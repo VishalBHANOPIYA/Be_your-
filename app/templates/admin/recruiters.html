@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Recruiter Verification | Be Your Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12 space-y-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+            <h1 class="text-4xl font-heading font-bold text-on-surface uppercase tracking-tighter">Recruiters & Companies</h1>
+            <p class="text-on-surface/40">Manage recruiter access and verify company profiles.</p>
+        </div>
+        <a href="{{ url_for('admin.dashboard') }}" class="flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="glass-card rounded-[2.5rem] overflow-hidden border border-outline">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-white/5 border-b border-outline">
+                        <th class="px-8 py-5 text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Recruiter</th>
+                        <th class="px-8 py-5 text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Company</th>
+                        <th class="px-8 py-5 text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Location</th>
+                        <th class="px-8 py-5 text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Verification</th>
+                        <th class="px-8 py-5 text-[10px] font-bold text-on-surface/40 uppercase tracking-widest text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-outline">
+                    {% for recruiter, company in recruiters_pagination.items %}
+                    <tr class="hover:bg-white/[0.02] transition-colors">
+                        <td class="px-8 py-5">
+                            <p class="text-sm font-bold text-on-surface">{{ recruiter.name }}</p>
+                            <p class="text-xs text-on-surface/40">{{ recruiter.email }}</p>
+                        </td>
+                        <td class="px-8 py-5">
+                            {% if company %}
+                                <p class="text-sm font-bold text-on-surface/80">{{ company.name }}</p>
+                                <a href="{{ company.website }}" target="_blank" class="text-[10px] text-primary hover:underline uppercase tracking-widest">Visit Website</a>
+                            {% else %}
+                                <span class="px-3 py-1 rounded-full bg-white/5 border border-outline text-[10px] font-bold text-on-surface/20 uppercase tracking-widest">No Profile</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-8 py-5 text-xs text-on-surface/60">
+                            {{ company.location if company else 'N/A' }}
+                        </td>
+                        <td class="px-8 py-5">
+                            {% if company %}
+                                {% if company.is_verified %}
+                                    <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest">Verified</span>
+                                {% else %}
+                                    <span class="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold uppercase tracking-widest">Unverified</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-on-surface/10 text-sm">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-8 py-5 text-right">
+                            {% if company %}
+                                <form action="{{ url_for('admin.verify_recruiter', user_id=recruiter.id) }}" method="POST" class="inline">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="px-4 py-2 rounded-xl border border-outline hover:bg-white/5 transition-all text-[10px] font-bold uppercase tracking-widest">
+                                        {{ 'Unverify' if company.is_verified else 'Verify' }}
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="px-8 py-6 bg-white/5 flex justify-between items-center border-t border-outline">
+            <p class="text-xs text-on-surface/40">
+                Showing {{ recruiters_pagination.items|length }} recruiters
+            </p>
+            <div class="flex gap-2">
+                {% if recruiters_pagination.has_prev %}
+                <a href="{{ url_for('admin.recruiters', page=recruiters_pagination.prev_num) }}" class="px-4 py-2 rounded-xl border border-outline hover:bg-white/5 transition-all text-xs font-bold">Previous</a>
+                {% endif %}
+                
+                {% if recruiters_pagination.has_next %}
+                <a href="{{ url_for('admin.recruiters', page=recruiters_pagination.next_num) }}" class="px-4 py-2 rounded-xl border border-outline hover:bg-white/5 transition-all text-xs font-bold">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

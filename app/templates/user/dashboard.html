@@ -9,35 +9,71 @@
                 <div class="absolute inset-0 indigo-gradient opacity-0 group-hover:opacity-5 transition-opacity"></div>
                 
                 <div class="relative">
-                    <div class="w-24 h-24 bg-indigo-500/20 rounded-[2rem] mx-auto flex items-center justify-center text-indigo-400 text-3xl font-bold border border-indigo-500/30 shadow-2xl">
-                        {{ current_user.name[0] }}
-                    </div>
+                    {% if current_user.avatar_url %}
+                        <img src="{{ url_for('static', filename=current_user.avatar_url) }}" alt="Profile" class="w-24 h-24 rounded-[2rem] mx-auto object-cover border border-indigo-500/30 shadow-2xl">
+                    {% else %}
+                        <div class="w-24 h-24 bg-indigo-500/20 rounded-[2rem] mx-auto flex items-center justify-center text-indigo-400 text-3xl font-bold border border-indigo-500/30 shadow-2xl uppercase">
+                            {{ current_user.name[0] }}
+                        </div>
+                    {% endif %}
                     <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 border-4 border-surface rounded-full"></div>
                 </div>
 
-                <div class="space-y-1">
-                    <h2 class="text-xl font-heading font-bold text-on-surface">{{ current_user.name }}</h2>
-                    <p class="text-on-surface/40 text-xs font-bold uppercase tracking-widest">{{ current_user.role | capitalize }}</p>
-                </div>
-                
-                {% if current_user.profile.resume_path %}
-                    <div class="px-4 py-2 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] font-bold flex items-center justify-center gap-2 tracking-widest uppercase">
-                        <span class="material-symbols-outlined text-sm">verified</span>
-                        Resume Verified
+                <div class="relative z-10 space-y-8">
+                    <div class="space-y-1">
+                        <h2 class="text-xl font-heading font-bold text-on-surface">{{ current_user.name }}</h2>
+                        <p class="text-on-surface/40 text-xs font-bold uppercase tracking-widest">{{ current_user.role | capitalize }}</p>
                     </div>
-                {% endif %}
+                    
+                    {% if current_user.profile and current_user.profile.resume_path %}
+                        <div class="space-y-3">
+                            <div class="px-4 py-2 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] font-bold flex items-center justify-center gap-2 tracking-widest uppercase">
+                                <span class="material-symbols-outlined text-sm">verified</span>
+                                Resume Verified
+                            </div>
+                            
+                            <!-- AI-Verified Skill Badges -->
+                            {% if current_user.profile.badges %}
+                            <div class="flex flex-wrap justify-center gap-3 pt-4 border-t border-outline/50">
+                                {% for badge in current_user.profile.badges %}
+                                <div class="group/badge relative cursor-help" title="{{ badge.name }} ({{ badge.level }}) - Earned via {{ badge.source }}">
+                                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover/badge:scale-110 group-hover/badge:border-indigo-400 transition-all shadow-lg shadow-indigo-500/5">
+                                        <span class="material-symbols-outlined text-xl">{{ badge.icon }}</span>
+                                    </div>
+                                    <div class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-indigo-500 border-2 border-surface animate-pulse"></div>
+                                    
+                                    <!-- Badge Tooltip -->
+                                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 p-4 glass-card border border-primary/20 rounded-2xl opacity-0 group-hover/badge:opacity-100 pointer-events-none transition-all z-50 shadow-2xl scale-95 group-hover/badge:scale-100">
+                                        <div class="space-y-2">
+                                            <p class="text-[9px] font-bold text-primary uppercase tracking-widest">{{ badge.level }} Badge</p>
+                                            <p class="text-xs font-bold text-on-surface">{{ badge.name }}</p>
+                                            <div class="h-px w-full bg-outline/50"></div>
+                                            <p class="text-[8px] text-on-surface/40 leading-tight">Verified via AI {{ badge.source }} analysis on {{ badge.earned_at.split(' ')[0] }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
 
-                <div class="space-y-3 pt-4 border-t border-outline">
-                    <form action="{{ url_for('user.upload_resume') }}" method="POST" enctype="multipart/form-data" id="resume-upload-form">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        <button type="button" onclick="document.getElementById('resume-upload-input').click()" class="block w-full py-4 text-center rounded-2xl indigo-gradient text-white text-xs font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-indigo-500/20">
-                            {{ 'Upload New Resume' if current_user.profile and current_user.profile.resume_path else 'Upload Resume' }}
-                        </button>
-                        <input type="file" id="resume-upload-input" name="resume" class="hidden" onchange="document.getElementById('resume-upload-form').submit()">
-                    </form>
-                    <a href="{{ url_for('user.edit_profile') }}" class="block w-full py-4 rounded-2xl border border-outline text-xs text-center font-bold uppercase tracking-widest hover:bg-surface transition-all text-on-surface/60">
-                        Edit Profile
-                    </a>
+                            <a href="{{ url_for('user.resume_analysis') }}" class="block text-center text-[10px] font-bold text-primary hover:text-primary/80 transition-colors uppercase tracking-widest pt-2">
+                                View Deep AI Analysis →
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    <div class="space-y-3 pt-4 border-t border-outline">
+                        <form action="{{ url_for('user.upload_resume') }}" method="POST" enctype="multipart/form-data" class="relative">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <label class="block w-full py-4 text-center rounded-2xl indigo-gradient text-white text-xs font-bold uppercase tracking-widest cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-lg shadow-indigo-500/20">
+                                {{ 'Upload New Resume' if current_user.profile and current_user.profile.resume_path else 'Upload Resume' }}
+                                <input type="file" name="resume" class="sr-only" onchange="this.form.submit()">
+                            </label>
+                        </form>
+                        <a href="{{ url_for('user.edit_profile') }}" class="block w-full py-4 rounded-2xl border border-outline text-xs text-center font-bold uppercase tracking-widest hover:bg-surface transition-all text-on-surface/60 relative z-20">
+                            Edit Profile
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -45,12 +81,24 @@
             <div class="glass-card p-8 rounded-[2.5rem] space-y-6">
                 <div class="flex justify-between items-center">
                     <p class="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Profile Progress</p>
-                    <p class="text-sm font-bold">85%</p>
+                    <p class="text-sm font-bold">{{ profile_progress }}%</p>
                 </div>
                 <div class="h-1.5 w-full bg-surface rounded-full overflow-hidden">
-                    <div class="h-full w-[85%] indigo-gradient rounded-full"></div>
+                    <div class="h-full indigo-gradient rounded-full" style="width: {{ profile_progress }}%"></div>
                 </div>
             </div>
+
+            <!-- Top Skills (AI Extracted) -->
+            {% if current_user.profile and current_user.profile.skills %}
+            <div class="glass-card p-8 rounded-[2.5rem] space-y-6">
+                <p class="text-[10px] font-bold text-violet-400 uppercase tracking-[0.2em]">Top AI-Identified Skills</p>
+                <div class="flex flex-wrap gap-2">
+                    {% for skill in current_user.profile.skills[:10] %}
+                        <span class="px-3 py-1.5 rounded-lg bg-white/5 border border-outline text-[10px] font-bold text-on-surface/70">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
         </div>
 
         <!-- Main Dashboard -->
@@ -67,7 +115,7 @@
                 </div>
                 <div class="glass-card p-10 rounded-[3rem] space-y-4 hover:-translate-y-2 transition-transform">
                     <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-[0.2em]">Match Score</p>
-                    <h3 class="text-5xl font-heading font-bold text-on-surface">94</h3>
+                    <h3 class="text-5xl font-heading font-bold text-on-surface">{{ avg_match if avg_match else '--' }}</h3>
                 </div>
             </div>
 
@@ -87,6 +135,17 @@
                         <p class="text-on-surface/40 text-sm italic">Analyzing your profile to find the best matches...</p>
                     </div>
                 </div>
+            </div>
+
+            <!-- Portfolio Analyzer Promo -->
+            <div class="glass-card p-10 rounded-[3rem] indigo-gradient text-white flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="space-y-4 text-center md:text-left">
+                    <h3 class="text-2xl font-heading font-bold">New: Portfolio Analyzer 🚀</h3>
+                    <p class="text-white/80 text-sm max-w-md">Connect your GitHub to get deep AI insights into your code quality and projects. Impress recruiters with real data.</p>
+                </div>
+                <a href="{{ url_for('portfolio.portfolio_dashboard') }}" class="px-8 py-4 bg-white text-primary rounded-2xl font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl">
+                    Analyze My GitHub
+                </a>
             </div>
 
             <!-- Applications Table -->
@@ -119,7 +178,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-10 py-8 text-sm text-on-surface/60">{{ app.created_at.strftime('%d %b, %Y') }}</td>
+                                <td class="px-10 py-8 text-sm text-on-surface/60">{{ app.applied_at.strftime('%d %b, %Y') }}</td>
                                 <td class="px-10 py-8">
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-1.5 bg-surface rounded-full overflow-hidden">

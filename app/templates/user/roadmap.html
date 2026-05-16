@@ -3,94 +3,114 @@
 {% block title %}Career Roadmap | Be Your AI{% endblock %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto px-6 py-12 space-y-12">
-    <!-- Header Section -->
-    <div class="glass-card p-12 rounded-[3rem] relative overflow-hidden">
-        <div class="absolute inset-0 glow-overlay -z-10 opacity-20"></div>
-        <div class="flex flex-col md:flex-row justify-between items-center gap-10">
-            <div class="space-y-4 text-center md:text-left">
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase tracking-[0.2em]">
-                    AI Career Architect
+<div class="max-w-4xl mx-auto px-6 py-12 space-y-12">
+    
+    <!-- Active Roadmap Header (Only shows if roadmap exists) -->
+    {% if roadmap %}
+    <div class="glass-card p-10 rounded-[2.5rem] border border-primary/20 bg-primary/5">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="space-y-3 text-center md:text-left">
+                <div class="flex items-center justify-center md:justify-start gap-4 mb-2">
+                    <a href="{{ url_for('user.dashboard') }}" class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest hover:text-primary transition-colors flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">arrow_back</span>
+                        Back to Dashboard
+                    </a>
                 </div>
-                <h1 class="text-4xl md:text-5xl font-bold text-on-surface tracking-tight">
-                    {% if target_role %}
-                        Your Path to <span class="text-primary">{{ target_role }}</span>
-                    {% else %}
-                        Your Personalized Career Path
-                    {% endif %}
+                <h1 class="text-3xl md:text-4xl font-bold text-on-surface">
+                    Your Path to <span class="text-primary">{{ target_role }}</span>
                 </h1>
-                <p class="text-on-surface-variant max-w-xl text-lg">We've mapped out the exact steps you need to take to reach your dream role.</p>
+                <p class="text-on-surface/60">Follow these {{ roadmap.phases|length }} phases to master your role.</p>
             </div>
             
-            <div class="w-48 h-48 rounded-[2rem] indigo-gradient p-1 shadow-2xl rotate-3">
-                <div class="w-full h-full bg-surface rounded-[1.8rem] flex items-center justify-center">
-                    <span class="material-symbols-outlined text-7xl text-primary animate-pulse">route</span>
+            <div class="flex flex-col sm:flex-row gap-4 items-center">
+                <div class="px-6 py-3 rounded-2xl bg-surface border border-outline text-center min-w-[120px]">
+                    <p class="text-xl font-bold text-primary">{{ roadmap.timeline }}</p>
+                    <p class="text-[9px] uppercase font-bold text-on-surface/40">Duration</p>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Roadmap Generation Form (if no roadmap) -->
-    {% if not roadmap %}
-    <div class="glass-card p-10 rounded-[3rem] border-dashed border-outline text-center space-y-8">
-        <div class="space-y-2">
-            <h2 class="text-2xl font-bold">What's your dream role?</h2>
-            <p class="text-on-surface-variant">Our AI will generate a step-by-step learning path for you.</p>
-        </div>
-        <form action="{{ url_for('ai.generate_roadmap') }}" method="POST" class="max-w-md mx-auto flex flex-col gap-4">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="text" name="target_role" required 
-                class="w-full bg-input border border-outline rounded-2xl px-6 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all text-center text-lg"
-                placeholder="e.g. Full Stack Developer, AI Engineer">
-            <button type="submit" class="w-full py-4 rounded-2xl indigo-gradient text-white font-bold shadow-xl hover:scale-105 transition-all">
-                Generate My Roadmap
-            </button>
-        </form>
-    </div>
-    {% endif %}
 
     <!-- Roadmap Steps -->
-    {% if roadmap %}
-    <div class="relative space-y-12">
-        <!-- Connecting Line -->
-        <div class="absolute left-8 top-12 bottom-12 w-0.5 bg-surface -z-10"></div>
+    <div class="relative space-y-8">
+        <div class="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-purple-600 rounded-full opacity-20"></div>
 
-        {% for phase in roadmap %}
-        <div class="space-y-8">
-            <div class="flex items-center gap-8">
-                <div class="w-16 h-16 rounded-2xl indigo-gradient flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-                    {{ loop.index }}
-                </div>
-                <h3 class="text-3xl font-bold text-on-surface">{{ phase.title }}</h3>
+        {% for phase in roadmap.phases %}
+        <div class="relative pl-20 pb-8 group">
+            <div class="absolute left-4 top-0 w-8 h-8 rounded-full indigo-gradient border-4 border-background z-10 flex items-center justify-center text-[10px] text-white font-bold shadow-lg">
+                {{ loop.index0 }}
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 ml-24">
-                {% for milestone in phase.milestones %}
-                <div class="glass-card p-8 rounded-[2rem] border-outline hover:border-primary/30 transition-all group">
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <h4 class="text-xl font-bold text-on-surface group-hover:text-primary transition-colors">{{ milestone.name }}</h4>
-                            <span class="material-symbols-outlined text-on-surface/10 group-hover:text-primary transition-colors">check_circle</span>
-                        </div>
-                        <p class="text-on-surface-variant text-sm leading-relaxed">{{ milestone.description }}</p>
-                    </div>
+            <div class="glass-card p-8 rounded-3xl border border-outline hover:border-primary/50 transition-all space-y-6 bg-surface/50">
+                <div class="space-y-1">
+                    <p class="text-[10px] font-bold text-primary uppercase tracking-widest">
+                        {{ phase.title.split(':')[0] if ':' in phase.title else 'Step ' ~ loop.index0 }}
+                    </p>
+                    <h2 class="text-2xl font-bold text-on-surface">
+                        {{ phase.title.split(':')[1] if ':' in phase.title else phase.title }}
+                    </h2>
                 </div>
-                {% endfor %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% for ms in phase.milestones %}
+                    <div class="p-5 rounded-2xl bg-background/40 border border-outline/30 flex items-start gap-4">
+                        <span class="material-symbols-outlined text-primary text-xl">task_alt</span>
+                        <div class="space-y-1">
+                            <p class="font-bold text-on-surface text-sm">{{ ms.name }}</p>
+                            <p class="text-xs text-on-surface/50 leading-relaxed">{{ ms.desc }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         {% endfor %}
-        
-        <!-- Re-generate Button -->
-        <div class="pt-12 flex justify-center">
-            <a href="{{ url_for('user.roadmap') }}" class="px-8 py-4 rounded-2xl border border-outline hover:bg-surface transition-all text-sm font-bold text-on-surface/60">
-                Start Over / Different Role
-            </a>
+
+        <!-- Final Goal -->
+        <div class="relative pl-20 pt-4">
+            <div class="absolute left-2 top-0 w-12 h-12 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-emerald-400">
+                <span class="material-symbols-outlined">workspace_premium</span>
+            </div>
+            <div class="glass-card p-10 rounded-[3rem] border-2 border-emerald-500/30 bg-emerald-500/5 text-center">
+                <h3 class="text-2xl font-bold text-emerald-400">Goal Reached!</h3>
+                <p class="text-on-surface/60 mt-2">You are now ready for a role as {{ target_role }}</p>
+            </div>
         </div>
     </div>
     {% endif %}
+
+    <!-- Career Explorer (Always available to search for new/next roles) -->
+    <div class="pt-12">
+        <div class="glass-card p-12 rounded-[3.5rem] border border-dashed border-outline text-center space-y-8 bg-primary/5">
+            <div class="space-y-2">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-2">
+                    Career Explorer
+                </div>
+                <h2 class="text-3xl font-bold">Want to explore another path?</h2>
+                <p class="text-on-surface/50 max-w-lg mx-auto">Type any role below (e.g., AI Engineer, Product Manager, Backend Dev) to generate a new specialized tech tree.</p>
+            </div>
+            
+            <form action="{{ url_for('ai.generate_roadmap') }}" method="POST" class="max-w-md mx-auto relative group">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-6 top-1/2 -translate-y-1/2 text-primary">search</span>
+                    <input type="text" name="target_role" required 
+                        class="w-full bg-background border border-outline rounded-3xl pl-16 pr-6 py-5 text-on-surface focus:outline-none focus:border-primary transition-all text-lg shadow-xl"
+                        placeholder="Search for your next role...">
+                </div>
+                <button type="submit" class="w-full mt-6 py-4 rounded-2xl indigo-gradient text-white font-bold shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">bolt</span>
+                    Generate Next Path
+                </button>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 <style>
-    .filled { font-variation-settings: 'FILL' 1; }
+    .indigo-gradient {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
 </style>
 {% endblock %}

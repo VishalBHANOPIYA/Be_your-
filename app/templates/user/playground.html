@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ challenge.title }} | Be Your Pro Playground</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        background: '#0d0d1a',
+                        surface: '#15152b',
+                        outline: 'rgba(255,255,255,0.08)',
+                        'on-surface': '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .indigo-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface overflow-hidden">
+<div class="h-screen overflow-hidden flex flex-col bg-background relative">
+    
+    <!-- Floating Header -->
+    <div class="absolute top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 px-6 py-3 rounded-2xl bg-surface/80 backdrop-blur-xl border border-outline shadow-2xl shadow-black/10">
+        <a href="{{ url_for('playground.dashboard') }}" class="w-8 h-8 rounded-lg hover:bg-primary/10 flex items-center justify-center text-on-surface/40 hover:text-primary transition-all">
+            <span class="material-symbols-outlined text-sm">arrow_back</span>
+        </a>
+        <div class="h-4 w-px bg-outline"></div>
+        <div class="flex flex-col">
+            <h1 class="text-[11px] font-bold text-on-surface tracking-tight">{{ challenge.title }}</h1>
+            <p class="text-[8px] text-on-surface/40 uppercase font-bold tracking-widest">{{ challenge.difficulty }} • {{ challenge.language }}</p>
+        </div>
+        <div class="h-4 w-px bg-outline"></div>
+        <div class="flex items-center gap-2">
+            <button onclick="toggleSidebar()" class="w-8 h-8 rounded-lg hover:bg-primary/10 flex items-center justify-center text-on-surface/40 hover:text-primary transition-all" title="Toggle Instructions">
+                <span class="material-symbols-outlined text-sm">description</span>
+            </button>
+            <button onclick="submitCode()" id="submit-btn" class="px-4 py-2 rounded-lg bg-primary text-white text-[10px] font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
+                Analyze
+            </button>
+        </div>
+    </div>
+
+    <!-- Workspace Container -->
+    <div class="flex-1 flex overflow-hidden">
+        
+        <!-- Collapsible Left Sidebar -->
+        <div id="left-sidebar" class="w-[400px] border-r border-outline flex flex-col bg-surface/30 backdrop-blur-sm transition-all duration-500 ease-in-out">
+            <div class="flex-1 overflow-y-auto p-10 space-y-10 pt-24">
+                <div class="space-y-6">
+                    <h3 class="text-[10px] font-bold text-primary uppercase tracking-[0.3em]">Goal</h3>
+                    <div class="text-on-surface/80 leading-relaxed text-base font-medium whitespace-pre-wrap">
+                        {{ challenge.problem_statement }}
+                    </div>
+                </div>
+
+                <div id="ai-feedback-panel" class="hidden space-y-8 animate-in fade-in duration-500">
+                    <div class="h-px w-full bg-outline"></div>
+                    <h3 class="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em]">AI Feedback</h3>
+                    <div id="feedback-content" class="space-y-6"></div>
+                </div>
+            </div>
+
+            <!-- Fixed Footer Actions -->
+            <div id="sidebar-footer" class="hidden p-6 border-t border-outline bg-surface/50 space-y-2">
+                <a href="{{ url_for('playground.new_challenge') }}" class="w-full py-3 rounded-xl indigo-gradient text-white text-[9px] font-bold uppercase tracking-widest text-center flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">auto_awesome</span> Next
+                </a>
+            </div>
+        </div>
+
+        <!-- Right: Monaco Editor & Slide-up Terminal -->
+        <div class="flex-1 flex flex-col relative bg-background">
+            <div id="editor-container" class="flex-1"></div>
+            
+            <!-- Contextual Terminal -->
+            <div id="terminal-panel" class="h-0 border-t border-outline bg-surface overflow-hidden transition-all duration-500 ease-in-out">
+                <div class="px-6 py-3 border-b border-outline flex justify-between items-center">
+                    <span class="text-[9px] font-bold text-on-surface/40 uppercase tracking-widest">Output</span>
+                    <button onclick="toggleTerminal()" class="text-on-surface/40 hover:text-on-surface">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
+                </div>
+                <div id="terminal-output" class="p-6 font-mono text-xs text-on-surface/80 overflow-y-auto h-[calc(100%-40px)]"></div>
+            </div>
+
+            <!-- Floating Action Bar (Bottom Right) -->
+            <div class="absolute bottom-8 right-8 flex items-center gap-3">
+                <button onclick="runCode()" id="run-btn" class="px-6 py-3 rounded-2xl bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-emerald-500/20 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">play_arrow</span> Run
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js?v=1.2"></script>
+<script>
+    let editor;
+    let isMonaco = false;
+    
+    function getTheme() {
+        return document.documentElement.classList.contains('dark') ? 'vs-dark' : 'vs-light';
+    }
+
+    // Add a simple fallback if Monaco fails
+    function useFallback() {
+        const container = document.getElementById('editor-container');
+        container.innerHTML = `
+            <div class="flex flex-col h-full bg-background p-8 space-y-4">
+                <div class="flex items-center gap-3 text-on-surface/40">
+                    <span class="material-symbols-outlined text-sm">edit_note</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest">Standard Editor (Fallback Active)</span>
+                </div>
+                <textarea id="fallback-editor" class="flex-1 w-full bg-surface border border-outline rounded-2xl p-6 text-on-surface font-mono text-lg focus:outline-none focus:border-primary/50 transition-all resize-none" placeholder="Type your code here...">${`{{ challenge.starter_code | safe }}`}</textarea>
+            </div>
+        `;
+        editor = {
+            getValue: () => document.getElementById('fallback-editor').value
+        };
+        isMonaco = false;
+    }
+
+    try {
+        require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            editor = monaco.editor.create(document.getElementById('editor-container'), {
+                value: `{{ challenge.starter_code | safe }}`,
+                language: '{{ challenge.language }}',
+                theme: getTheme(),
+                fontSize: 18,
+                fontFamily: "'Fira Code', 'JetBrains Mono', monospace",
+                minimap: { enabled: false },
+                padding: { top: 40 },
+                automaticLayout: true,
+                smoothScrolling: true,
+                cursorBlinking: "smooth",
+                backgroundColor: 'transparent'
+            });
+            isMonaco = true;
+
+            // Watch for theme changes
+            const observer = new MutationObserver(() => {
+                monaco.editor.setTheme(getTheme());
+            });
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+            
+        }, function(err) {
+            console.error("Monaco load failed, using fallback", err);
+            useFallback();
+        });
+    } catch (e) {
+        useFallback();
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('left-sidebar');
+        if (sidebar.style.width === '0px') {
+            sidebar.style.width = '400px';
+            sidebar.style.opacity = '1';
+        } else {
+            sidebar.style.width = '0px';
+            sidebar.style.opacity = '0';
+        }
+        setTimeout(() => editor.layout(), 500);
+    }
+
+    function toggleTerminal(show = false) {
+        const panel = document.getElementById('terminal-panel');
+        if (show) {
+            panel.style.height = '200px';
+        } else {
+            panel.style.height = '0px';
+        }
+        setTimeout(() => editor.layout(), 500);
+    }
+
+    // Skulpt Setup
+    function outf(text) {
+        const output = document.getElementById('terminal-output');
+        output.innerText += text;
+    }
+    function builtinRead(x) {
+        if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+            throw "File not found: '" + x + "'";
+        return Sk.builtinFiles["files"][x];
+    }
+
+    async function runCode() {
+        const btn = document.getElementById('run-btn');
+        const output = document.getElementById('terminal-output');
+        const code = editor.getValue();
+        
+        btn.disabled = true;
+        btn.innerHTML = '<span class="animate-spin material-symbols-outlined text-sm">sync</span> Running...';
+        output.innerHTML = "";
+        
+        toggleTerminal(true); // Auto-show terminal
+        
+        try {
+            Sk.pre = "terminal-output";
+            Sk.configure({
+                output: outf,
+                read: builtinRead,
+                __future__: Sk.python3
+            });
+            
+            var myPromise = Sk.misieval.asyncToPromise(function() {
+                return Sk.importMainWithBody("<stdin>", false, code, true);
+            });
+            
+            await myPromise;
+            
+            if (output.innerText === "") {
+                output.innerHTML = '<span class="text-on-surface/20 italic">Code executed successfully (no output).</span>';
+            }
+        } catch (err) {
+            output.innerHTML += `<span class="text-red-400 font-bold">Execution Error:</span>\n<span class="text-red-400">${err.toString()}</span>`;
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<span class="material-symbols-outlined text-sm">play_arrow</span> Run';
+        }
+    }
+
+    async function submitCode() {
+        const btn = document.getElementById('submit-btn');
+        const code = editor.getValue();
+        const feedbackPanel = document.getElementById('ai-feedback-panel');
+        const content = document.getElementById('feedback-content');
+        
+        btn.disabled = true;
+        btn.innerHTML = '<span class="animate-spin material-symbols-outlined">sync</span> Analyzing...';
+        
+        try {
+            const response = await fetch("{{ url_for('playground.submit', challenge_id=challenge.id) }}", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-CSRFToken": "{{ csrf_token() }}" },
+                body: JSON.stringify({ code: code })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                feedbackPanel.classList.remove('hidden');
+                document.getElementById('sidebar-footer').classList.remove('hidden');
+                
+                const analysis = data.analysis;
+                content.innerHTML = `
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+                            <p class="text-[8px] font-bold text-on-surface/40 uppercase tracking-widest mb-1">Total Score</p>
+                            <p class="text-3xl font-bold text-primary">${analysis.score}%</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+                            <p class="text-[8px] font-bold text-on-surface/40 uppercase tracking-widest mb-1">Readability</p>
+                            <p class="text-3xl font-bold text-emerald-400">${analysis.metrics.readability}%</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <p class="text-[9px] font-bold text-on-surface/60 uppercase">AI Summary</p>
+                        <p class="text-xs text-on-surface/70 leading-relaxed">${analysis.summary}</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <p class="text-[9px] font-bold text-on-surface/60 uppercase">Key Suggestions</p>
+                        <div class="space-y-2">
+                            ${analysis.suggestions.map(s => `
+                                <div class="flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10">
+                                    <span class="material-symbols-outlined text-primary text-sm">lightbulb</span>
+                                    <p class="text-[10px] text-on-surface/80 leading-tight">${s}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                // Scroll feedback into view
+                feedbackPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+        } catch (error) {
+            console.error("Submission failed", error);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<span class="material-symbols-outlined text-sm">rocket_launch</span> Run AI Analysis';
+        }
+    }
+</script>
+
+<style>
+    .indigo-gradient {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
+    /* Hide scrollbars for a clean look */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.05);
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255,255,255,0.1);
+    }
+</style>
+</body>
+</html>

@@ -79,7 +79,7 @@
                                             </span>
                                             <span class="flex items-center gap-1.5 text-xs text-on-surface-variant">
                                                 <span class="material-symbols-outlined text-sm">payments</span>
-                                                ${{ "{:,.0f}".format(job.salary_min/1000) }}k - ${{ "{:,.0f}".format(job.salary_max/1000) }}k
+                                                ${{ "{:,.0f}".format((job.salary_min or 0)/1000) }}k - ${{ "{:,.0f}".format((job.salary_max or 0)/1000) }}k
                                             </span>
                                         </div>
                                     </div>

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Activity Logs | Be Your Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12 space-y-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+            <h1 class="text-4xl font-heading font-bold text-on-surface uppercase tracking-tighter">System Activity Logs</h1>
+            <p class="text-on-surface/40">Audit trail of all administrative actions performed on the platform.</p>
+        </div>
+        <a href="{{ url_for('admin.dashboard') }}" class="flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="glass-card rounded-[2.5rem] overflow-hidden border border-outline">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-white/5 border-b border-outline">
+                        <th class="px-8 py-5 text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Admin User</th>
+                        <th class="px-8 py-5 text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Action</th>
+                        <th class="px-8 py-5 text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Target Type</th>
+                        <th class="px-8 py-5 text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-outline">
+                    {% for log in logs_pagination.items %}
+                    <tr class="hover:bg-white/[0.02] transition-colors">
+                        <td class="px-8 py-5">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm text-primary">admin_panel_settings</span>
+                                <span class="text-xs font-bold text-on-surface">{{ log.admin.name }}</span>
+                            </div>
+                        </td>
+                        <td class="px-8 py-5">
+                            <span class="text-xs font-bold text-on-surface/80">{{ log.action }}</span>
+                        </td>
+                        <td class="px-8 py-5">
+                            <span class="px-3 py-1 rounded-full bg-white/5 border border-outline text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">
+                                {{ log.target_type }}
+                            </span>
+                        </td>
+                        <td class="px-8 py-5 text-xs text-on-surface/40 font-mono">
+                            {{ log.timestamp.strftime('%d %b %Y, %H:%M') }}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="px-8 py-20 text-center">
+                            <span class="material-symbols-outlined text-5xl text-on-surface/10 mb-4">history_toggle_off</span>
+                            <p class="text-on-surface/40 font-bold uppercase tracking-widest">No activity logged yet.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="px-8 py-6 bg-white/5 flex justify-between items-center border-t border-outline">
+            <p class="text-xs text-on-surface/40">
+                Audit Trail ({{ logs_pagination.total }} entries)
+            </p>
+            <div class="flex gap-2">
+                {% if logs_pagination.has_prev %}
+                <a href="{{ url_for('admin.logs', page=logs_pagination.prev_num) }}" class="px-4 py-2 rounded-xl border border-outline hover:bg-white/5 transition-all text-xs font-bold">Previous</a>
+                {% endif %}
+                
+                {% if logs_pagination.has_next %}
+                <a href="{{ url_for('admin.logs', page=logs_pagination.next_num) }}" class="px-4 py-2 rounded-xl border border-outline hover:bg-white/5 transition-all text-xs font-bold">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

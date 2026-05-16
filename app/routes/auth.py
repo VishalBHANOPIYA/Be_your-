@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
 from app.services.auth_service import AuthService
 from app.utils.email_helper import send_reset_email
-from app.extensions import oauth
+from app.extensions import oauth, limiter
 from flask_login import login_required, logout_user, current_user
 
 auth_bp = Blueprint('auth', __name__)
@@ -15,6 +15,7 @@ def get_redirect_target(user):
         return url_for('user.dashboard')
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
+@limiter.limit("10 per hour", methods=["POST"])
 def register():
     if current_user.is_authenticated:
         return redirect(get_redirect_target(current_user))
@@ -32,6 +33,7 @@ def register():
     return render_template('auth/register.html')
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute", methods=["POST"])
 def login():
     if current_user.is_authenticated:
         return redirect(get_redirect_target(current_user))
@@ -58,6 +60,7 @@ def logout():
     return redirect(url_for('auth.login'))
 
 @auth_bp.route('/forgot-password', methods=['GET', 'POST'])
+@limiter.limit("5 per hour", methods=["POST"])
 def forgot_password():
     if request.method == 'POST':
         email = request.form.get('email')

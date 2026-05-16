@@ -16,20 +16,26 @@
                     <span class="material-symbols-outlined text-3xl">psychology</span>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Session Progress</p>
+                    <p class="text-[10px] font-bold text-primary uppercase tracking-[0.2em]" id="phase-title">Phase 1: Aptitude</p>
                     <h2 class="text-xl font-bold" id="progress-text">Question 1 of {{ interview.questions|length }}</h2>
                 </div>
             </div>
 
-            <!-- Timer Circle -->
-            <div class="relative w-24 h-24 flex items-center justify-center group">
-                <svg class="w-full h-full -rotate-90">
-                    <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="4" fill="transparent" class="text-white/5"></circle>
-                    <circle id="timer-progress" cx="48" cy="48" r="40" stroke="currentColor" stroke-width="4" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="0" class="text-primary transition-all duration-1000"></circle>
-                </svg>
-                <div class="absolute flex flex-col items-center">
-                    <span id="timer-text" class="text-2xl font-heading font-bold">90</span>
-                    <span class="text-[8px] font-bold text-on-surface/40 uppercase tracking-widest">Sec</span>
+            <!-- Timer & Audio Controls -->
+            <div class="flex items-center gap-6">
+                <button onclick="toggleSpeech()" class="w-12 h-12 rounded-full bg-surface border border-outline flex items-center justify-center hover:scale-110 transition-all group" title="Toggle AI Voice">
+                    <span class="material-symbols-outlined text-primary" id="speech-toggle-icon">volume_up</span>
+                </button>
+
+                <div class="relative w-24 h-24 flex items-center justify-center group">
+                    <svg class="w-full h-full -rotate-90">
+                        <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="4" fill="transparent" class="text-white/5"></circle>
+                        <circle id="timer-progress" cx="48" cy="48" r="40" stroke="currentColor" stroke-width="4" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="0" class="text-primary transition-all duration-1000"></circle>
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span id="timer-text" class="text-2xl font-heading font-bold">90</span>
+                        <span class="text-[8px] font-bold text-on-surface/40 uppercase tracking-widest">Sec</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -148,6 +154,13 @@
     function nextQuestion() {
         currentIndex++;
         if (currentIndex < questions.length) {
+            // Update Phase Title
+            let phaseTitle = "Phase 1: Aptitude";
+            if (currentIndex >= 10) phaseTitle = "Phase 3: Technical";
+            else if (currentIndex >= 5) phaseTitle = "Phase 2: Experience";
+            
+            document.getElementById('phase-title').innerText = phaseTitle;
+            
             // Update UI for next question
             document.getElementById('current-question').innerText = questions[currentIndex];
             document.getElementById('answer-input').value = '';
@@ -165,6 +178,7 @@
             });
             
             startTimer();
+            speakQuestion(questions[currentIndex]);
         } else {
             finishSession();
         }
@@ -203,45 +217,89 @@
         }
     }
 
-    // Voice Recognition Logic
+    // Voice & Speech Synthesis Logic
     let recognition;
     let isListening = false;
+    let isSpeechEnabled = true;
+    const synth = window.speechSynthesis;
+
+    function speakQuestion(text) {
+        if (!isSpeechEnabled || !text) return;
+        
+        // Cancel any ongoing speech
+        synth.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.95; // Slightly slower for clarity
+        utterance.pitch = 1;
+        
+        // Pick a professional sounding voice if available
+        const voices = synth.getVoices();
+        const preferredVoice = voices.find(v => v.name.includes('Google US English') || v.name.includes('Samantha'));
+        if (preferredVoice) utterance.voice = preferredVoice;
+        
+        synth.speak(utterance);
+    }
+
+    // Toggle for AI Speech
+    function toggleSpeech() {
+        isSpeechEnabled = !isSpeechEnabled;
+        const icon = document.getElementById('speech-toggle-icon');
+        icon.innerText = isSpeechEnabled ? 'volume_up' : 'volume_off';
+        if (!isSpeechEnabled) synth.cancel();
+    }
     
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         recognition = new SpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
+        recognition.lang = 'en-US';
         
         recognition.onresult = (event) => {
-            let finalTranscript = '';
+            let currentTranscript = '';
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript;
+                    currentTranscript += event.results[i][0].transcript;
                 }
             }
-            if (finalTranscript) {
-                document.getElementById('answer-input').value += finalTranscript + ' ';
+            if (currentTranscript) {
+                const input = document.getElementById('answer-input');
+                input.value += (input.value ? ' ' : '') + currentTranscript;
                 updateWordCount();
+                
+                // Auto-scroll textarea
+                input.scrollTop = input.scrollHeight;
             }
         };
 
         recognition.onstart = () => {
             isListening = true;
-            document.getElementById('voice-icon').classList.add('text-red-500', 'animate-pulse');
+            const btn = document.getElementById('voice-btn');
+            const icon = document.getElementById('voice-icon');
+            btn.classList.add('border-red-500/50', 'bg-red-500/5');
+            icon.classList.add('text-red-500', 'animate-pulse');
             document.getElementById('voice-text').innerText = 'Listening...';
         };
 
         recognition.onend = () => {
             isListening = false;
-            document.getElementById('voice-icon').classList.remove('text-red-500', 'animate-pulse');
-            document.getElementById('voice-text').innerText = 'Start Voice';
+            const btn = document.getElementById('voice-btn');
+            const icon = document.getElementById('voice-icon');
+            btn.classList.remove('border-red-500/50', 'bg-red-500/5');
+            icon.classList.remove('text-red-500', 'animate-pulse');
+            document.getElementById('voice-text').innerText = 'Resume Voice';
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error', event.error);
+            isListening = false;
         };
     }
 
     document.getElementById('voice-btn').onclick = () => {
         if (!recognition) {
-            alert("Speech recognition not supported in this browser.");
+            alert("Speech recognition not supported in this browser. Please use Chrome or Edge.");
             return;
         }
         if (isListening) {
@@ -262,6 +320,7 @@
         if (isListening) recognition.stop();
         submitAnswer();
     };
+    
     document.getElementById('skip-btn').onclick = () => {
         if (isListening) recognition.stop();
         nextQuestion();
@@ -269,7 +328,16 @@
     
     document.getElementById('answer-input').oninput = updateWordCount;
 
+    // Wait for voices to load (some browsers need this)
+    window.speechSynthesis.onvoiceschanged = () => {
+        if (currentIndex === 0) speakQuestion(questions[0]);
+    };
+
     // Initialize
     startTimer();
+    // Immediate fallback if voices are already loaded
+    setTimeout(() => {
+        if (currentIndex === 0) speakQuestion(questions[0]);
+    }, 1000);
 </script>
 {% endblock %}

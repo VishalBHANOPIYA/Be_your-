@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Playground | Be Your AI{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12 space-y-12">
+    
+    <!-- Hero Header -->
+    <div class="glass-card p-12 rounded-[3.5rem] border border-primary/20 bg-primary/5 text-center space-y-8">
+        <div class="space-y-4">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-4">
+                Skill Builder
+            </div>
+            <h1 class="text-4xl md:text-5xl font-heading font-bold text-on-surface">AI Coding Playground</h1>
+            <p class="text-on-surface/50 max-w-2xl mx-auto text-lg">Challenge yourself with personalized coding problems based on your career roadmap. Get real-time AI code reviews and level up your engineering skills.</p>
+        </div>
+        
+        <div class="flex justify-center">
+            <a href="{{ url_for('playground.new_challenge') }}" class="px-10 py-5 rounded-2xl indigo-gradient text-white font-bold text-lg shadow-xl shadow-indigo-500/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-3">
+                <span class="material-symbols-outlined">add_circle</span>
+                Generate New Challenge
+            </a>
+        </div>
+    </div>
+
+    <!-- Challenges Grid -->
+    <div class="space-y-8">
+        <h3 class="text-xl font-heading font-bold text-on-surface px-4">Your Recent Challenges</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for challenge in challenges %}
+            <div class="glass-card p-8 rounded-[2.5rem] border border-outline hover:border-primary/40 transition-all group space-y-6 flex flex-col">
+                <div class="flex justify-between items-start">
+                    <div class="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined text-2xl">code</span>
+                    </div>
+                    {% if challenge.status == 'solved' %}
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-widest border border-emerald-500/20">Solved</span>
+                    {% elif challenge.status == 'failed' %}
+                        <span class="px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-[10px] font-bold uppercase tracking-widest border border-red-500/20">Needs Work</span>
+                    {% else %}
+                        <span class="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-[10px] font-bold uppercase tracking-widest border border-yellow-500/20">Pending</span>
+                    {% endif %}
+                </div>
+
+                <div class="flex-1 space-y-2">
+                    <h4 class="text-xl font-bold text-on-surface group-hover:text-primary transition-colors">{{ challenge.title }}</h4>
+                    <p class="text-sm text-on-surface/50 line-clamp-2">{{ challenge.problem_statement }}</p>
+                </div>
+
+                <div class="pt-6 border-t border-outline flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        {% if challenge.score %}
+                        <div class="text-center">
+                            <p class="text-[8px] font-bold text-on-surface/40 uppercase tracking-widest">Score</p>
+                            <p class="text-sm font-bold text-primary">{{ challenge.score }}%</p>
+                        </div>
+                        {% endif %}
+                        <div class="text-center">
+                            <p class="text-[8px] font-bold text-on-surface/40 uppercase tracking-widest">Difficulty</p>
+                            <p class="text-sm font-bold text-on-surface/60">{{ challenge.difficulty }}</p>
+                        </div>
+                    </div>
+                    
+                    <a href="{{ url_for('playground.solve', challenge_id=challenge.id) }}" class="p-3 rounded-xl bg-surface border border-outline hover:bg-primary/10 hover:border-primary/30 transition-all">
+                        <span class="material-symbols-outlined text-on-surface/40 group-hover:text-primary">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if not challenges %}
+            <div class="col-span-full py-20 text-center glass-card rounded-[3rem] border-dashed border-outline space-y-4">
+                <p class="text-on-surface/40 text-lg italic">You haven't started any challenges yet.</p>
+                <p class="text-on-surface/30 text-sm">Click "Generate New Challenge" to begin your practice session.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .indigo-gradient {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
+</style>
+{% endblock %}

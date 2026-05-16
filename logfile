@@ -39,3 +39,59 @@
 2026-05-16 17:49:22.908 IST [9340] LOG:  checkpoint complete: wrote 7 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.605 s, sync=0.003 s, total=0.619 s; sync files=6, longest=0.002 s, average=0.001 s; distance=3 kB, estimate=1248 kB; lsn=0/1A860B8, redo lsn=0/1A86028
 2026-05-16 17:54:22.953 IST [9340] LOG:  checkpoint starting: time
 2026-05-16 17:54:23.269 IST [9340] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.305 s, sync=0.003 s, total=0.317 s; sync files=4, longest=0.002 s, average=0.001 s; distance=3 kB, estimate=1123 kB; lsn=0/1A87060, redo lsn=0/1A87008
+2026-05-16 18:49:22.979 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 18:49:23.204 IST [9340] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.206 s, sync=0.005 s, total=0.226 s; sync files=3, longest=0.004 s, average=0.002 s; distance=4 kB, estimate=1011 kB; lsn=0/1A88350, redo lsn=0/1A882F8
+2026-05-16 19:04:22.501 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 19:04:23.017 IST [9340] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.505 s, sync=0.004 s, total=0.516 s; sync files=5, longest=0.002 s, average=0.001 s; distance=10 kB, estimate=911 kB; lsn=0/1A8AEA0, redo lsn=0/1A8AE48
+2026-05-16 20:59:23.721 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 20:59:24.758 IST [9340] LOG:  checkpoint complete: wrote 11 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.017 s, sync=0.007 s, total=1.038 s; sync files=11, longest=0.004 s, average=0.001 s; distance=5 kB, estimate=821 kB; lsn=0/1A8C3D0, redo lsn=0/1A8C378
+2026-05-16 21:04:23.857 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 21:04:24.382 IST [9340] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.507 s, sync=0.005 s, total=0.526 s; sync files=5, longest=0.003 s, average=0.001 s; distance=11 kB, estimate=740 kB; lsn=0/1A8F2B8, redo lsn=0/1A8F260
+2026-05-16 21:09:23.462 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 21:09:23.786 IST [9340] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.306 s, sync=0.005 s, total=0.324 s; sync files=4, longest=0.003 s, average=0.002 s; distance=9 kB, estimate=667 kB; lsn=0/1A91798, redo lsn=0/1A91740
+2026-05-16 21:14:23.887 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 21:14:24.417 IST [9340] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.507 s, sync=0.005 s, total=0.531 s; sync files=5, longest=0.003 s, average=0.001 s; distance=16 kB, estimate=602 kB; lsn=0/1A95B80, redo lsn=0/1A95B28
+2026-05-16 21:19:23.518 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 21:19:24.542 IST [9340] LOG:  checkpoint complete: wrote 11 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.007 s, sync=0.006 s, total=1.024 s; sync files=8, longest=0.003 s, average=0.001 s; distance=32 kB, estimate=545 kB; lsn=0/1A9DC00, redo lsn=0/1A9DBA8
+2026-05-16 21:24:23.612 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 21:24:24.132 IST [9340] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.505 s, sync=0.005 s, total=0.521 s; sync files=5, longest=0.004 s, average=0.001 s; distance=4 kB, estimate=491 kB; lsn=0/1A9EFC0, redo lsn=0/1A9EF68
+2026-05-16 21:54:23.562 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 21:54:24.278 IST [9340] LOG:  checkpoint complete: wrote 8 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.706 s, sync=0.003 s, total=0.716 s; sync files=8, longest=0.002 s, average=0.001 s; distance=15 kB, estimate=443 kB; lsn=0/1AA2EC8, redo lsn=0/1AA2E70
+2026-05-16 22:04:23.477 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 22:04:23.992 IST [9340] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.509 s, sync=0.002 s, total=0.516 s; sync files=6, longest=0.002 s, average=0.001 s; distance=6 kB, estimate=399 kB; lsn=0/1AA4948, redo lsn=0/1AA48F0
+2026-05-16 22:09:24.033 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 22:09:24.145 IST [9340] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.103 s, sync=0.003 s, total=0.112 s; sync files=2, longest=0.003 s, average=0.002 s; distance=2 kB, estimate=360 kB; lsn=0/1AA52B8, redo lsn=0/1AA5260
+2026-05-16 22:14:24.238 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 22:14:24.754 IST [9340] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.504 s, sync=0.004 s, total=0.517 s; sync files=5, longest=0.003 s, average=0.001 s; distance=14 kB, estimate=325 kB; lsn=0/1AA8CC8, redo lsn=0/1AA8C70
+2026-05-16 22:19:24.855 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 22:19:25.368 IST [9340] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.504 s, sync=0.003 s, total=0.514 s; sync files=5, longest=0.002 s, average=0.001 s; distance=17 kB, estimate=294 kB; lsn=0/1AAD270, redo lsn=0/1AAD218
+2026-05-16 22:24:24.468 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 22:24:24.782 IST [9340] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.304 s, sync=0.003 s, total=0.314 s; sync files=4, longest=0.002 s, average=0.001 s; distance=13 kB, estimate=266 kB; lsn=0/1AB0678, redo lsn=0/1AB0620
+2026-05-16 23:19:25.658 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 23:19:25.970 IST [9340] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.303 s, sync=0.003 s, total=0.313 s; sync files=4, longest=0.002 s, average=0.001 s; distance=11 kB, estimate=241 kB; lsn=0/1AB3480, redo lsn=0/1AB3428
+2026-05-16 23:29:43.155 IST [30544] ERROR:  column profiles.badges does not exist at character 538
+2026-05-16 23:29:43.155 IST [30544] STATEMENT:  SELECT profiles.id AS profiles_id, profiles.user_id AS profiles_user_id, profiles.headline AS profiles_headline, profiles.bio AS profiles_bio, profiles.skills AS profiles_skills, profiles.experience AS profiles_experience, profiles.education AS profiles_education, profiles.location AS profiles_location, profiles.github_url AS profiles_github_url, profiles.linkedin_url AS profiles_linkedin_url, profiles.resume_path AS profiles_resume_path, profiles.resume_text AS profiles_resume_text, profiles.resume_score AS profiles_resume_score, profiles.badges AS profiles_badges, profiles.visibility AS profiles_visibility 
+	FROM profiles 
+	WHERE 'ff0adbd3-0600-42d2-86cb-faae784fc7ea'::uuid::UUID = profiles.user_id
+2026-05-16 23:29:48.784 IST [30544] ERROR:  column profiles.badges does not exist at character 538
+2026-05-16 23:29:48.784 IST [30544] STATEMENT:  SELECT profiles.id AS profiles_id, profiles.user_id AS profiles_user_id, profiles.headline AS profiles_headline, profiles.bio AS profiles_bio, profiles.skills AS profiles_skills, profiles.experience AS profiles_experience, profiles.education AS profiles_education, profiles.location AS profiles_location, profiles.github_url AS profiles_github_url, profiles.linkedin_url AS profiles_linkedin_url, profiles.resume_path AS profiles_resume_path, profiles.resume_text AS profiles_resume_text, profiles.resume_score AS profiles_resume_score, profiles.badges AS profiles_badges, profiles.visibility AS profiles_visibility 
+	FROM profiles 
+	WHERE 'ff0adbd3-0600-42d2-86cb-faae784fc7ea'::uuid::UUID = profiles.user_id
+2026-05-16 23:30:00.758 IST [30544] ERROR:  column profiles.badges does not exist at character 538
+2026-05-16 23:30:00.758 IST [30544] STATEMENT:  SELECT profiles.id AS profiles_id, profiles.user_id AS profiles_user_id, profiles.headline AS profiles_headline, profiles.bio AS profiles_bio, profiles.skills AS profiles_skills, profiles.experience AS profiles_experience, profiles.education AS profiles_education, profiles.location AS profiles_location, profiles.github_url AS profiles_github_url, profiles.linkedin_url AS profiles_linkedin_url, profiles.resume_path AS profiles_resume_path, profiles.resume_text AS profiles_resume_text, profiles.resume_score AS profiles_resume_score, profiles.badges AS profiles_badges, profiles.visibility AS profiles_visibility 
+	FROM profiles 
+	WHERE 'ff0adbd3-0600-42d2-86cb-faae784fc7ea'::uuid::UUID = profiles.user_id
+2026-05-16 23:34:26.263 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 23:34:26.883 IST [9340] LOG:  checkpoint complete: wrote 7 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.607 s, sync=0.004 s, total=0.621 s; sync files=7, longest=0.002 s, average=0.001 s; distance=23 kB, estimate=219 kB; lsn=0/1AB9418, redo lsn=0/1AB93C0
+2026-05-16 23:39:26.982 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 23:39:31.327 IST [9340] LOG:  checkpoint complete: wrote 44 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.325 s, sync=0.005 s, total=4.345 s; sync files=35, longest=0.002 s, average=0.001 s; distance=173 kB, estimate=214 kB; lsn=0/1AE4A40, redo lsn=0/1AE49E8
+2026-05-16 23:44:26.425 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 23:44:26.747 IST [9340] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.306 s, sync=0.004 s, total=0.323 s; sync files=4, longest=0.002 s, average=0.001 s; distance=6 kB, estimate=193 kB; lsn=0/1AE6450, redo lsn=0/1AE63F8
+2026-05-16 23:49:26.848 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 23:49:26.971 IST [9340] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.104 s, sync=0.004 s, total=0.124 s; sync files=2, longest=0.003 s, average=0.002 s; distance=5 kB, estimate=175 kB; lsn=0/1AE7890, redo lsn=0/1AE7838
+2026-05-16 23:54:27.072 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 23:54:27.388 IST [9340] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.303 s, sync=0.003 s, total=0.317 s; sync files=4, longest=0.002 s, average=0.001 s; distance=12 kB, estimate=158 kB; lsn=0/1AEA978, redo lsn=0/1AEA920
+2026-05-16 23:59:27.485 IST [9340] LOG:  checkpoint starting: time
+2026-05-16 23:59:27.803 IST [9340] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.306 s, sync=0.003 s, total=0.318 s; sync files=4, longest=0.002 s, average=0.001 s; distance=8 kB, estimate=143 kB; lsn=0/1AECD08, redo lsn=0/1AECCB0
+2026-05-17 00:04:27.901 IST [9340] LOG:  checkpoint starting: time
+2026-05-17 00:04:28.021 IST [9340] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.104 s, sync=0.004 s, total=0.120 s; sync files=2, longest=0.002 s, average=0.002 s; distance=6 kB, estimate=130 kB; lsn=0/1AEE5B0, redo lsn=0/1AEE558

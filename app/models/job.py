@@ -1,7 +1,10 @@
 from datetime import datetime
 import uuid
+from sqlalchemy import JSON
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from app.extensions import db
+
+CompatibleJSON = JSON().with_variant(JSONB(), 'postgresql')
 
 class Job(db.Model):
     __tablename__ = 'jobs'
@@ -10,7 +13,7 @@ class Job(db.Model):
     company_id = db.Column(UUID(as_uuid=True), db.ForeignKey('companies.id'), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    skills_required = db.Column(JSONB) # ["Python", "Django"]
+    skills_required = db.Column(CompatibleJSON) # ["Python", "Django"]
     experience_min = db.Column(db.Integer)
     salary_min = db.Column(db.Integer)
     salary_max = db.Column(db.Integer)

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Resume AI Analysis | Be Your{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-12">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <div>
+            <h1 class="text-4xl font-heading font-bold text-on-surface mb-2 uppercase tracking-tighter">AI Resume Analysis</h1>
+            <p class="text-on-surface-variant">Deep dive into your resume's performance and ATS compatibility.</p>
+        </div>
+        <a href="{{ url_for('user.dashboard') }}" class="flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <!-- Score Card -->
+        <div class="lg:col-span-4">
+            <div class="glass-card p-10 rounded-[3rem] text-center space-y-8 relative overflow-hidden group h-full">
+                <div class="absolute inset-0 indigo-gradient opacity-5"></div>
+                
+                <p class="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Overall Score</p>
+                
+                <div class="relative inline-flex items-center justify-center">
+                    <svg class="w-48 h-48 transform -rotate-90">
+                        <circle cx="96" cy="96" r="88" stroke="currentColor" stroke-width="12" fill="transparent" class="text-surface" />
+                        <circle cx="96" cy="96" r="88" stroke="currentColor" stroke-width="12" fill="transparent" 
+                            stroke-dasharray="552.92" 
+                            stroke-dashoffset="{{ 552.92 * (1 - analysis.score / 100) }}"
+                            class="text-primary transition-all duration-1000 ease-out" 
+                            stroke-linecap="round" />
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span class="text-6xl font-heading font-bold">{{ analysis.score }}</span>
+                        <span class="text-[10px] font-bold text-on-surface/40 uppercase">Out of 100</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-sm font-bold {% if analysis.ats_compatibility %}text-emerald-400{% else %}text-amber-400{% endif %}">
+                        {{ 'ATS COMPATIBLE' if analysis.ats_compatibility else 'NEEDS OPTIMIZATION' }}
+                    </p>
+                    <p class="text-xs text-on-surface/40">Readability: {{ analysis.readability }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Feedback -->
+        <div class="lg:col-span-8 space-y-10">
+            <div class="glass-card p-10 rounded-[3rem] space-y-8 h-full">
+                <h3 class="text-xl font-heading font-bold flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">insights</span>
+                    AI Feedback & Insights
+                </h3>
+
+                <div class="space-y-6">
+                    {% for item in analysis.feedback %}
+                        <div class="flex items-start gap-4 p-5 rounded-2xl bg-white/5 border border-outline">
+                            <span class="material-symbols-outlined {% if 'Optimal' in item or 'Strong' in item or 'Good' in item %}text-emerald-400{% else %}text-amber-400{% endif %}">
+                                {{ 'check_circle' if 'Optimal' in item or 'Strong' in item or 'Good' in item else 'warning' }}
+                            </span>
+                            <p class="text-sm text-on-surface/80 leading-relaxed">{{ item }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 pt-6">
+                    <div class="p-6 rounded-2xl bg-surface border border-outline text-center">
+                        <p class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest mb-1">Word Count</p>
+                        <p class="text-2xl font-bold">{{ analysis.word_count }}</p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-surface border border-outline text-center">
+                        <p class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest mb-1">Action Verbs</p>
+                        <p class="text-2xl font-bold">{{ analysis.action_verbs|length }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills & Keywords -->
+        <div class="lg:col-span-12">
+            <div class="glass-card p-10 rounded-[3rem] space-y-8">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-heading font-bold flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">psychology</span>
+                        Identified Keywords & Skills
+                    </h3>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                    {% for skill in analysis.skills_found %}
+                        <span class="px-5 py-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-indigo-400">
+                            {{ skill }}
+                        </span>
+                    {% endfor %}
+                    {% if not analysis.skills_found %}
+                        <p class="text-sm text-on-surface/40 italic">No matching keywords found. Try adding more technical terms to your resume.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes progress {
+        from { stroke-dashoffset: 552.92; }
+    }
+    circle:last-child {
+        animation: progress 1.5s ease-out forwards;
+    }
+</style>
+{% endblock %}

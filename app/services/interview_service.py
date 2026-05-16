@@ -46,8 +46,14 @@ class InterviewService:
 
     @staticmethod
     def start_session(user_id, job_role=None, category="technical"):
-        questions = InterviewService.QUESTION_BANK.get(category, InterviewService.QUESTION_BANK['technical'])
-        selected_questions = random.sample(questions, min(len(questions), 5))
+        from app.models.user import User
+        from app.services.ai_service import AIService
+        
+        user = User.query.get(user_id)
+        user_skills = user.profile.skills if user and user.profile else []
+        
+        # Use AI to generate specialized questions based on user skills
+        selected_questions = AIService.generate_interview_questions(user_skills, job_role, category)
         
         interview = Interview(
             user_id=user_id,
@@ -109,9 +115,27 @@ class InterviewService:
         if interview:
             interview.status = "completed"
             
-            # Calculate average score from feedback
-            all_scores = [f['score'] for f in interview.feedback.values()] if interview.feedback else [0]
-            interview.total_score = sum(all_scores) / len(all_scores) if all_scores else 0
+            from app.services.ai_service import AIService
+            scorecard = AIService.generate_interview_scorecard(
+                interview.questions, 
+                interview.answers, 
+                interview.feedback
+            )
+            
+            # Merge scorecard into feedback
+            full_feedback = dict(interview.feedback) if interview.feedback else {}
+            full_feedback['scorecard'] = scorecard
+            interview.feedback = full_feedback
+            interview.total_score = scorecard['overall_score']
             
             db.session.commit()
+
+            # --- BADGE AWARDING LOGIC ---
+            if scorecard['overall_score'] >= 80:
+                from app.services.badge_service import BadgeService
+                from app.models.user import User
+                user = User.query.get(interview.user_id)
+                if user:
+                    BadgeService.check_and_award_interview_badge(user, scorecard['overall_score'], interview.job_role or "Technical")
+            
         return interview

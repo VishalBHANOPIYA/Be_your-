@@ -1,77 +1,107 @@
 {% extends "base.html" %}
 
-{% block title %}Admin Control Center | Be Your{% endblock %}
+{% block title %}Admin Dashboard | Be Your{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-6 py-12 space-y-12">
-    <!-- Header Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="glass-card p-10 rounded-[3rem] space-y-4 hover:-translate-y-2 transition-transform border-l-4 border-primary">
-            <p class="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Total Users</p>
-            <h3 class="text-5xl font-heading font-bold text-on-surface">{{ stats.total_users }}</h3>
-            <div class="flex gap-4 text-[10px] font-bold text-on-surface/40 uppercase">
-                <span>{{ stats.seekers }} Seekers</span>
-                <span>{{ stats.recruiters }} Recruiters</span>
-            </div>
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-4xl font-heading font-bold text-on-surface uppercase tracking-tighter">Admin Control Center</h1>
+            <p class="text-on-surface/40">Manage platform users, jobs, and system activity.</p>
         </div>
-        <div class="glass-card p-10 rounded-[3rem] space-y-4 hover:-translate-y-2 transition-transform border-l-4 border-violet-400">
-            <p class="text-[10px] font-bold text-violet-400 uppercase tracking-[0.2em]">Active Jobs</p>
-            <h3 class="text-5xl font-heading font-bold text-on-surface">{{ stats.total_jobs }}</h3>
-        </div>
-        <div class="glass-card p-10 rounded-[3rem] space-y-4 hover:-translate-y-2 transition-transform border-l-4 border-emerald-400">
-            <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-[0.2em]">Applications</p>
-            <h3 class="text-5xl font-heading font-bold text-on-surface">{{ stats.total_applications }}</h3>
-        </div>
-        <div class="glass-card p-10 rounded-[3rem] space-y-4 hover:-translate-y-2 transition-transform border-l-4 border-amber-400">
-            <p class="text-[10px] font-bold text-amber-400 uppercase tracking-[0.2em]">Interviews</p>
-            <h3 class="text-5xl font-heading font-bold text-on-surface">142</h3>
+        <div class="flex gap-4">
+            <a href="{{ url_for('admin.export_users') }}" class="flex items-center gap-2 px-6 py-3 rounded-2xl border border-white/10 hover:bg-white/5 transition-all text-sm font-bold">
+                <span class="material-symbols-outlined text-sm">download</span>
+                Export Users CSV
+            </a>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <!-- Recent Users -->
-        <div class="glass-card rounded-[3rem] overflow-hidden">
-            <div class="px-10 py-8 border-b border-outline flex justify-between items-center">
-                <h3 class="text-xl font-heading font-bold text-on-surface">Newest Users</h3>
-                <a href="{{ url_for('admin.users') }}" class="text-xs font-bold text-primary uppercase tracking-widest">View All</a>
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="glass-card p-8 rounded-[2.5rem] space-y-2">
+            <p class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Total Users</p>
+            <p class="text-3xl font-bold">{{ stats.total_users }}</p>
+        </div>
+        <div class="glass-card p-8 rounded-[2.5rem] space-y-2">
+            <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Total Recruiters</p>
+            <p class="text-3xl font-bold">{{ stats.total_recruiters }}</p>
+        </div>
+        <div class="glass-card p-8 rounded-[2.5rem] space-y-2">
+            <p class="text-[10px] font-bold text-primary uppercase tracking-widest">Completed Interviews</p>
+            <p class="text-3xl font-bold">{{ stats.total_interviews }}</p>
+        </div>
+        <div class="glass-card p-8 rounded-[2.5rem] space-y-2">
+            <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Active Job Postings</p>
+            <p class="text-3xl font-bold">{{ stats.total_jobs }}</p>
+        </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a href="{{ url_for('admin.users') }}" class="glass-card p-8 rounded-[2.5rem] hover:border-primary/50 transition-all group flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <span class="material-symbols-outlined text-3xl text-primary">group</span>
+                <span class="font-bold">Manage Users</span>
             </div>
-            <div class="divide-y divide-white/5">
+            <span class="material-symbols-outlined text-on-surface/20 group-hover:text-primary transition-all">arrow_forward_ios</span>
+        </a>
+        <a href="{{ url_for('admin.recruiters') }}" class="glass-card p-8 rounded-[2.5rem] hover:border-primary/50 transition-all group flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <span class="material-symbols-outlined text-3xl text-indigo-400">business</span>
+                <span class="font-bold">Recruiters & Companies</span>
+            </div>
+            <span class="material-symbols-outlined text-on-surface/20 group-hover:text-primary transition-all">arrow_forward_ios</span>
+        </a>
+        <a href="{{ url_for('admin.logs') }}" class="glass-card p-8 rounded-[2.5rem] hover:border-primary/50 transition-all group flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <span class="material-symbols-outlined text-3xl text-amber-400">history</span>
+                <span class="font-bold">Activity Logs</span>
+            </div>
+            <span class="material-symbols-outlined text-on-surface/20 group-hover:text-primary transition-all">arrow_forward_ios</span>
+        </a>
+    </div>
+
+    <!-- Recent Activity Tables -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <!-- Newest Users -->
+        <div class="glass-card p-8 rounded-[3rem] space-y-6">
+            <h3 class="text-xl font-bold flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">person_add</span>
+                Recent Signups
+            </h3>
+            <div class="space-y-4">
                 {% for user in stats.recent_users %}
-                <div class="px-10 py-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-surface border border-outline flex items-center justify-center text-primary font-bold">
+                <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-outline">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
                             {{ user.name[0] }}
                         </div>
                         <div>
-                            <p class="font-bold text-on-surface text-sm">{{ user.name }}</p>
-                            <p class="text-[10px] text-on-surface/40 uppercase tracking-widest">{{ user.role }}</p>
+                            <p class="text-sm font-bold">{{ user.name }}</p>
+                            <p class="text-[10px] text-on-surface/40">{{ user.email }}</p>
                         </div>
                     </div>
-                    <span class="text-[10px] text-on-surface/30 font-bold uppercase">{{ user.created_at.strftime('%b %d') }}</span>
+                    <span class="text-[10px] px-3 py-1 rounded-full bg-white/5 border border-outline uppercase tracking-widest">{{ user.role }}</span>
                 </div>
                 {% endfor %}
             </div>
         </div>
 
-        <!-- Recent Jobs -->
-        <div class="glass-card rounded-[3rem] overflow-hidden">
-            <div class="px-10 py-8 border-b border-outline flex justify-between items-center">
-                <h3 class="text-xl font-heading font-bold text-on-surface">Latest Job Postings</h3>
-                <a href="{{ url_for('admin.jobs') }}" class="text-xs font-bold text-primary uppercase tracking-widest">Manage Jobs</a>
-            </div>
-            <div class="divide-y divide-white/5">
+        <!-- Newest Jobs -->
+        <div class="glass-card p-8 rounded-[3rem] space-y-6">
+            <h3 class="text-xl font-bold flex items-center gap-2">
+                <span class="material-symbols-outlined text-emerald-400">work</span>
+                Recent Job Postings
+            </h3>
+            <div class="space-y-4">
                 {% for job in stats.recent_jobs %}
-                <div class="px-10 py-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                            <span class="material-symbols-outlined text-sm">work</span>
-                        </div>
-                        <div>
-                            <p class="font-bold text-on-surface text-sm">{{ job.title }}</p>
-                            <p class="text-[10px] text-on-surface/40 uppercase tracking-widest">{{ job.company.name }}</p>
-                        </div>
+                <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-outline">
+                    <div>
+                        <p class="text-sm font-bold">{{ job.title }}</p>
+                        <p class="text-[10px] text-on-surface/40">{{ job.company.name }} • {{ job.location }}</p>
                     </div>
-                    <span class="text-[10px] text-on-surface/30 font-bold uppercase">{{ job.created_at.strftime('%b %d') }}</span>
+                    <span class="text-[10px] font-bold text-primary">{{ job.created_at.strftime('%d %b') }}</span>
                 </div>
                 {% endfor %}
             </div>

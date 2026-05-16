@@ -10,8 +10,13 @@
             <p class="text-on-surface-variant text-sm">Update your personal information and professional details.</p>
         </div>
 
-        <form method="POST" action="{{ url_for('user.edit_profile') }}" class="space-y-6">
+        <form method="POST" action="{{ url_for('user.edit_profile') }}" class="space-y-6" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Profile Picture</label>
+                <input type="file" name="avatar" accept="image/*" class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all cursor-pointer">
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
@@ -33,6 +38,21 @@
             <div class="space-y-2">
                 <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Bio</label>
                 <textarea name="bio" rows="4" class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">{{ current_user.profile.bio or '' }}</textarea>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Skills (Comma Separated)</label>
+                <input type="text" name="skills" value="{{ current_user.profile.skills|join(', ') if current_user.profile.skills else '' }}" placeholder="e.g. Python, Flask, React, SQL" class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Work Experience</label>
+                <textarea name="experience" rows="3" placeholder="Briefly describe your past roles, companies, and achievements..." class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">{{ current_user.profile.experience[0].details if current_user.profile.experience else '' }}</textarea>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Education</label>
+                <textarea name="education" rows="2" placeholder="List your degrees, universities, and graduation years..." class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">{{ current_user.profile.education[0].details if current_user.profile.education else '' }}</textarea>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

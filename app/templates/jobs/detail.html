@@ -40,7 +40,7 @@
                     </div>
                     <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface text-sm text-on-surface-variant">
                         <span class="material-symbols-outlined text-base">payments</span>
-                        ${{ "{:,.0f}".format(job.salary_min/1000) }}k - ${{ "{:,.0f}".format(job.salary_max/1000) }}k
+                        ${{ "{:,.0f}".format((job.salary_min or 0)/1000) }}k - ${{ "{:,.0f}".format((job.salary_max or 0)/1000) }}k
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
                 </div>
 
                 {% if current_user.is_authenticated %}
-                    <form method="POST" action="{{ url_for('jobs.apply', job_id=job.id) }}" class="space-y-6">
+                    <form method="POST" action="{{ url_for('jobs.apply_job', job_id=job.id) }}" class="space-y-6">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="space-y-2">
                             <label for="cover_note" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Short Note (Optional)</label>
@@ -99,24 +99,199 @@
                 <div class="pt-6 border-t border-outline space-y-4">
                     <div class="flex items-center justify-between text-sm">
                         <span class="text-on-surface-variant">Posted on</span>
-                        <span class="text-on-surface font-medium">{{ job.created_at.strftime('%d %b, %Y') }}</span>
+                        <span class="text-on-surface font-medium">{{ job.created_at.strftime('%d %b, %Y') if job.created_at else 'Recently' }}</span>
                     </div>
                     <div class="flex items-center justify-between text-sm">
                         <span class="text-on-surface-variant">Deadline</span>
-                        <span class="text-on-surface font-medium">{{ job.deadline.strftime('%d %b, %Y') }}</span>
+                        <span class="text-on-surface font-medium">{{ job.deadline.strftime('%d %b, %Y') if job.deadline else 'Open until filled' }}</span>
                     </div>
                 </div>
             </div>
 
-            <!-- AI Insights Mini-Card -->
-            <div class="glass-card p-6 rounded-[2rem] border-primary/20 space-y-4">
+            <!-- AI Insights / Skill Gap Card -->
+            <div class="glass-card p-6 rounded-[2rem] border-primary/20 space-y-6">
                 <div class="flex items-center gap-2 text-primary">
-                    <span class="material-symbols-outlined">psychology</span>
-                    <h4 class="font-bold text-sm uppercase tracking-widest">AI Insights</h4>
+                    <span class="material-symbols-outlined">analytics</span>
+                    <h4 class="font-bold text-sm uppercase tracking-widest">Skill Gap Analysis</h4>
                 </div>
-                <p class="text-xs text-on-surface-variant">Based on your current profile, you have a <span class="text-primary font-bold">72% match</span> for this role. We recommend highlighting your 'Flask' experience.</p>
+                
+                {% if skill_gap %}
+                    <div class="relative h-64 w-full">
+                        <canvas id="skillRadarChart"></canvas>
+                    </div>
+
+                    <div class="space-y-4 pt-4 border-t border-outline">
+                        <div>
+                            <p class="text-[10px] font-bold text-green-500 uppercase tracking-widest mb-2">You have these:</p>
+                            <div class="flex flex-wrap gap-2">
+                                {% for skill in skill_gap.matched %}
+                                    <span class="px-3 py-1 rounded-lg bg-green-500/10 text-green-500 text-[10px] font-bold border border-green-500/20">{{ skill }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-primary uppercase tracking-widest mb-2">You need these:</p>
+                            <div class="flex flex-wrap gap-2">
+                                {% for skill in skill_gap.missing %}
+                                    <span class="px-3 py-1 rounded-lg bg-primary/10 text-primary text-[10px] font-bold border border-primary/20">{{ skill }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="gen-cover-letter" onclick="generateCoverLetter('{{ job.id }}')"
+                        class="w-full py-3 rounded-xl border border-primary/30 text-primary text-xs font-bold hover:bg-primary/10 transition-all flex items-center justify-center gap-2 mt-4">
+                        <span class="material-symbols-outlined text-sm">description</span>
+                        Generate AI Cover Letter
+                    </button>
+                {% else %}
+                    <p class="text-xs text-on-surface-variant italic">Complete your profile to see a detailed skill gap analysis.</p>
+                    <a href="{{ url_for('user.dashboard') }}" class="block text-center text-xs font-bold text-primary hover:underline mt-2">Go to Profile</a>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+<!-- Cover Letter Modal -->
+<div id="cover-letter-modal" class="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-6">
+    <div class="glass-card w-full max-w-2xl p-8 rounded-[2.5rem] space-y-6 shadow-2xl relative">
+        <button onclick="closeModal()" class="absolute right-6 top-6 text-on-surface-variant hover:text-on-surface">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        
+        <div class="space-y-2">
+            <h3 class="text-2xl font-bold text-on-surface">Your AI Cover Letter</h3>
+            <p class="text-on-surface-variant text-sm">Tailored specifically for this role at {{ job.company.name }}.</p>
+        </div>
+
+        <div class="relative">
+            <textarea id="cover-letter-text" rows="15" 
+                class="w-full bg-input border border-outline rounded-2xl px-6 py-6 text-on-surface text-sm leading-relaxed focus:outline-none focus:border-primary/50 transition-all"></textarea>
+            
+            <button onclick="copyLetter()" class="absolute right-4 bottom-4 p-3 rounded-xl indigo-gradient text-white shadow-lg hover:scale-105 transition-all flex items-center gap-2 text-xs font-bold">
+                <span class="material-symbols-outlined text-sm">content_copy</span>
+                Copy to Clipboard
+            </button>
+        </div>
+        
+        <div id="copy-success" class="text-green-500 text-xs font-bold text-center hidden">
+            Copied to clipboard!
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    {% if skill_gap %}
+    const ctx = document.getElementById('skillRadarChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: {{ skill_gap.labels | tojson }},
+            datasets: [{
+                label: 'Your Skills',
+                data: {{ skill_gap.user_data | tojson }},
+                fill: true,
+                backgroundColor: 'rgba(255, 107, 0, 0.4)',
+                borderColor: '#FF6B00',
+                pointBackgroundColor: '#FF6B00',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#FF6B00',
+                borderWidth: 3
+            }, {
+                label: 'Job Requirement',
+                data: {{ skill_gap.job_data | tojson }},
+                fill: true,
+                backgroundColor: 'rgba(100, 100, 100, 0.05)',
+                borderColor: 'rgba(150, 150, 150, 0.3)',
+                pointBackgroundColor: 'rgba(150, 150, 150, 0.3)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(150, 150, 150, 0.3)',
+                borderDash: [5, 5],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: { color: 'rgba(150, 150, 150, 0.2)' },
+                    grid: { color: 'rgba(150, 150, 150, 0.2)' },
+                    pointLabels: { 
+                        color: 'var(--on-surface)', 
+                        font: { size: 11, weight: '700', family: 'Inter' },
+                        padding: 15
+                    },
+                    ticks: { 
+                        display: true, 
+                        stepSize: 25, 
+                        showLabelBackdrop: false,
+                        color: 'rgba(150, 150, 150, 0.5)',
+                        font: { size: 9 }
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true }
+            }
+        }
+    });
+    {% endif %}
+
+    function generateCoverLetter(jobId) {
+        const btn = document.getElementById('gen-cover-letter');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">sync</span> Generating...';
+
+        fetch('/ai/cover-letter/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ job_id: jobId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+            
+            if (data.success) {
+                document.getElementById('cover-letter-text').value = data.letter;
+                document.getElementById('cover-letter-modal').style.display = 'flex';
+            } else {
+                alert(data.error || 'Failed to generate cover letter.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+            alert('An error occurred. Please try again.');
+        });
+    }
+
+    function closeModal() {
+        document.getElementById('cover-letter-modal').style.display = 'none';
+    }
+
+    function copyLetter() {
+        const text = document.getElementById('cover-letter-text');
+        text.select();
+        document.execCommand('copy');
+        
+        const successMsg = document.getElementById('copy-success');
+        successMsg.classList.remove('hidden');
+        setTimeout(() => successMsg.classList.add('hidden'), 2000);
+    }
+</script>
 {% endblock %}

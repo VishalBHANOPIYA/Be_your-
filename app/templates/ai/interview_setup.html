@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-12">
+    <div class="glass-card p-12 rounded-[3.5rem] space-y-12 border-2 border-primary/20 relative overflow-hidden">
+        <!-- Background Glow -->
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl"></div>
+
+        <div class="text-center space-y-4 relative z-10">
+            <h1 class="text-4xl md:text-5xl font-heading font-bold text-on-surface">Interview Setup</h1>
+            <p class="text-on-surface/60 max-w-xl mx-auto italic">Customize your experience to focus on what matters most to your career.</p>
+        </div>
+
+        <form action="{{ url_for('ai.start_interview') }}" method="POST" class="space-y-10 relative z-10">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Interview Category -->
+                <div class="space-y-4">
+                    <label class="text-sm font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                        <span class="material-symbols-outlined text-base">category</span>
+                        Interview Type
+                    </label>
+                    <select name="category" class="w-full bg-surface border-2 border-outline rounded-2xl px-6 py-4 text-on-surface focus:border-primary transition-all appearance-none cursor-pointer">
+                        <option value="technical">Full Mock Interview (15 Questions)</option>
+                        <option value="hr">HR & Behavioral Focused</option>
+                        <option value="system_design">System Design Deep Dive</option>
+                    </select>
+                </div>
+
+                <!-- Technical Skill Focus -->
+                <div class="space-y-4">
+                    <label class="text-sm font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                        <span class="material-symbols-outlined text-base">psychology</span>
+                        Technical Focus
+                    </label>
+                    <select name="specific_skill" class="w-full bg-surface border-2 border-outline rounded-2xl px-6 py-4 text-on-surface focus:border-primary transition-all appearance-none cursor-pointer">
+                        <option value="">General (Mix of Skills)</option>
+                        <option value="Python">Python Development</option>
+                        <option value="Flask">Flask / Backend Web</option>
+                        <option value="React">React / Frontend Web</option>
+                        <option value="PostgreSQL">Database (PostgreSQL/SQL)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Experience Level -->
+            <div class="space-y-4">
+                <label class="text-sm font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base">military_tech</span>
+                    Experience Target
+                </label>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="job_role" value="Junior Developer" class="hidden peer">
+                        <div class="p-6 rounded-2xl border-2 border-outline bg-surface peer-checked:border-primary peer-checked:bg-primary/5 transition-all text-center">
+                            <p class="font-bold text-sm">Junior</p>
+                            <p class="text-[10px] text-on-surface/40 uppercase font-bold">0-2 Years</p>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="job_role" value="Senior Developer" checked class="hidden peer">
+                        <div class="p-6 rounded-2xl border-2 border-outline bg-surface peer-checked:border-primary peer-checked:bg-primary/5 transition-all text-center">
+                            <p class="font-bold text-sm">Senior</p>
+                            <p class="text-[10px] text-on-surface/40 uppercase font-bold">3-5 Years</p>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="job_role" value="Tech Lead" class="hidden peer">
+                        <div class="p-6 rounded-2xl border-2 border-outline bg-surface peer-checked:border-primary peer-checked:bg-primary/5 transition-all text-center">
+                            <p class="font-bold text-sm">Lead</p>
+                            <p class="text-[10px] text-on-surface/40 uppercase font-bold">5+ Years</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="pt-6">
+                <button type="submit" class="w-full py-6 rounded-[2rem] indigo-gradient text-white font-bold text-xl shadow-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4">
+                    <span class="material-symbols-outlined text-2xl">rocket_launch</span>
+                    Begin Full AI Interview
+                </button>
+                <p class="text-center text-xs text-on-surface/40 mt-6 italic">This session will take approximately 15-20 minutes. Prepare your voice or keyboard!</p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .indigo-gradient {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
+</style>
+{% endblock %}

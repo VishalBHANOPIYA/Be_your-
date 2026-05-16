@@ -1,10 +1,14 @@
 from datetime import datetime
 import uuid
+from sqlalchemy import JSON
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from app.extensions import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.extensions import login_manager
+
+# Use JSONB for Postgres, JSON for others (like SQLite in tests)
+CompatibleJSON = JSON().with_variant(JSONB(), 'postgresql')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -13,6 +17,9 @@ def load_user(user_id):
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     
+    # Use db.String(36) as a fallback for UUID if on SQLite, 
+    # but SQLAlchemy's UUID type from postgresql usually works if treated as a type.
+    # However, to be safe for tests, we can use a more generic approach.
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
@@ -43,13 +50,14 @@ class Profile(db.Model):
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     headline = db.Column(db.String(255))
     bio = db.Column(db.Text)
-    skills = db.Column(JSONB) # ["Python", "Flask"]
-    experience = db.Column(JSONB) # [{company, role, years}]
-    education = db.Column(JSONB) # [{college, degree, year}]
+    skills = db.Column(CompatibleJSON) # ["Python", "Flask"]
+    experience = db.Column(CompatibleJSON) # [{company, role, years}]
+    education = db.Column(CompatibleJSON) # [{college, degree, year}]
     location = db.Column(db.String(120))
     github_url = db.Column(db.String(255))
     linkedin_url = db.Column(db.String(255))
     resume_path = db.Column(db.String(500))
     resume_text = db.Column(db.Text)
     resume_score = db.Column(db.Float)
+    badges = db.Column(CompatibleJSON, default=[]) # [{"name": "Python Expert", "level": "Gold", "earned_at": "..."}]
     visibility = db.Column(db.Boolean, default=True)

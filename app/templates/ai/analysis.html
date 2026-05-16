@@ -1,91 +1,107 @@
 {% extends "base.html" %}
 
-{% block title %}Interview Analysis | Be Your AI{% endblock %}
-
 {% block content %}
 <div class="max-w-5xl mx-auto px-6 py-12 space-y-12">
-    <!-- Header Summary -->
-    <div class="glass-card p-12 rounded-[3rem] relative overflow-hidden">
-        <div class="absolute inset-0 glow-overlay -z-10 opacity-20"></div>
-        <div class="flex flex-col md:flex-row justify-between items-center gap-10">
-            <div class="space-y-4 text-center md:text-left">
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase tracking-[0.2em]">
-                    Performance Analysis
-                </div>
-                <h1 class="text-4xl md:text-5xl font-bold text-on-surface tracking-tight">Interview <span class="text-primary">Summary</span></h1>
-                <p class="text-on-surface-variant max-w-xl">Great job completing your session! Here's how you performed and where you can improve.</p>
+    <!-- Scorecard Header -->
+    <div class="glass-card p-12 rounded-[3.5rem] relative overflow-hidden text-center space-y-8">
+        <div class="absolute inset-0 indigo-gradient opacity-10"></div>
+        
+        <div class="relative z-10 space-y-4">
+            <h1 class="text-4xl md:text-5xl font-heading font-bold text-on-surface">Interview Performance Report</h1>
+            <p class="text-on-surface/40 font-bold uppercase tracking-[0.3em] text-xs">Job Role: {{ interview.job_role or 'Technical Role' }}</p>
+        </div>
+
+        <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-10 pt-8">
+            <div class="space-y-2">
+                <p class="text-[10px] font-bold text-primary uppercase tracking-widest">Overall Score</p>
+                <h2 class="text-6xl font-heading font-bold text-on-surface">{{ interview.total_score }}%</h2>
             </div>
-            
-            <div class="relative w-40 h-40 flex items-center justify-center">
-                <svg class="w-full h-full -rotate-90">
-                    <circle cx="80" cy="80" r="70" stroke="currentColor" stroke-width="8" fill="transparent" class="text-white/5"></circle>
-                    <circle cx="80" cy="80" r="70" stroke="currentColor" stroke-width="8" fill="transparent" 
-                        stroke-dasharray="439.6" stroke-dashoffset="{{ 439.6 - (439.6 * interview.total_score / 100) }}" 
-                        class="text-primary transition-all duration-1000"></circle>
-                </svg>
-                <div class="absolute text-center">
-                    <span class="text-4xl font-heading font-bold">{{ interview.total_score|int }}</span>
-                    <span class="block text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Score</span>
-                </div>
+            <div class="space-y-2">
+                <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Status</p>
+                <h2 class="text-4xl font-heading font-bold text-emerald-400">{{ interview.feedback.get('scorecard', {}).get('recommendation', 'Analysis Pending') }}</h2>
+            </div>
+            <div class="space-y-2">
+                <p class="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Key Strength</p>
+                <h2 class="text-2xl font-heading font-bold text-on-surface">
+                    {{ (interview.feedback.get('scorecard', {}).get('strengths', ['Generalist']))[0] }}
+                </h2>
             </div>
         </div>
     </div>
 
-    <!-- Question Breakdown -->
+    <!-- Phase Breakdown -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {% for report in interview.feedback.get('scorecard', {}).get('phase_reports', []) %}
+        <div class="glass-card p-8 rounded-[2.5rem] space-y-6 relative group hover:border-primary/30 transition-all">
+            <div class="flex justify-between items-start">
+                <div class="space-y-1">
+                    <p class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Phase 0{{ loop.index }}</p>
+                    <h3 class="text-xl font-bold">{{ report.phase }}</h3>
+                </div>
+                <div class="text-right">
+                    <p class="text-2xl font-bold text-primary">{{ report.score }}%</p>
+                    <p class="text-[8px] font-bold uppercase text-{{ 'emerald-400' if 'Passed' in report.status or 'Exceeded' in report.status else 'red-400' }}">{{ report.status }}</p>
+                </div>
+            </div>
+            
+            <div class="h-1.5 w-full bg-surface rounded-full overflow-hidden">
+                <div class="h-full indigo-gradient rounded-full transition-all duration-1000" style="width: {{ report.score }}%"></div>
+            </div>
+
+            <p class="text-xs text-on-surface/60 leading-relaxed">{{ report.summary }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Detailed Q&A Analysis -->
     <div class="space-y-8">
-        <h2 class="text-2xl font-bold text-on-surface flex items-center gap-3 px-4">
-            <span class="material-symbols-outlined text-primary">analytics</span>
-            Detailed Feedback
-        </h2>
+        <h3 class="text-2xl font-heading font-bold text-on-surface flex items-center gap-3 px-4">
+            <span class="material-symbols-outlined text-primary">transcript</span>
+            Detailed Transcript Analysis
+        </h3>
 
         <div class="space-y-6">
             {% for i in range(interview.questions|length) %}
-            {% set q = interview.questions[i] %}
-            {% set a = interview.answers[i|string] if interview.answers and i|string in interview.answers else 'No answer provided.' %}
-            {% set f = interview.feedback[i|string] if interview.feedback and i|string in interview.feedback else None %}
-            
-            <div class="glass-card p-8 rounded-[2.5rem] border-outline space-y-6">
-                <div class="flex justify-between items-start gap-4">
-                    <div class="space-y-2 flex-1">
-                        <p class="text-[10px] font-bold text-primary uppercase tracking-widest">Question {{ i + 1 }}</p>
-                        <h3 class="text-xl font-bold text-on-surface">{{ q }}</h3>
+            <div class="glass-card p-8 rounded-[2.5rem] space-y-6">
+                <div class="flex justify-between items-center gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="w-8 h-8 rounded-lg bg-surface border border-outline flex items-center justify-center text-xs font-bold text-on-surface/40">{{ i + 1 }}</span>
+                        <h4 class="font-bold text-on-surface">{{ interview.questions[i] }}</h4>
                     </div>
-                    {% if f %}
-                    <div class="px-4 py-2 rounded-xl bg-surface border border-outline text-xs font-bold text-primary">
-                        {{ f.score }}%
-                    </div>
-                    {% endif %}
-                </div>
-
-                <div class="space-y-2">
-                    <p class="text-[10px] font-bold text-on-surface/30 uppercase tracking-widest ml-1">Your Answer</p>
-                    <div class="p-6 rounded-2xl bg-white/[0.02] border border-outline text-on-surface-variant text-sm leading-relaxed italic">
-                        "{{ a }}"
+                    <div class="px-4 py-1.5 rounded-xl bg-primary/5 border border-primary/20 text-primary text-xs font-bold">
+                        {{ interview.feedback.get(i|string, {}).get('score', 0) }}%
                     </div>
                 </div>
 
-                {% if f %}
-                <div class="flex items-start gap-4 p-6 rounded-2xl bg-primary/5 border border-primary/10">
-                    <span class="material-symbols-outlined text-primary">smart_toy</span>
-                    <div class="space-y-1">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-outline">
+                    <div class="space-y-3">
+                        <p class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Your Answer</p>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">{{ interview.answers.get(i|string) or 'No answer provided.' }}</p>
+                    </div>
+                    <div class="space-y-3 p-6 rounded-2xl bg-primary/5">
                         <p class="text-[10px] font-bold text-primary uppercase tracking-widest">AI Feedback</p>
-                        <p class="text-on-surface text-sm leading-relaxed">{{ f.analysis }}</p>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">{{ interview.feedback.get(i|string, {}).get('analysis', 'No analysis available.') }}</p>
                     </div>
                 </div>
-                {% endif %}
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- Actions -->
-    <div class="flex flex-col sm:flex-row justify-center gap-6 pt-12">
-        <a href="{{ url_for('ai.start_interview') }}" class="px-10 py-5 rounded-2xl indigo-gradient text-white font-bold text-center shadow-xl hover:scale-105 transition-all">
-            Try Another Session
+    <!-- Footer Actions -->
+    <div class="flex flex-col md:flex-row justify-center gap-6 pt-12">
+        <a href="{{ url_for('ai.start_interview') }}" class="px-10 py-5 rounded-2xl indigo-gradient text-white font-bold text-center shadow-lg hover:scale-105 transition-all">
+            Try Another Mock Interview
         </a>
-        <a href="{{ url_for('user.dashboard') }}" class="px-10 py-5 rounded-2xl border border-outline text-on-surface font-bold text-center hover:bg-surface transition-all">
-            Return to Dashboard
+        <a href="{{ url_for('user.dashboard') }}" class="px-10 py-5 rounded-2xl border border-outline text-on-surface/60 font-bold text-center hover:bg-surface transition-all">
+            Back to Dashboard
         </a>
     </div>
 </div>
+
+<style>
+    .indigo-gradient {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
+</style>
 {% endblock %}

@@ -8,3 +8,587 @@ Press CTRL+C to quit
  * Restarting with watchdog (inotify)
  * Debugger is active!
  * Debugger PIN: 925-023-670
+127.0.0.1 - - [16/May/2026 22:17:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:17:30] "GET /ai/interview/start HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:17:34] "POST /ai/interview/start HTTP/1.1" 302 -
+127.0.0.1 - - [16/May/2026 22:17:34] "GET /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:18:08] "POST /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2/finish HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:18:11] "GET /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2/analysis HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/Downloads/Be_your/app/routes/ai.py", line 61, in interview_analysis
+    return render_template('ai/analysis.html', interview=interview)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/vish/Downloads/Be_your/app/templates/ai/analysis.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/home/vish/Downloads/Be_your/app/templates/base.html", line 165, in top-level template code
+    {% block content %}{% endblock %}
+  File "/home/vish/Downloads/Be_your/app/templates/ai/analysis.html", line 72, in block 'content'
+    {{ interview.feedback[i|string].score }}%
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 487, in getattr
+    return getattr(obj, attribute)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'dict object' has no attribute '0'
+127.0.0.1 - - [16/May/2026 22:18:12] "GET /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2/analysis?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:18:12] "GET /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2/analysis?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:18:12] "GET /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2/analysis?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:19:57] "GET /portfolio/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:20:01] "GET /jobs/ HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:20:38] "GET /ai/interview/start HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:20:40] "POST /ai/interview/start HTTP/1.1" 302 -
+127.0.0.1 - - [16/May/2026 22:20:40] "GET /ai/interview/3d7d6f83-be16-4100-9572-a16c43c5f1b7 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:20:53] "POST /ai/interview/3d7d6f83-be16-4100-9572-a16c43c5f1b7/finish HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:20:56] "GET /ai/interview/3d7d6f83-be16-4100-9572-a16c43c5f1b7/analysis HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:21:09] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 22:21:09] "GET /static/uploads/avatars/avatar_ff0adbd3-0600-42d2-86cb-faae784fc7ea_Professional_headshot_in_formal_attire.png HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 22:21:10] "GET /ai/recommendations HTTP/1.1" 200 -
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/resume.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/resume.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/resume.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/resume.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+127.0.0.1 - - [16/May/2026 23:12:48] "GET /jobs/ HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:12:53] "GET /ai/interview/start HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:12:55] "GET /jobs/ HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:12:56] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:15:11] "GET /ai/interview/start HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:15:13] "POST /ai/interview/start HTTP/1.1" 302 -
+127.0.0.1 - - [16/May/2026 23:15:13] "GET /ai/interview/e3045e9c-2c63-44be-b3b0-b8a4fb139d75 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:15:42] "GET /jobs/ HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:15:48] "GET /ai/interview/start HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:16:54] "GET /portfolio/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:17:01] "POST /portfolio/analyze HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:17:06] "GET /user/roadmap HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/Downloads/Be_your/app/routes/user.py", line 53, in roadmap
+    return render_template('user/roadmap.html', roadmap=None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/templating.py", line 149, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 1084, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 1013, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 972, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/vish/Downloads/Be_your/app/templates/user/roadmap.html", line 193, in template
+    {% endblock %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'.
+127.0.0.1 - - [16/May/2026 23:17:06] "GET /user/roadmap?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:17:06] "GET /user/roadmap?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:17:06] "GET /user/roadmap?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:17:35] "GET /user/roadmap HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:17:40] "GET /user/roadmap HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:17:44] "POST /ai/roadmap/generate HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:20:30] "POST /ai/roadmap/generate HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:20:51] "GET /resume/resume/optimize HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:20:53] "GET /user/roadmap HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:20:58] "POST /ai/roadmap/generate HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:23:18] "POST /ai/roadmap/generate HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:24:32] "POST /ai/roadmap/generate HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:24:34] "GET /user/roadmap HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:24:38] "GET /user/roadmap HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:24:40] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:24:40] "GET /static/uploads/avatars/avatar_ff0adbd3-0600-42d2-86cb-faae784fc7ea_Professional_headshot_in_formal_attire.png HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 23:24:41] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:24:43] "GET /user/roadmap HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:24:53] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:24:54] "GET /static/uploads/avatars/avatar_ff0adbd3-0600-42d2-86cb-faae784fc7ea_Professional_headshot_in_formal_attire.png HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 23:24:54] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:24:55] "GET /user/roadmap HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:26:57] "GET /user/roadmap HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:27:01] "POST /ai/roadmap/generate HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:27:11] "POST /ai/roadmap/generate HTTP/1.1" 200 -
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/user.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/user.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/badge_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/badge_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/badge_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/badge_service.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/interview_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/interview_service.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+127.0.0.1 - - [16/May/2026 23:29:34] "GET /ai/interview/start HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:29:43] "GET /user/dashboard HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column profiles.badges does not exist
+LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/Downloads/Be_your/app/routes/user.py", line 35, in dashboard
+    if current_user.profile:
+       ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 978, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 1141, in _emit_lazyload
+    result = session.execute(
+             ^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column profiles.badges does not exist
+LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
+                                                             ^
+
+[SQL: SELECT profiles.id AS profiles_id, profiles.user_id AS profiles_user_id, profiles.headline AS profiles_headline, profiles.bio AS profiles_bio, profiles.skills AS profiles_skills, profiles.experience AS profiles_experience, profiles.education AS profiles_education, profiles.location AS profiles_location, profiles.github_url AS profiles_github_url, profiles.linkedin_url AS profiles_linkedin_url, profiles.resume_path AS profiles_resume_path, profiles.resume_text AS profiles_resume_text, profiles.resume_score AS profiles_resume_score, profiles.badges AS profiles_badges, profiles.visibility AS profiles_visibility 
+FROM profiles 
+WHERE %(param_1)s::UUID = profiles.user_id]
+[parameters: {'param_1': UUID('ff0adbd3-0600-42d2-86cb-faae784fc7ea')}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+127.0.0.1 - - [16/May/2026 23:29:43] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 23:29:43] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 23:29:43] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 23:29:48] "GET /user/dashboard HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column profiles.badges does not exist
+LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/Downloads/Be_your/app/routes/user.py", line 35, in dashboard
+    if current_user.profile:
+       ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 978, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 1141, in _emit_lazyload
+    result = session.execute(
+             ^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column profiles.badges does not exist
+LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
+                                                             ^
+
+[SQL: SELECT profiles.id AS profiles_id, profiles.user_id AS profiles_user_id, profiles.headline AS profiles_headline, profiles.bio AS profiles_bio, profiles.skills AS profiles_skills, profiles.experience AS profiles_experience, profiles.education AS profiles_education, profiles.location AS profiles_location, profiles.github_url AS profiles_github_url, profiles.linkedin_url AS profiles_linkedin_url, profiles.resume_path AS profiles_resume_path, profiles.resume_text AS profiles_resume_text, profiles.resume_score AS profiles_resume_score, profiles.badges AS profiles_badges, profiles.visibility AS profiles_visibility 
+FROM profiles 
+WHERE %(param_1)s::UUID = profiles.user_id]
+[parameters: {'param_1': UUID('ff0adbd3-0600-42d2-86cb-faae784fc7ea')}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+127.0.0.1 - - [16/May/2026 23:29:48] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 23:29:48] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 23:30:00] "GET /user/dashboard HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedColumn: column profiles.badges does not exist
+LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/Downloads/Be_your/app/routes/user.py", line 35, in dashboard
+    if current_user.profile:
+       ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1121, in _fire_loader_callables
+    return self.callable_(state, passive)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 978, in _load_for_state
+    return self._emit_lazyload(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 1141, in _emit_lazyload
+    result = session.execute(
+             ^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column profiles.badges does not exist
+LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
+                                                             ^
+
+[SQL: SELECT profiles.id AS profiles_id, profiles.user_id AS profiles_user_id, profiles.headline AS profiles_headline, profiles.bio AS profiles_bio, profiles.skills AS profiles_skills, profiles.experience AS profiles_experience, profiles.education AS profiles_education, profiles.location AS profiles_location, profiles.github_url AS profiles_github_url, profiles.linkedin_url AS profiles_linkedin_url, profiles.resume_path AS profiles_resume_path, profiles.resume_text AS profiles_resume_text, profiles.resume_score AS profiles_resume_score, profiles.badges AS profiles_badges, profiles.visibility AS profiles_visibility 
+FROM profiles 
+WHERE %(param_1)s::UUID = profiles.user_id]
+[parameters: {'param_1': UUID('ff0adbd3-0600-42d2-86cb-faae784fc7ea')}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+127.0.0.1 - - [16/May/2026 23:30:00] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 23:30:00] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+ * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/c035c14eb577_add_badges_to_profile.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/c035c14eb577_add_badges_to_profile.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/c035c14eb577_add_badges_to_profile.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+127.0.0.1 - - [16/May/2026 23:31:59] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:31:59] "GET /static/uploads/avatars/avatar_ff0adbd3-0600-42d2-86cb-faae784fc7ea_Professional_headshot_in_formal_attire.png HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 23:32:00] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:32:02] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:32:02] "GET /static/uploads/avatars/avatar_ff0adbd3-0600-42d2-86cb-faae784fc7ea_Professional_headshot_in_formal_attire.png HTTP/1.1" 304 -
+127.0.0.1 - - [16/May/2026 23:32:02] "GET /ai/recommendations HTTP/1.1" 200 -
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/code_challenge.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/code_challenge.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/code_challenge.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/code_challenge.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/playground.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/playground.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/playground.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/playground.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+ * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/faa619f26c50_add_code_challenge_table.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/faa619f26c50_add_code_challenge_table.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/faa619f26c50_add_code_challenge_table.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+127.0.0.1 - - [16/May/2026 23:36:03] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:36:16] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:36:28] "GET /playground/playground/new HTTP/1.1" 302 -
+127.0.0.1 - - [16/May/2026 23:36:29] "GET /playground/playground/solve/128a0f3d-7508-4436-be08-4e94a6007654 HTTP/1.1" 200 -
+ * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+127.0.0.1 - - [16/May/2026 23:40:45] "GET /playground/playground/solve/128a0f3d-7508-4436-be08-4e94a6007654 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:41:48] "POST /playground/playground/submit/128a0f3d-7508-4436-be08-4e94a6007654 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:42:59] "GET /playground/playground/solve/128a0f3d-7508-4436-be08-4e94a6007654 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:43:22] "POST /playground/playground/submit/128a0f3d-7508-4436-be08-4e94a6007654 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:43:25] "GET /playground/playground/new HTTP/1.1" 302 -
+127.0.0.1 - - [16/May/2026 23:43:25] "GET /playground/playground/solve/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:43:26] "GET /playground/playground/solve/stackframe.js HTTP/1.1" 404 -
+127.0.0.1 - - [16/May/2026 23:44:02] "POST /playground/playground/submit/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:46:56] "GET /playground/playground/solve/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:46:56] "GET /playground/playground/solve/stackframe.js HTTP/1.1" 404 -
+127.0.0.1 - - [16/May/2026 23:47:39] "POST /playground/playground/submit/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+127.0.0.1 - - [16/May/2026 23:50:42] "GET /playground/playground/solve/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:50:47] "GET /playground/playground/solve/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:51:12] "POST /playground/playground/submit/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:51:46] "POST /playground/playground/submit/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:51:55] "GET /playground/playground/new HTTP/1.1" 302 -
+127.0.0.1 - - [16/May/2026 23:51:55] "GET /playground/playground/solve/45e814ca-c381-41af-aef4-dd8b87f775b8 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:52:33] "POST /playground/playground/submit/45e814ca-c381-41af-aef4-dd8b87f775b8 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:53:20] "POST /playground/playground/submit/45e814ca-c381-41af-aef4-dd8b87f775b8 HTTP/1.1" 200 -
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 925-023-670
+127.0.0.1 - - [16/May/2026 23:54:27] "GET /playground/playground/solve/45e814ca-c381-41af-aef4-dd8b87f775b8 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:54:45] "POST /playground/playground/submit/45e814ca-c381-41af-aef4-dd8b87f775b8 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:55:18] "GET /jobs/ HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:55:22] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:58:25] "GET /portfolio/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:58:28] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:58:35] "GET /playground/playground/new HTTP/1.1" 302 -
+127.0.0.1 - - [16/May/2026 23:58:36] "GET /playground/playground/solve/4aa44b86-64fa-48e4-96f1-3ad29566a390 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:58:45] "POST /playground/playground/submit/4aa44b86-64fa-48e4-96f1-3ad29566a390 HTTP/1.1" 200 -
+127.0.0.1 - - [16/May/2026 23:59:32] "GET /playground/playground/solve/4aa44b86-64fa-48e4-96f1-3ad29566a390 HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:02:12] "GET /playground/playground/solve/4aa44b86-64fa-48e4-96f1-3ad29566a390 HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:02:23] "POST /playground/playground/submit/4aa44b86-64fa-48e4-96f1-3ad29566a390 HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:02:33] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:04:34] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:04:38] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:04:39] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:04:53] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:10:52] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:11:08] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:11:11] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:11:16] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:11:19] "GET /portfolio/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:11:22] "GET /resume/resume/optimize HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 00:11:27] "GET /user/roadmap HTTP/1.1" 200 -

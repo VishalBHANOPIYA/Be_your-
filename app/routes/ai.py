@@ -3,17 +3,26 @@ from flask_login import login_required, current_user
 from app.services.interview_service import InterviewService
 from app.services.ai_service import AIService
 from app.models.interview import Interview
+from app.models.job import Job
+import uuid
 
 ai_bp = Blueprint('ai', __name__)
 
 @ai_bp.route('/interview/start', methods=['GET', 'POST'])
 @login_required
 def start_interview():
-    category = request.args.get('category', 'technical')
-    job_role = request.args.get('job_role')
-    
-    interview = InterviewService.start_session(current_user.id, job_role, category)
-    return redirect(url_for('ai.interview_session', interview_id=interview.id))
+    if request.method == 'POST':
+        category = request.form.get('category', 'technical')
+        job_role = request.form.get('job_role', 'Software Engineer')
+        specific_skill = request.form.get('specific_skill')
+        
+        # Prioritize specific skill if provided
+        final_role = specific_skill if specific_skill else job_role
+        
+        interview = InterviewService.start_session(current_user.id, final_role, category)
+        return redirect(url_for('ai.interview_session', interview_id=interview.id))
+        
+    return render_template('ai/interview_setup.html')
 
 @ai_bp.route('/interview/<uuid:interview_id>')
 @login_required
@@ -76,3 +85,25 @@ def recommendations():
             } for r in recs
         ]
     })
+
+@ai_bp.route('/cover-letter/generate', methods=['POST'])
+@login_required
+def generate_cover_letter():
+    data = request.json or {}
+    job_id_str = data.get('job_id')
+    
+    if not job_id_str:
+        return jsonify({"success": False, "error": "Job ID is required."}), 400
+        
+    try:
+        job_id = uuid.UUID(job_id_str)
+    except (ValueError, TypeError):
+        return jsonify({"success": False, "error": "Invalid Job ID format."}), 400
+        
+    job = Job.query.get_or_404(job_id)
+    
+    if not current_user.profile:
+        return jsonify({"success": False, "error": "Please complete your profile (upload resume) first."}), 400
+        
+    letter = AIService.generate_cover_letter(current_user.profile, job)
+    return jsonify({"success": True, "letter": letter})

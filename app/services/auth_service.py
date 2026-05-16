@@ -3,19 +3,33 @@ from flask import current_app
 from app.models.user import User, Profile
 from app.extensions import db
 from flask_login import login_user, logout_user
+from app.utils.validators import validate_email, validate_password, validate_name
 
 class AuthService:
     @staticmethod
     def register_user(name, email, password, role='seeker'):
+        # Apply validators
+        ok, err = validate_name(name)
+        if not ok: return None, err
+        
+        ok, err = validate_email(email)
+        if not ok: return None, err
+        
+        ok, err = validate_password(password)
+        if not ok: return None, err
+
         if User.query.filter_by(email=email).first():
             return None, "Email already registered"
+            
         user = User(name=name, email=email, role=role)
         user.set_password(password)
         db.session.add(user)
         db.session.flush()
+        
         profile = Profile(user_id=user.id)
         db.session.add(profile)
         db.session.commit()
+        
         return user, None
 
     @staticmethod
