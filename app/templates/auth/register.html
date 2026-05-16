@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Join Be Your | AI-Powered Career Platform{% endblock %}
+
+{% block content %}
+<section class="min-h-[80vh] flex items-center justify-center px-6 py-20 relative overflow-hidden">
+    <div class="absolute inset-0 glow-overlay -z-10"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 blur-[150px] rounded-full -z-10"></div>
+
+    <div class="w-full max-w-md glass-card p-10 rounded-[2.5rem] space-y-8 relative shadow-2xl border-outline">
+        <div class="text-center space-y-2">
+            <h1 class="text-3xl font-bold text-on-surface tracking-tight">Create your account</h1>
+            <p class="text-on-surface-variant text-sm">Start your AI-powered career evolution today.</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.register') }}" class="space-y-6">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="space-y-2">
+                <label for="name" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Full Name</label>
+                <input type="text" id="name" name="name" required
+                    class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant"
+                    placeholder="Enter your name">
+            </div>
+
+            <div class="space-y-2">
+                <label for="email" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Email Address</label>
+                <input type="email" id="email" name="email" required
+                    class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant"
+                    placeholder="name@example.com">
+            </div>
+
+            <div class="space-y-2">
+                <label for="password" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Password</label>
+                <div class="relative group">
+                    <input type="password" id="password" name="password" required
+                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant pr-14"
+                        placeholder="••••••••">
+                    <button type="button" onclick="togglePassword('password', this)" class="absolute right-5 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined">visibility</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label for="role" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">I am a</label>
+                <select id="role" name="role" 
+                    class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all appearance-none cursor-pointer">
+                    <option value="seeker" class="bg-surface text-on-surface">Job Seeker</option>
+                    <option value="recruiter" class="bg-surface text-on-surface">Recruiter / Employer</option>
+                </select>
+            </div>
+
+            <button type="submit" 
+                class="w-full py-4 rounded-2xl indigo-gradient text-white font-bold text-lg shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all mt-4">
+                Create Account
+            </button>
+        </form>
+
+        <div class="relative py-4">
+            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-outline"></div></div>
+            <div class="relative flex justify-center text-xs uppercase"><span class="bg-surface px-2 text-on-surface-variant tracking-widest">Or continue with</span></div>
+        </div>
+
+        <button class="w-full py-4 rounded-2xl border border-outline flex items-center justify-center gap-3 text-on-surface font-bold hover:bg-surface transition-all">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" alt="Google">
+            Sign up with Google
+        </button>
+
+        <p class="text-center text-sm text-on-surface-variant">
+            Already have an account? 
+            <a href="{{ url_for('auth.login') }}" class="text-primary font-bold hover:underline underline-offset-4">Sign In</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

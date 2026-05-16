@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Find Your Dream Job | Be Your{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12 space-y-12">
+    <!-- Search Header -->
+    <div class="glass-card p-10 rounded-[2.5rem] relative overflow-hidden">
+        <div class="absolute inset-0 indigo-gradient opacity-10 -z-10"></div>
+        <div class="max-w-3xl space-y-6">
+            <h1 class="text-4xl font-bold text-on-surface tracking-tight">Explore opportunities</h1>
+            <form method="GET" class="flex flex-col md:flex-row gap-4">
+                <div class="flex-grow relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+                    <input type="text" name="title" value="{{ filters.title or '' }}"
+                        class="w-full bg-input border border-outline rounded-2xl pl-12 pr-4 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all"
+                        placeholder="Job title or keywords">
+                </div>
+                <div class="md:w-48 relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">location_on</span>
+                    <input type="text" name="location" value="{{ filters.location or '' }}"
+                        class="w-full bg-input border border-outline rounded-2xl pl-12 pr-4 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all"
+                        placeholder="Location">
+                </div>
+                <button type="submit" class="px-8 py-4 rounded-2xl indigo-gradient text-white font-bold shadow-xl hover:scale-105 transition-all">
+                    Search
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Filters Sidebar -->
+        <aside class="col-span-1 space-y-8">
+            <div class="space-y-4">
+                <h3 class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Job Type</h3>
+                <div class="glass-card p-4 rounded-3xl space-y-2">
+                    {% for type in ['full-time', 'part-time', 'contract', 'remote'] %}
+                        <label class="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-surface cursor-pointer transition-all">
+                            <input type="radio" name="job_type" value="{{ type }}" {% if filters.job_type == type %}checked{% endif %}
+                                class="w-4 h-4 bg-input border-outline text-primary focus:ring-offset-background">
+                            <span class="text-sm text-on-surface-variant">{{ type | capitalize }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
+
+        <!-- Job List -->
+        <main class="col-span-1 lg:col-span-3 space-y-6">
+            <div class="flex justify-between items-center px-2">
+                <p class="text-on-surface-variant text-sm">Showing <span class="text-on-surface font-bold">{{ pagination.total }}</span> results</p>
+                <div class="flex items-center gap-2 text-sm text-on-surface-variant">
+                    Sort by: <span class="text-on-surface font-bold">Newest</span>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                {% if pagination.items %}
+                    {% for job in pagination.items %}
+                        <a href="{{ url_for('jobs.view_job', job_id=job.id) }}" 
+                            class="block glass-card p-8 rounded-[2rem] group hover:border-primary/30 transition-all duration-300">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                <div class="flex items-start gap-6">
+                                    <div class="w-16 h-16 bg-surface rounded-2xl flex items-center justify-center text-primary border border-outline">
+                                        <span class="material-symbols-outlined text-3xl">business</span>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <h2 class="text-xl font-bold text-on-surface group-hover:text-primary transition-colors">{{ job.title }}</h2>
+                                        <p class="text-indigo-300/80 font-medium">{{ job.company.name }}</p>
+                                        <div class="flex flex-wrap gap-x-4 gap-y-2 pt-2">
+                                            <span class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+                                                <span class="material-symbols-outlined text-sm">location_on</span>
+                                                {{ job.location }}
+                                            </span>
+                                            <span class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+                                                <span class="material-symbols-outlined text-sm">schedule</span>
+                                                {{ job.job_type | capitalize }}
+                                            </span>
+                                            <span class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+                                                <span class="material-symbols-outlined text-sm">payments</span>
+                                                ${{ "{:,.0f}".format(job.salary_min/1000) }}k - ${{ "{:,.0f}".format(job.salary_max/1000) }}k
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button class="p-3 rounded-xl border border-outline text-on-surface-variant hover:text-secondary hover:border-secondary/50 transition-all">
+                                        <span class="material-symbols-outlined">bookmark</span>
+                                    </button>
+                                    <span class="px-6 py-3 rounded-xl indigo-gradient text-white text-sm font-bold transition-all shadow-lg hover:shadow-xl hover:scale-105">
+                                        View Details
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+
+                    <!-- Pagination -->
+                    {% if pagination.pages > 1 %}
+                        <div class="flex justify-center gap-2 pt-8">
+                            {% for p in pagination.iter_pages() %}
+                                {% if p %}
+                                    <a href="{{ url_for('jobs.list_jobs', page=p, **filters) }}" 
+                                        class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm transition-all
+                                        {% if p == pagination.page %}indigo-gradient text-white shadow-lg{% else %}glass-card text-on-surface-variant hover:text-white{% endif %}">
+                                        {{ p }}
+                                    </a>
+                                {% else %}
+                                    <span class="w-12 h-12 flex items-center justify-center text-on-surface-variant">...</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="glass-card p-20 rounded-[2.5rem] text-center space-y-4">
+                        <div class="w-20 h-20 bg-surface rounded-full mx-auto flex items-center justify-center text-on-surface-variant">
+                            <span class="material-symbols-outlined text-4xl">search_off</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-on-surface">No jobs found</h3>
+                        <p class="text-on-surface-variant">Try adjusting your filters or search keywords.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

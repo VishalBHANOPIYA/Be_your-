@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Control Center | Be Your{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12 space-y-12">
+    <!-- Header Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="glass-card p-10 rounded-[3rem] space-y-4 hover:-translate-y-2 transition-transform border-l-4 border-primary">
+            <p class="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Total Users</p>
+            <h3 class="text-5xl font-heading font-bold text-on-surface">{{ stats.total_users }}</h3>
+            <div class="flex gap-4 text-[10px] font-bold text-on-surface/40 uppercase">
+                <span>{{ stats.seekers }} Seekers</span>
+                <span>{{ stats.recruiters }} Recruiters</span>
+            </div>
+        </div>
+        <div class="glass-card p-10 rounded-[3rem] space-y-4 hover:-translate-y-2 transition-transform border-l-4 border-violet-400">
+            <p class="text-[10px] font-bold text-violet-400 uppercase tracking-[0.2em]">Active Jobs</p>
+            <h3 class="text-5xl font-heading font-bold text-on-surface">{{ stats.total_jobs }}</h3>
+        </div>
+        <div class="glass-card p-10 rounded-[3rem] space-y-4 hover:-translate-y-2 transition-transform border-l-4 border-emerald-400">
+            <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-[0.2em]">Applications</p>
+            <h3 class="text-5xl font-heading font-bold text-on-surface">{{ stats.total_applications }}</h3>
+        </div>
+        <div class="glass-card p-10 rounded-[3rem] space-y-4 hover:-translate-y-2 transition-transform border-l-4 border-amber-400">
+            <p class="text-[10px] font-bold text-amber-400 uppercase tracking-[0.2em]">Interviews</p>
+            <h3 class="text-5xl font-heading font-bold text-on-surface">142</h3>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <!-- Recent Users -->
+        <div class="glass-card rounded-[3rem] overflow-hidden">
+            <div class="px-10 py-8 border-b border-outline flex justify-between items-center">
+                <h3 class="text-xl font-heading font-bold text-on-surface">Newest Users</h3>
+                <a href="{{ url_for('admin.users') }}" class="text-xs font-bold text-primary uppercase tracking-widest">View All</a>
+            </div>
+            <div class="divide-y divide-white/5">
+                {% for user in stats.recent_users %}
+                <div class="px-10 py-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-surface border border-outline flex items-center justify-center text-primary font-bold">
+                            {{ user.name[0] }}
+                        </div>
+                        <div>
+                            <p class="font-bold text-on-surface text-sm">{{ user.name }}</p>
+                            <p class="text-[10px] text-on-surface/40 uppercase tracking-widest">{{ user.role }}</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] text-on-surface/30 font-bold uppercase">{{ user.created_at.strftime('%b %d') }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Recent Jobs -->
+        <div class="glass-card rounded-[3rem] overflow-hidden">
+            <div class="px-10 py-8 border-b border-outline flex justify-between items-center">
+                <h3 class="text-xl font-heading font-bold text-on-surface">Latest Job Postings</h3>
+                <a href="{{ url_for('admin.jobs') }}" class="text-xs font-bold text-primary uppercase tracking-widest">Manage Jobs</a>
+            </div>
+            <div class="divide-y divide-white/5">
+                {% for job in stats.recent_jobs %}
+                <div class="px-10 py-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined text-sm">work</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-on-surface text-sm">{{ job.title }}</p>
+                            <p class="text-[10px] text-on-surface/40 uppercase tracking-widest">{{ job.company.name }}</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] text-on-surface/30 font-bold uppercase">{{ job.created_at.strftime('%b %d') }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

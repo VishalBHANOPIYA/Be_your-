@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}{{ job.title }} at {{ job.company.name }} | Be Your{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-12 space-y-8">
+    <!-- Back Button -->
+    <a href="{{ url_for('jobs.list_jobs') }}" class="inline-flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-bold text-sm group">
+        <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+        BACK TO ALL JOBS
+    </a>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Content -->
+        <div class="lg:col-span-2 space-y-8">
+            <div class="glass-card p-10 rounded-[2.5rem] space-y-8">
+                <div class="flex items-start justify-between gap-6">
+                    <div class="flex items-center gap-6">
+                        <div class="w-20 h-20 bg-surface rounded-3xl flex items-center justify-center text-primary border border-outline">
+                            <span class="material-symbols-outlined text-4xl">business</span>
+                        </div>
+                        <div>
+                            <h1 class="text-3xl font-bold text-on-surface leading-tight">{{ job.title }}</h1>
+                            <p class="text-xl text-primary font-medium">{{ job.company.name }}</p>
+                        </div>
+                    </div>
+                    <button class="p-4 rounded-2xl border border-outline text-on-surface-variant hover:text-secondary hover:border-secondary/50 transition-all">
+                        <span class="material-symbols-outlined">bookmark</span>
+                    </button>
+                </div>
+
+                <div class="flex flex-wrap gap-4 pt-4 border-t border-outline">
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface text-sm text-on-surface-variant">
+                        <span class="material-symbols-outlined text-base">location_on</span>
+                        {{ job.location }}
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface text-sm text-on-surface-variant">
+                        <span class="material-symbols-outlined text-base">schedule</span>
+                        {{ job.job_type | capitalize }}
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface text-sm text-on-surface-variant">
+                        <span class="material-symbols-outlined text-base">payments</span>
+                        ${{ "{:,.0f}".format(job.salary_min/1000) }}k - ${{ "{:,.0f}".format(job.salary_max/1000) }}k
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h3 class="text-xl font-bold text-on-surface">Job Description</h3>
+                    <div class="text-on-surface-variant leading-relaxed space-y-4">
+                        {{ job.description | replace('\n', '<br>') | safe }}
+                    </div>
+                </div>
+
+                <div class="space-y-6 pt-8 border-t border-outline">
+                    <h3 class="text-xl font-bold text-on-surface">Required Skills</h3>
+                    <div class="flex flex-wrap gap-3">
+                        {% for skill in job.skills_required %}
+                            <span class="px-4 py-2 rounded-xl bg-primary-container/20 text-primary text-xs font-bold border border-primary/20">
+                                {{ skill }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar / Action Card -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="glass-card p-8 rounded-[2rem] space-y-8 sticky top-24">
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-on-surface">Apply Now</h3>
+                    <p class="text-on-surface-variant text-sm">Submit your profile for AI analysis against this role.</p>
+                </div>
+
+                {% if current_user.is_authenticated %}
+                    <form method="POST" action="{{ url_for('jobs.apply', job_id=job.id) }}" class="space-y-6">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="space-y-2">
+                            <label for="cover_note" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Short Note (Optional)</label>
+                            <textarea name="cover_note" id="cover_note" rows="3"
+                                class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all resize-none text-sm"
+                                placeholder="Why are you a good fit?"></textarea>
+                        </div>
+                        <button type="submit" 
+                            class="w-full py-5 rounded-2xl indigo-gradient text-white font-bold text-lg shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all">
+                            Apply with AI Profile
+                        </button>
+                    </form>
+                {% else %}
+                    <div class="space-y-4">
+                        <p class="text-sm text-on-surface-variant italic">Please sign in to apply for this position.</p>
+                        <a href="{{ url_for('auth.login', next=request.path) }}" 
+                            class="block w-full py-5 rounded-2xl border border-primary/30 text-primary text-center font-bold text-lg hover:bg-primary/5 transition-all">
+                            Sign In to Apply
+                        </a>
+                    </div>
+                {% endif %}
+
+                <div class="pt-6 border-t border-outline space-y-4">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-on-surface-variant">Posted on</span>
+                        <span class="text-on-surface font-medium">{{ job.created_at.strftime('%d %b, %Y') }}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-on-surface-variant">Deadline</span>
+                        <span class="text-on-surface font-medium">{{ job.deadline.strftime('%d %b, %Y') }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights Mini-Card -->
+            <div class="glass-card p-6 rounded-[2rem] border-primary/20 space-y-4">
+                <div class="flex items-center gap-2 text-primary">
+                    <span class="material-symbols-outlined">psychology</span>
+                    <h4 class="font-bold text-sm uppercase tracking-widest">AI Insights</h4>
+                </div>
+                <p class="text-xs text-on-surface-variant">Based on your current profile, you have a <span class="text-primary font-bold">72% match</span> for this role. We recommend highlighting your 'Flask' experience.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

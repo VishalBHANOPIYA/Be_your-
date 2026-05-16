@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Server Error | Be Your{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex flex-col items-center justify-center px-6 py-20 relative overflow-hidden">
+    <!-- Ambient Background -->
+    <div class="absolute inset-0 glow-overlay -z-10"></div>
+    
+    <div class="text-center space-y-8 max-w-2xl relative">
+        <div class="w-32 h-32 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-10">
+            <span class="material-symbols-outlined text-6xl text-red-500 animate-pulse">engineering</span>
+        </div>
+        
+        <div class="space-y-4">
+            <h2 class="text-4xl font-bold text-on-surface tracking-tight">System Malfunction</h2>
+            <p class="text-on-surface-variant text-lg">Our neural circuits are experiencing some interference. We're working hard to get things back online.</p>
+        </div>
+
+        <div class="pt-8 flex flex-col sm:flex-row justify-center gap-6">
+            <button onclick="window.location.reload()" class="px-10 py-5 rounded-2xl indigo-gradient text-white font-bold text-lg shadow-2xl shadow-indigo-500/20 hover:scale-105 transition-all inline-flex items-center gap-3">
+                <span class="material-symbols-outlined">refresh</span>
+                Try Again
+            </button>
+            <a href="/" class="px-10 py-5 rounded-2xl border border-outline text-on-surface font-bold text-lg hover:bg-surface transition-all inline-flex items-center gap-3">
+                Return Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

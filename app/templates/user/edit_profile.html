@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile | Be Your{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-6 py-12">
+    <div class="glass-card p-10 rounded-[3rem] space-y-8">
+        <div class="space-y-2">
+            <h1 class="text-3xl font-heading font-bold text-on-surface">Edit Profile</h1>
+            <p class="text-on-surface-variant text-sm">Update your personal information and professional details.</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('user.edit_profile') }}" class="space-y-6">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Full Name</label>
+                    <input type="text" name="name" value="{{ current_user.name }}" class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">
+                </div>
+                
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Location</label>
+                    <input type="text" name="location" value="{{ current_user.profile.location or '' }}" class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Professional Headline</label>
+                <input type="text" name="headline" value="{{ current_user.profile.headline or '' }}" placeholder="e.g. Senior Software Engineer" class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Bio</label>
+                <textarea name="bio" rows="4" class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">{{ current_user.profile.bio or '' }}</textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">LinkedIn URL</label>
+                    <input type="url" name="linkedin_url" value="{{ current_user.profile.linkedin_url or '' }}" class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">
+                </div>
+                
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-primary uppercase tracking-widest ml-1">GitHub URL</label>
+                    <input type="url" name="github_url" value="{{ current_user.profile.github_url or '' }}" class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">
+                </div>
+            </div>
+
+            <div class="pt-6 flex justify-end gap-4">
+                <a href="{{ url_for('user.dashboard') }}" class="px-8 py-4 rounded-2xl border border-outline font-bold hover:bg-surface transition-all">Cancel</a>
+                <button type="submit" class="px-8 py-4 rounded-2xl indigo-gradient text-white font-bold shadow-xl hover:scale-105 transition-all">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Interview Analysis | Be Your AI{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-12 space-y-12">
+    <!-- Header Summary -->
+    <div class="glass-card p-12 rounded-[3rem] relative overflow-hidden">
+        <div class="absolute inset-0 glow-overlay -z-10 opacity-20"></div>
+        <div class="flex flex-col md:flex-row justify-between items-center gap-10">
+            <div class="space-y-4 text-center md:text-left">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase tracking-[0.2em]">
+                    Performance Analysis
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold text-on-surface tracking-tight">Interview <span class="text-primary">Summary</span></h1>
+                <p class="text-on-surface-variant max-w-xl">Great job completing your session! Here's how you performed and where you can improve.</p>
+            </div>
+            
+            <div class="relative w-40 h-40 flex items-center justify-center">
+                <svg class="w-full h-full -rotate-90">
+                    <circle cx="80" cy="80" r="70" stroke="currentColor" stroke-width="8" fill="transparent" class="text-white/5"></circle>
+                    <circle cx="80" cy="80" r="70" stroke="currentColor" stroke-width="8" fill="transparent" 
+                        stroke-dasharray="439.6" stroke-dashoffset="{{ 439.6 - (439.6 * interview.total_score / 100) }}" 
+                        class="text-primary transition-all duration-1000"></circle>
+                </svg>
+                <div class="absolute text-center">
+                    <span class="text-4xl font-heading font-bold">{{ interview.total_score|int }}</span>
+                    <span class="block text-[10px] font-bold text-on-surface/40 uppercase tracking-widest">Score</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Breakdown -->
+    <div class="space-y-8">
+        <h2 class="text-2xl font-bold text-on-surface flex items-center gap-3 px-4">
+            <span class="material-symbols-outlined text-primary">analytics</span>
+            Detailed Feedback
+        </h2>
+
+        <div class="space-y-6">
+            {% for i in range(interview.questions|length) %}
+            {% set q = interview.questions[i] %}
+            {% set a = interview.answers[i|string] if interview.answers and i|string in interview.answers else 'No answer provided.' %}
+            {% set f = interview.feedback[i|string] if interview.feedback and i|string in interview.feedback else None %}
+            
+            <div class="glass-card p-8 rounded-[2.5rem] border-outline space-y-6">
+                <div class="flex justify-between items-start gap-4">
+                    <div class="space-y-2 flex-1">
+                        <p class="text-[10px] font-bold text-primary uppercase tracking-widest">Question {{ i + 1 }}</p>
+                        <h3 class="text-xl font-bold text-on-surface">{{ q }}</h3>
+                    </div>
+                    {% if f %}
+                    <div class="px-4 py-2 rounded-xl bg-surface border border-outline text-xs font-bold text-primary">
+                        {{ f.score }}%
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] font-bold text-on-surface/30 uppercase tracking-widest ml-1">Your Answer</p>
+                    <div class="p-6 rounded-2xl bg-white/[0.02] border border-outline text-on-surface-variant text-sm leading-relaxed italic">
+                        "{{ a }}"
+                    </div>
+                </div>
+
+                {% if f %}
+                <div class="flex items-start gap-4 p-6 rounded-2xl bg-primary/5 border border-primary/10">
+                    <span class="material-symbols-outlined text-primary">smart_toy</span>
+                    <div class="space-y-1">
+                        <p class="text-[10px] font-bold text-primary uppercase tracking-widest">AI Feedback</p>
+                        <p class="text-on-surface text-sm leading-relaxed">{{ f.analysis }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-col sm:flex-row justify-center gap-6 pt-12">
+        <a href="{{ url_for('ai.start_interview') }}" class="px-10 py-5 rounded-2xl indigo-gradient text-white font-bold text-center shadow-xl hover:scale-105 transition-all">
+            Try Another Session
+        </a>
+        <a href="{{ url_for('user.dashboard') }}" class="px-10 py-5 rounded-2xl border border-outline text-on-surface font-bold text-center hover:bg-surface transition-all">
+            Return to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

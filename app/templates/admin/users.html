@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}User Management | Admin Control{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12 space-y-10">
+    <div class="flex justify-between items-center">
+        <div class="space-y-2">
+            <h1 class="text-3xl font-bold text-on-surface tracking-tight">User Management</h1>
+            <p class="text-on-surface-variant text-sm">Monitor and manage all user accounts on the platform.</p>
+        </div>
+        <a href="{{ url_for('admin.dashboard') }}" class="px-6 py-3 rounded-2xl border border-outline hover:bg-surface transition-all text-sm font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">grid_view</span>
+            Dashboard
+        </a>
+    </div>
+
+    <div class="glass-card rounded-[3rem] overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="text-[10px] font-bold text-on-surface/40 tracking-[0.2em] uppercase bg-white/[0.02]">
+                        <th class="px-10 py-6">User</th>
+                        <th class="px-10 py-6">Role</th>
+                        <th class="px-10 py-6">Joined</th>
+                        <th class="px-10 py-6">Status</th>
+                        <th class="px-10 py-6 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    {% for user in users %}
+                    <tr class="group hover:bg-white/[0.02] transition-colors">
+                        <td class="px-10 py-8">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-2xl bg-surface border border-outline flex items-center justify-center text-primary font-bold">
+                                    {{ user.name[0] }}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-on-surface">{{ user.name }}</p>
+                                    <p class="text-xs text-on-surface/40">{{ user.email }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-10 py-8">
+                            <span class="px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border 
+                                {% if user.role == 'admin' %}bg-amber-500/10 text-amber-500 border-amber-500/20
+                                {% elif user.role == 'recruiter' %}bg-violet-500/10 text-violet-500 border-violet-500/20
+                                {% else %}bg-indigo-500/10 text-indigo-400 border-indigo-500/20{% endif %}">
+                                {{ user.role }}
+                            </span>
+                        </td>
+                        <td class="px-10 py-8 text-sm text-on-surface/60">{{ user.created_at.strftime('%d %b, %Y') }}</td>
+                        <td class="px-10 py-8">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full {{ 'bg-green-500' if user.is_active else 'bg-red-500' }}"></div>
+                                <span class="text-xs font-bold uppercase tracking-widest {{ 'text-green-500' if user.is_active else 'text-red-500' }}">
+                                    {{ 'Active' if user.is_active else 'Deactivated' }}
+                                </span>
+                            </div>
+                        </td>
+                        <td class="px-10 py-8 text-right">
+                            <form action="{{ url_for('admin.toggle_user_status', user_id=user.id) }}" method="POST">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="px-6 py-2 rounded-xl border border-outline text-xs font-bold hover:bg-surface transition-all text-on-surface/60">
+                                    {{ 'Deactivate' if user.is_active else 'Activate' }}
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

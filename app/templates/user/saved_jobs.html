@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Saved Jobs | Be Your Career{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-12 space-y-12">
+    <!-- Header -->
+    <div class="space-y-2">
+        <h1 class="text-4xl font-bold text-on-surface tracking-tight">Saved Jobs</h1>
+        <p class="text-on-surface-variant">Your bookmarked opportunities and career prospects.</p>
+    </div>
+
+    <!-- Jobs Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {% for job in jobs %}
+        <div class="glass-card p-8 rounded-[2.5rem] relative overflow-hidden group hover:border-primary/30 transition-all flex flex-col justify-between h-full shadow-lg">
+            <!-- Job Type Badge -->
+            <div class="flex justify-between items-start mb-6">
+                <span class="px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase tracking-[0.2em]">
+                    {{ job.job_type }}
+                </span>
+                
+                <form action="{{ url_for('jobs.unsave_job', job_id=job.id) }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="w-10 h-10 rounded-xl bg-primary border border-primary/30 flex items-center justify-center text-white shadow-lg shadow-primary/20 transition-all hover:scale-110">
+                        <span class="material-symbols-outlined text-xl filled">bookmark</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="space-y-4">
+                <div class="space-y-1">
+                    <h3 class="text-2xl font-bold text-on-surface group-hover:text-primary transition-colors">{{ job.title }}</h3>
+                    <p class="text-on-surface-variant font-medium flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">apartment</span>
+                        {{ job.company.name }}
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap gap-4 text-xs font-bold text-on-surface/40 uppercase tracking-widest">
+                    <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">location_on</span>
+                        {{ job.location }}
+                    </span>
+                    <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">payments</span>
+                        ${{ (job.salary_min/1000)|int }}k - ${{ (job.salary_max/1000)|int }}k
+                    </span>
+                </div>
+
+                <!-- Skills -->
+                <div class="flex flex-wrap gap-2 pt-2">
+                    {% for skill in job.skills_required[:3] %}
+                    <span class="px-3 py-1.5 rounded-lg bg-surface border border-outline text-[10px] font-bold text-on-surface/60 uppercase tracking-wider">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="pt-8 mt-auto">
+                <a href="{{ url_for('jobs.view_job', job_id=job.id) }}" class="block w-full py-4 rounded-2xl border border-outline text-center text-sm font-bold text-on-surface hover:bg-surface transition-all">
+                    View Details
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-span-full text-center py-24 glass-card rounded-[3rem] border-dashed border-outline">
+            <div class="w-20 h-20 rounded-full bg-surface border border-outline flex items-center justify-center mx-auto mb-6 text-on-surface/20">
+                <span class="material-symbols-outlined text-4xl">bookmark_add</span>
+            </div>
+            <h2 class="text-2xl font-bold text-on-surface mb-2">No Saved Jobs Yet</h2>
+            <p class="text-on-surface-variant mb-8 max-w-sm mx-auto text-sm">Start exploring opportunities and bookmark the ones that match your career goals.</p>
+            <a href="{{ url_for('jobs.list_jobs') }}" class="inline-flex items-center gap-2 px-8 py-4 rounded-2xl indigo-gradient text-white font-bold text-sm shadow-xl shadow-indigo-500/20 hover:scale-105 transition-all">
+                Browse Jobs
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

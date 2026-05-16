@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Recruiter Dashboard | Be Your{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Sidebar -->
+        <aside class="col-span-1 space-y-6">
+            <div class="glass-card p-6 rounded-3xl text-center space-y-4">
+                <div class="w-20 h-20 bg-indigo-500/20 rounded-2xl mx-auto flex items-center justify-center text-indigo-400 text-3xl font-bold border border-indigo-500/30">
+                    {{ company.name[0] }}
+                </div>
+                <div class="space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-on-surface">{{ current_user.name }}</h2>
+                    <p class="text-on-surface-variant text-sm">{{ company.name }}</p>
+                </div>
+                
+                <a href="{{ url_for('recruiter.post_job') }}" class="block w-full py-3 rounded-xl indigo-gradient text-white text-sm font-bold text-center hover:scale-[1.02] transition-all">
+                    Post New Job
+                </a>
+
+                <button class="w-full py-3 rounded-xl border border-outline text-sm font-bold hover:bg-surface transition-all text-on-surface-variant">
+                    Company Profile
+                </button>
+            </div>
+
+            <nav class="glass-card p-4 rounded-3xl space-y-1">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-container/20 text-primary font-bold text-sm">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                    <span class="material-symbols-outlined">post_add</span>
+                    Manage Jobs
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                    <span class="material-symbols-outlined">group</span>
+                    Applicants
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                    <span class="material-symbols-outlined">analytics</span>
+                    Analytics
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="col-span-1 lg:col-span-3 space-y-8">
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-on-surface">Recruiter Dashboard</h1>
+                    <p class="text-on-surface-variant">Manage your hiring pipeline and job listings.</p>
+                </div>
+                <a href="#" class="px-8 py-4 rounded-2xl indigo-gradient text-white font-bold text-sm shadow-xl hover:scale-105 transition-all">
+                    Post a New Job
+                </a>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-3xl space-y-2">
+                    <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Active Jobs</p>
+                    <p class="text-3xl font-bold text-primary">{{ jobs | length }}</p>
+                </div>
+                <div class="glass-card p-6 rounded-3xl space-y-2">
+                    <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Total Applicants</p>
+                    <p class="text-3xl font-bold text-secondary">124</p>
+                </div>
+                <div class="glass-card p-6 rounded-3xl space-y-2">
+                    <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Avg. Match Score</p>
+                    <p class="text-3xl font-bold text-white">78%</p>
+                </div>
+            </div>
+
+            <!-- Jobs Table Section -->
+            <div class="space-y-6">
+                <h3 class="text-xl font-bold text-on-surface">Your Job Listings</h3>
+                
+                <div class="glass-card rounded-[2rem] overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-surface border-b border-outline">
+                                <th class="px-8 py-5 text-xs font-bold text-primary uppercase tracking-widest">Job Title</th>
+                                <th class="px-8 py-5 text-xs font-bold text-primary uppercase tracking-widest">Status</th>
+                                <th class="px-8 py-5 text-xs font-bold text-primary uppercase tracking-widest">Applicants</th>
+                                <th class="px-8 py-5 text-xs font-bold text-primary uppercase tracking-widest text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            {% if jobs %}
+                                {% for job in jobs %}
+                                    <tr class="group hover:bg-white/[0.02] transition-colors">
+                                        <td class="px-8 py-6">
+                                            <p class="font-bold text-on-surface">{{ job.title }}</p>
+                                            <p class="text-on-surface-variant text-xs">{{ job.location }} • {{ job.job_type | capitalize }}</p>
+                                        </td>
+                                        <td class="px-8 py-6">
+                                            <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-[10px] font-bold border border-green-500/30 uppercase tracking-tighter">
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="px-8 py-6">
+                                            <div class="flex items-center gap-2">
+                                                <p class="font-bold text-on-surface">12</p>
+                                                <span class="text-on-surface-variant text-xs">New</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-8 py-6 text-right">
+                                            <button class="text-on-surface-variant hover:text-white transition-colors">
+                                                <span class="material-symbols-outlined">edit</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" class="px-8 py-20 text-center space-y-4">
+                                        <p class="text-on-surface-variant">No jobs posted yet.</p>
+                                        <a href="#" class="text-primary font-bold hover:underline">Create your first listing</a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

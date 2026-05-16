@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Page Not Found | Be Your{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex flex-col items-center justify-center px-6 py-20 relative overflow-hidden">
+    <!-- Ambient Background -->
+    <div class="absolute inset-0 glow-overlay -z-10"></div>
+    
+    <div class="text-center space-y-8 max-w-2xl relative">
+        <h1 class="text-[12rem] font-heading font-bold leading-none text-white opacity-5 select-none">404</h1>
+        
+        <div class="space-y-4 -mt-20">
+            <h2 class="text-4xl font-bold text-on-surface tracking-tight">Lost in the Digital Maze?</h2>
+            <p class="text-on-surface-variant text-lg">The page you're looking for has either drifted into another dimension or never existed in this timeline.</p>
+        </div>
+
+        <div class="pt-8">
+            <a href="/" class="px-10 py-5 rounded-2xl indigo-gradient text-white font-bold text-lg shadow-2xl shadow-indigo-500/20 hover:scale-105 transition-all inline-flex items-center gap-3">
+                <span class="material-symbols-outlined">home</span>
+                Back to Reality
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

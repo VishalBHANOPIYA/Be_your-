@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Job Moderation | Admin Control{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12 space-y-10">
+    <div class="flex justify-between items-center">
+        <div class="space-y-2">
+            <h1 class="text-3xl font-bold text-on-surface tracking-tight">Job Moderation</h1>
+            <p class="text-on-surface-variant text-sm">Review and manage all active job listings on the platform.</p>
+        </div>
+        <a href="{{ url_for('admin.dashboard') }}" class="px-6 py-3 rounded-2xl border border-outline hover:bg-surface transition-all text-sm font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">grid_view</span>
+            Dashboard
+        </a>
+    </div>
+
+    <div class="glass-card rounded-[3rem] overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="text-[10px] font-bold text-on-surface/40 tracking-[0.2em] uppercase bg-white/[0.02]">
+                        <th class="px-10 py-6">Job Title</th>
+                        <th class="px-10 py-6">Company</th>
+                        <th class="px-10 py-6">Posted On</th>
+                        <th class="px-10 py-6">Status</th>
+                        <th class="px-10 py-6 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    {% for job in jobs %}
+                    <tr class="group hover:bg-white/[0.02] transition-colors">
+                        <td class="px-10 py-8">
+                            <div>
+                                <p class="font-bold text-on-surface">{{ job.title }}</p>
+                                <p class="text-xs text-on-surface/40">{{ job.location }}</p>
+                            </div>
+                        </td>
+                        <td class="px-10 py-8 text-sm text-on-surface/60">{{ job.company.name }}</td>
+                        <td class="px-10 py-8 text-sm text-on-surface/60">{{ job.created_at.strftime('%d %b, %Y') }}</td>
+                        <td class="px-10 py-8">
+                            <span class="px-4 py-1.5 rounded-full bg-green-500/10 text-green-500 text-[10px] font-bold uppercase tracking-widest border border-green-500/20">
+                                {{ 'Active' if job.is_active else 'Inactive' }}
+                            </span>
+                        </td>
+                        <td class="px-10 py-8 text-right">
+                            <form action="{{ url_for('admin.delete_job', job_id=job.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this job listing?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="px-6 py-2 rounded-xl border border-red-500/10 text-xs font-bold hover:bg-red-500/5 transition-all text-red-400">
+                                    Delete Listing
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

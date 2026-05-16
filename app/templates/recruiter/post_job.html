@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Edit' if job else 'Post' }} Job | Be Your Recruiter{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-12">
+    <div class="glass-card p-10 rounded-[3rem] relative overflow-hidden">
+        <div class="absolute inset-0 indigo-gradient opacity-5 -z-10"></div>
+        
+        <div class="mb-10 space-y-2">
+            <h1 class="text-3xl font-bold text-on-surface tracking-tight">{{ 'Edit Existing' if job else 'Post a New' }} Job</h1>
+            <p class="text-on-surface-variant text-sm">Fill in the details below to reach thousands of top-tier candidates.</p>
+        </div>
+
+        <form method="POST" class="space-y-8">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label for="title" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Job Title</label>
+                    <input type="text" id="title" name="title" required value="{{ job.title if job else '' }}"
+                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-white/10"
+                        placeholder="e.g. Senior Software Engineer">
+                </div>
+
+                <div class="space-y-2">
+                    <label for="location" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Location</label>
+                    <input type="text" id="location" name="location" required value="{{ job.location if job else '' }}"
+                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-white/10"
+                        placeholder="e.g. Remote, New York, NY">
+                </div>
+
+                <div class="space-y-2">
+                    <label for="job_type" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Job Type</label>
+                    <select id="job_type" name="job_type" required
+                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all appearance-none cursor-pointer">
+                        <option value="full-time" {{ 'selected' if job and job.job_type == 'full-time' else '' }} class="bg-surface">Full-time</option>
+                        <option value="part-time" {{ 'selected' if job and job.job_type == 'part-time' else '' }} class="bg-surface">Part-time</option>
+                        <option value="contract" {{ 'selected' if job and job.job_type == 'contract' else '' }} class="bg-surface">Contract</option>
+                        <option value="internship" {{ 'selected' if job and job.job_type == 'internship' else '' }} class="bg-surface">Internship</option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="deadline" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Application Deadline</label>
+                    <input type="date" id="deadline" name="deadline" required value="{{ job.deadline.strftime('%Y-%m-%d') if job and job.deadline else '' }}"
+                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all">
+                </div>
+
+                <div class="space-y-2">
+                    <label for="salary_min" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Salary Min ($)</label>
+                    <input type="number" id="salary_min" name="salary_min" value="{{ job.salary_min if job else '' }}"
+                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all"
+                        placeholder="50000">
+                </div>
+
+                <div class="space-y-2">
+                    <label for="salary_max" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Salary Max ($)</label>
+                    <input type="number" id="salary_max" name="salary_max" value="{{ job.salary_max if job else '' }}"
+                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all"
+                        placeholder="80000">
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label for="skills_required" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Skills Required (Comma separated)</label>
+                <input type="text" id="skills_required" name="skills_required" required value="{{ job.skills_required|join(', ') if job else '' }}"
+                    class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-white/10"
+                    placeholder="e.g. Python, Flask, React, PostgreSQL">
+            </div>
+
+            <div class="space-y-2">
+                <label for="description" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Job Description</label>
+                <textarea id="description" name="description" rows="8" required
+                    class="w-full bg-input border border-outline rounded-[2rem] p-8 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-white/10 leading-relaxed"
+                    placeholder="Describe the role, responsibilities, and qualifications..."></textarea>
+            </div>
+
+            <div class="pt-6">
+                <button type="submit" 
+                    class="w-full py-5 rounded-2xl indigo-gradient text-white font-bold text-lg shadow-2xl shadow-indigo-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all">
+                    {{ 'Update Job Listing' if job else 'Post Job Now' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Initialize description if editing
+    {% if job %}
+    document.getElementById('description').value = `{{ job.description|safe }}`;
+    {% endif %}
+</script>
+{% endblock %}
