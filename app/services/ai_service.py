@@ -162,7 +162,70 @@ class AIService:
                 "timeline": "5–7 Months"
             }
 
-        # 3. GENERALIZED GENERATOR (For any other role)
+        # 3. BACKEND ROADMAP
+        if "back" in role_lower:
+            return {
+                "role": "Backend Developer (2026)",
+                "phases": [
+                    {"title": "Phase 0: Basics", "milestones": [{"name": "Internet", "desc": "HTTP, DNS, TCP/IP"}, {"name": "OS", "desc": "Linux basics, Terminal"}]},
+                    {"title": "Phase 1: Languages", "milestones": [{"name": "Core Syntax", "desc": "Python, Node.js, or Go"}, {"name": "DSA", "desc": "Arrays, Trees, Graphs"}]},
+                    {"title": "Phase 2: APIs", "milestones": [{"name": "RESTful APIs", "desc": "Designing JSON endpoints"}, {"name": "GraphQL", "desc": "Advanced data querying"}]},
+                    {"title": "Phase 3: Databases", "milestones": [{"name": "Relational", "desc": "PostgreSQL, MySQL"}, {"name": "NoSQL", "desc": "MongoDB, Redis"}]},
+                    {"title": "Phase 4: Caching", "milestones": [{"name": "Redis", "desc": "In-memory data stores"}, {"name": "CDNs", "desc": "Content delivery"}]},
+                    {"title": "Phase 5: Security", "milestones": [{"name": "Auth", "desc": "JWT, OAuth2"}, {"name": "OWASP", "desc": "Preventing injection & XSS"}]},
+                    {"title": "Phase 6: Testing", "milestones": [{"name": "Unit Tests", "desc": "Pytest, Jest"}, {"name": "Integration Tests", "desc": "Testing API flows"}]},
+                    {"title": "Phase 7: CI/CD", "milestones": [{"name": "Pipelines", "desc": "GitHub Actions"}, {"name": "Docker", "desc": "Containerization basics"}]},
+                    {"title": "Phase 8: Architecture", "milestones": [{"name": "Microservices", "desc": "Service decoupling"}, {"name": "Message Brokers", "desc": "Kafka, RabbitMQ"}]},
+                    {"title": "Phase 9: Scale", "milestones": [{"name": "Load Balancing", "desc": "NGINX, HAProxy"}, {"name": "Monitoring", "desc": "Prometheus, Grafana"}]}
+                ],
+                "projects": ["REST API Service", "Auth Server", "Task Queue Worker"],
+                "stack": {"backend": "Python/Go/Node", "db": "PostgreSQL/Redis"},
+                "timeline": "6-8 Months"
+            }
+
+        # 4. DATA SCIENTIST ROADMAP
+        if "data" in role_lower or "science" in role_lower:
+            return {
+                "role": "Data Scientist (2026)",
+                "phases": [
+                    {"title": "Phase 0: Math", "milestones": [{"name": "Stats", "desc": "Probability, Distributions"}, {"name": "LinAlg", "desc": "Matrices, Vectors"}]},
+                    {"title": "Phase 1: Python", "milestones": [{"name": "Basics", "desc": "Python scripting"}, {"name": "Data Types", "desc": "Lists, Dictionaries"}]},
+                    {"title": "Phase 2: Data Tools", "milestones": [{"name": "Pandas", "desc": "Data manipulation"}, {"name": "NumPy", "desc": "Numerical arrays"}]},
+                    {"title": "Phase 3: Vis", "milestones": [{"name": "Matplotlib", "desc": "Basic plotting"}, {"name": "Seaborn", "desc": "Statistical graphs"}]},
+                    {"title": "Phase 4: ML Basics", "milestones": [{"name": "Scikit-Learn", "desc": "Classical ML models"}, {"name": "Regression", "desc": "Linear & Logistic"}]},
+                    {"title": "Phase 5: ML Adv", "milestones": [{"name": "Trees", "desc": "Random Forests"}, {"name": "Clustering", "desc": "K-Means, PCA"}]},
+                    {"title": "Phase 6: Deep Learning", "milestones": [{"name": "NNs", "desc": "Neural Networks"}, {"name": "PyTorch/TF", "desc": "Deep learning frameworks"}]},
+                    {"title": "Phase 7: NLP", "milestones": [{"name": "Text", "desc": "Tokenization, Embeddings"}, {"name": "Transformers", "desc": "HuggingFace, BERT"}]},
+                    {"title": "Phase 8: Big Data", "milestones": [{"name": "SQL", "desc": "Advanced querying"}, {"name": "Spark", "desc": "Distributed computing"}]},
+                    {"title": "Phase 9: MLOps", "milestones": [{"name": "Deployment", "desc": "Flask/FastAPI for models"}, {"name": "Tracking", "desc": "MLflow, Weights & Biases"}]}
+                ],
+                "projects": ["Housing Price Predictor", "Customer Segmentation", "Text Sentiment Analyzer"],
+                "stack": {"language": "Python/R", "tools": "Pandas/PyTorch/SQL"},
+                "timeline": "8-12 Months"
+            }
+
+        # 5. DEVOPS ENGINEER ROADMAP
+        if "devops" in role_lower or "cloud" in role_lower:
+            return {
+                "role": "DevOps Engineer (2026)",
+                "phases": [
+                    {"title": "Phase 0: OS & Linux", "milestones": [{"name": "CLI", "desc": "Bash scripting"}, {"name": "Networking", "desc": "TCP/IP, DNS, SSH"}]},
+                    {"title": "Phase 1: Programming", "milestones": [{"name": "Python/Go", "desc": "Automation scripting"}, {"name": "Git", "desc": "Version control"}]},
+                    {"title": "Phase 2: Cloud", "milestones": [{"name": "AWS/Azure/GCP", "desc": "Cloud fundamentals"}, {"name": "IAM", "desc": "Identity & Access Management"}]},
+                    {"title": "Phase 3: Containers", "milestones": [{"name": "Docker", "desc": "Building images"}, {"name": "Registry", "desc": "Docker Hub, ECR"}]},
+                    {"title": "Phase 4: Orchestration", "milestones": [{"name": "Kubernetes", "desc": "Pods, Deployments"}, {"name": "Helm", "desc": "K8s package manager"}]},
+                    {"title": "Phase 5: CI/CD", "milestones": [{"name": "Jenkins/Actions", "desc": "Continuous Integration"}, {"name": "ArgoCD", "desc": "Continuous Deployment (GitOps)"}]},
+                    {"title": "Phase 6: IaC", "milestones": [{"name": "Terraform", "desc": "Infrastructure as Code"}, {"name": "Ansible", "desc": "Configuration management"}]},
+                    {"title": "Phase 7: Monitoring", "milestones": [{"name": "Prometheus", "desc": "Metrics collection"}, {"name": "Grafana", "desc": "Dashboards & Alerts"}]},
+                    {"title": "Phase 8: Logging", "milestones": [{"name": "ELK Stack", "desc": "Elasticsearch, Logstash, Kibana"}, {"name": "Datadog", "desc": "APM and Logs"}]},
+                    {"title": "Phase 9: Security", "milestones": [{"name": "DevSecOps", "desc": "Secret scanning, Vault"}, {"name": "Compliance", "desc": "Auditing infra"}]}
+                ],
+                "projects": ["Dockerized Web App", "Terraform AWS Infra", "Kubernetes Cluster Setup"],
+                "stack": {"cloud": "AWS/K8s", "tools": "Terraform/Docker"},
+                "timeline": "6-9 Months"
+            }
+
+        # 6. GENERALIZED GENERATOR (For any other role)
         return {
             "role": f"{target_role.title()} Expert",
             "phases": [

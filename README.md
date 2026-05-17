@@ -1,102 +1,180 @@
 # Be Your — AI-Powered Career Platform
 
-![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python)
-![Flask](https://img.shields.io/badge/Flask-3.0-000000?logo=flask)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql)
-![MIT License](https://img.shields.io/badge/License-MIT-green)
+![Python](https://img.shields.io/badge/Python-3.11-blue.svg)
+![Flask](https://img.shields.io/badge/Flask-3.x-lightgrey.svg)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14-blue.svg)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-1.5.0-orange.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-## Live Demo
-[be-your.onrender.com](https://be-your.onrender.com)
+> "Discover Yourself. Land Your Dream Job."
+
+## 🔴 Live Demo
+[Be Your Live Demo](https://trailer-examine-sim-orbit.trycloudflare.com)
+*(Note: Replace with your final Render or production URL)*
 
 ## What is Be Your?
-Be Your is a comprehensive career intelligence platform designed to bridge the gap between job seekers and their dream roles. By leveraging AI-driven resume analysis, ATS scoring, and personalized career roadmaps, it empowers users to optimize their professional profiles and master the hiring process.
+Be Your is a next-generation AI-powered career platform designed to bridge the gap between human potential and industry expectations. It intelligently analyzes user profiles against market demands to generate personalized roadmaps, dynamic cover letters, and actionable feedback. By integrating advanced natural language processing with a sleek, distraction-free interface, it serves as the ultimate ecosystem for job seekers and recruiters alike.
 
-## Key Features
-✅ **AI Resume Intelligence**: Real-time ATS scoring and skill gap analysis.  
-✅ **Career Architect**: 10-phase personalized learning roadmaps for any role.  
-✅ **Job Match Engine**: Semantic matching (TF-IDF) between resumes and listings.  
-✅ **Mock Interviews**: Practice sessions with AI-generated feedback.  
-✅ **Recruiter Suite**: Powerful tools for candidate ranking and verification.  
-✅ **Admin Analytics**: Full platform oversight with CSV export capabilities.  
-✅ **Secure Auth**: Google OAuth2 integration and password reset workflows.  
-✅ **Role-Based Access**: Specialized dashboards for Seekers, Recruiters, and Admins.  
-✅ **Security Hardened**: Rate limiting, CSP, and secure file handling built-in.
+## ✨ Key Features
+**🧠 AI Intelligence**
+- **Resume Scoring:** Instantly evaluate resumes against job requirements.
+- **Skill Gap Analysis:** Identify exactly what skills you're missing for a role.
+- **Job Matching:** Intelligent recommendation engine matching your profile.
+- **Cover Letter:** Automatically generate highly-tailored cover letters.
 
-## Tech Stack
+**🚀 Career Growth**
+- **Career Roadmap:** Step-by-step, 10-phase learning paths for specific roles.
+- **Mock Interview:** AI-driven aptitude, behavioral, and technical interviews.
+- **Code Playground:** Real-time problem solving with AI solution analysis.
+- **Portfolio Analyzer:** Deep analysis of GitHub projects for credibility.
+
+**🏢 Platform Features**
+- **Recruiter Dashboard:** Seamlessly post, manage, and view job applications.
+- **Admin Panel:** Complete system oversight, logs, and CSV reporting.
+- **Badge System:** Earn exclusive badges by acing interviews and building portfolios.
+- **Notifications:** Real-time alerts for application status updates.
+
+**🔒 Security & Reliability**
+- **Authentication:** Secure local auth + Google OAuth2 integration.
+- **Rate Limiting:** Protection against spam and brute-force attacks.
+- **CSP Headers:** Strict content security policies applied platform-wide.
+- **Role-Based Access:** Isolated routes for Seekers, Recruiters, and Admins.
+
+## 🛠️ Tech Stack
 | Category | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Backend** | Python 3.11, Flask | Core server and API logic |
-| **Database** | PostgreSQL | Scalable relational data storage |
-| **AI/ML** | scikit-learn, TF-IDF | Recommendation and matching engine |
-| **Auth** | Flask-Login, Authlib | Session management and OAuth2 |
-| **Frontend** | Tailwind CSS, Vanilla JS | Premium dark glassmorphism UI |
-| **Testing** | Pytest | Comprehensive unit and integration testing |
-| **Deployment** | Render, Gunicorn | High-performance production hosting |
+|----------|------------|---------|
+| **Backend** | Python 3.11, Flask | Core server + REST API |
+| **Database** | PostgreSQL, SQLAlchemy | Relational data + ORM |
+| **AI/ML** | scikit-learn, TF-IDF | Matching + scoring engine |
+| **Auth** | Flask-Login, Authlib | Sessions + Google OAuth2 |
+| **Frontend** | Tailwind CSS, Vanilla JS | Dark glassmorphism UI |
+| **File Handling** | pdfplumber, python-docx| Resume text extraction |
+| **DevOps** | Gunicorn, Render | WSGI + cloud deployment |
+| **Testing** | pytest | 18+ automated tests |
 
-## Architecture
-```text
-Browser → Flask Blueprints → Services Layer → [PostgreSQL] + [AI Engine]
-```
-
-## Project Structure
+## 📁 Project Structure
 ```text
 be_your/
 ├── app/
-│   ├── routes/     (auth, user, jobs, recruiter, admin, ai)
-│   ├── models/     (SQLAlchemy schemas)
-│   ├── services/   (AI, Job, Auth business logic)
-│   ├── utils/      (Validators, Email, Resume Parser)
-│   ├── templates/  (25+ Jinja2 Templates)
-│   └── static/     (CSS, JS, Uploads)
-├── tests/          (Pytest suites)
-├── migrations/     (DB Versioning)
+│   ├── routes/     (9 blueprints: auth, user, jobs, recruiter, admin, ai, portfolio, resume, playground)
+│   ├── models/     (11 SQLAlchemy models)
+│   ├── services/   (8 service classes)
+│   ├── utils/      (decorators, email, validators, resume_parser, notify)
+│   └── templates/  (33 Jinja2 templates)
+├── tests/          (conftest + 3 test files, 18 tests)
+├── migrations/
 ├── requirements.txt
-└── Procfile
+├── Procfile
+└── README.md
 ```
 
-## Local Setup
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/yourusername/be_your.git
-   cd be_your
-   ```
-2. **Setup environment**:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-3. **Configure Environment**:
-   Copy `.env.example` to `.env` and fill in your values (PostgreSQL, Secret Keys, etc.).
-4. **Initialize Database**:
-   ```bash
-   flask db upgrade
-   python seed.py
-   ```
-5. **Run the application**:
-   ```bash
-   flask run
-   ```
+## 🚀 Local Setup
 
-## Environment Variables
+**Step 1 — Clone:**
+```bash
+git clone https://github.com/yourusername/be-your.git
+cd be-your
+```
+
+**Step 2 — Virtual environment (IMPORTANT: do NOT use Anaconda):**
+```bash
+python -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # Mac/Linux
+```
+
+**Step 3 — Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+
+**Step 4 — Environment setup:**
+```bash
+cp .env.example .env
+# Edit .env with your values (see Environment Variables section below)
+```
+
+**Step 5 — Database setup:**
+```bash
+# Make sure PostgreSQL is running locally
+flask db upgrade
+python seed.py           # Creates test data
+python seed_jobs.py      # Seeds sample jobs
+```
+
+**Step 6 — Run:**
+```bash
+flask run
+# Open http://localhost:5000
+```
+
+## ⚙️ Environment Variables
 | Variable | Description | Required |
-| :--- | :--- | :--- |
-| `SECRET_KEY` | Flask session secret | Yes |
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
+|----------|-------------|----------|
+| `SECRET_KEY` | Flask secret key (random string) | Yes |
+| `DATABASE_URL` | `postgresql://user:pass@localhost/be_your` | Yes |
 | `JWT_SECRET_KEY` | JWT signing key | Yes |
-| `GOOGLE_CLIENT_ID` | Google OAuth Client ID | Optional |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth Client Secret | Optional |
-| `MAIL_USERNAME` | SMTP server email | Optional |
-| `MAIL_PASSWORD` | SMTP app password | Optional |
+| `GOOGLE_CLIENT_ID` | Google OAuth (console.cloud.google.com) | Optional |
+| `GOOGLE_CLIENT_SECRET`| Google OAuth secret | Optional |
+| `MAIL_USERNAME` | Gmail address for sending emails | Optional |
+| `MAIL_PASSWORD` | Gmail App Password (not your real password)| Optional |
+| `UPLOAD_FOLDER` | Path for resume uploads (`app/static/uploads/resumes`) | Yes |
 
-## Running Tests
-Execute the full test suite using Pytest:
+## 🧪 Test Accounts (after running seed.py)
+| Role | Email | Password |
+|------|-------|----------|
+| **Job Seeker** | seeker@example.com | Seeker@123 |
+| **Recruiter** | recruiter@example.com | Recruiter@123 |
+| **Admin** | Create manually (see below) | — |
+
+**Create admin user manually:**
+```python
+flask shell
+>>> from app.models.user import User; from app.extensions import db
+>>> u = User(name="Admin", email="admin@beyour.com", role="admin")
+>>> u.set_password("Admin@1234"); u.is_verified = True
+>>> db.session.add(u); db.session.commit()
+```
+
+## 🔌 Key API Endpoints
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/auth/register` | Create account | No |
+| POST | `/auth/login` | Login | No |
+| GET | `/jobs/` | List all active jobs | No |
+| POST | `/jobs/<id>/apply` | Apply to a job | Seeker |
+| GET | `/ai/recommendations` | AI job recommendations | Seeker |
+| GET | `/ai/interview/start` | Start mock interview | Seeker |
+| POST | `/ai/cover-letter/generate`| Generate cover letter | Seeker |
+| GET | `/portfolio/dashboard` | Portfolio analyzer | Seeker |
+| GET | `/playground/playground` | Code challenges | Seeker |
+| GET | `/admin/dashboard` | Admin overview | Admin |
+| GET | `/admin/reports/export` | Download users CSV | Admin |
+
+## 🧪 Running Tests
 ```bash
 pytest tests/ -v
+pytest tests/test_ai.py -v     # AI engine only
+pytest tests/test_auth.py -v   # Auth only
 ```
 
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 🚢 Deploy to Render
+1. Push to GitHub (make sure `.env` is in `.gitignore`)
+2. Go to **render.com** → New Web Service
+3. Connect your GitHub repo
+4. Build command: `pip install -r requirements.txt`
+5. Start command: `gunicorn run:app` (already in `Procfile`)
+6. Add Environment Variables in Render dashboard
+7. Add PostgreSQL database in Render → copy `DATABASE_URL`
+8. Deploy → wait ~2 mins → live!
 
-## Author
-[Your Name] — [LinkedIn](https://linkedin.com/in/yourprofile) — [GitHub](https://github.com/yourusername)
+## 📊 Platform Stats
+- 11 database models · 9 Flask blueprints · 33 templates
+- 12 AI methods · 18+ automated tests · 704-line AI engine
+
+## 👤 Author
+**Vishal Bhanopiya** | [LinkedIn](https://linkedin.com/in/vishalbhanopiya) | [GitHub](https://github.com/VishalBHANOPIYA)
+
+## 📄 License
+MIT — feel free to use, modify, and build on this project.

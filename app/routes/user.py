@@ -162,3 +162,29 @@ def resume_analysis():
         
     analysis = AIService.analyze_resume(current_user.profile.resume_text)
     return render_template('user/resume_analysis.html', analysis=analysis)
+
+@user_bp.route('/notifications')
+@login_required
+def get_notifications():
+    from app.models.notification import Notification
+    from flask import jsonify
+    notifs = Notification.query.filter_by(user_id=current_user.id).order_by(Notification.created_at.desc()).limit(20).all()
+    
+    # Mark as read
+    Notification.query.filter_by(user_id=current_user.id, is_read=False).update({'is_read': True})
+    db.session.commit()
+    
+    return jsonify([{
+        'id': n.id,
+        'message': n.message,
+        'is_read': n.is_read,
+        'created_at': n.created_at.isoformat() if hasattr(n.created_at, 'isoformat') else n.created_at
+    } for n in notifs])
+
+@user_bp.route('/notifications/count')
+@login_required
+def get_notifications_count():
+    from app.models.notification import Notification
+    from flask import jsonify
+    count = Notification.query.filter_by(user_id=current_user.id, is_read=False).count()
+    return jsonify({"count": count})

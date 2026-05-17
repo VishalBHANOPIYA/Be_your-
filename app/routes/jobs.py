@@ -97,6 +97,10 @@ def apply_job(job_id):
     db.session.add(app_record)
     db.session.commit()
     
+    from app.utils.notify import send_notification
+    send_notification(current_user.id,
+      f"✅ You applied to '{job.title}'. Match score: {result['score']}%")
+    
     # 8. Flash success
     flash(f"Applied successfully! Your match score: {result['score']}%", "success")
     

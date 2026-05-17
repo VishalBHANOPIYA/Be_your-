@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
+from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app, session
 from app.services.auth_service import AuthService
 from app.utils.email_helper import send_reset_email
 from app.extensions import oauth, limiter
@@ -28,8 +28,9 @@ def register():
         if error:
             flash(error, 'danger')
             return render_template('auth/register.html')
-        flash('Registration successful! Please log in.', 'success')
-        return redirect(url_for('auth.login'))
+        session['verify_email'] = data.get('email')
+        flash('Registration successful! Please check your email for the verification code.', 'success')
+        return redirect(url_for('auth.verify_otp'))
     return render_template('auth/register.html')
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
@@ -48,6 +49,15 @@ def login():
             user = User.query.filter_by(email=email).first()
             return redirect(get_redirect_target(user))
         
+        if error == "unverified":
+            session['verify_email'] = email
+            from app.models.user import User
+            user = User.query.filter_by(email=email).first()
+            if user:
+                AuthService.generate_and_send_otp(user)
+            flash('Your account is not verified. A new verification code has been sent to your email.', 'warning')
+            return redirect(url_for('auth.verify_otp'))
+            
         flash(error, 'danger')
         
     return render_template('auth/login.html')
@@ -96,6 +106,42 @@ def reset_password(token):
         return redirect(url_for('auth.login'))
         
     return render_template('auth/reset_password.html')
+
+@auth_bp.route('/verify-otp', methods=['GET', 'POST'])
+def verify_otp():
+    email = session.get('verify_email')
+    if not email:
+        flash('Session expired or invalid. Please log in again.', 'warning')
+        return redirect(url_for('auth.login'))
+        
+    if request.method == 'POST':
+        otp_code = request.form.get('otp')
+        success, error = AuthService.verify_otp(email, otp_code)
+        if success:
+            flash('Your account has been verified! You can now log in.', 'success')
+            session.pop('verify_email', None)
+            return redirect(url_for('auth.login'))
+        else:
+            flash(error, 'danger')
+            
+    return render_template('auth/verify_otp.html', email=email)
+
+@auth_bp.route('/resend-otp', methods=['POST'])
+@limiter.limit("3 per 10 minutes")
+def resend_otp():
+    email = session.get('verify_email')
+    if not email:
+        return redirect(url_for('auth.login'))
+        
+    from app.models.user import User
+    user = User.query.filter_by(email=email).first()
+    if user and not user.is_verified:
+        AuthService.generate_and_send_otp(user)
+        flash('A new verification code has been sent to your email.', 'success')
+    else:
+        flash('Account already verified or not found.', 'warning')
+        
+    return redirect(url_for('auth.verify_otp'))
 
 # Google OAuth2 Routes
 @auth_bp.route('/login/google')

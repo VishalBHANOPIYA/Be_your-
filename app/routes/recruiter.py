@@ -108,6 +108,39 @@ def view_applicants(job_id):
 def update_app_status(app_id):
     status = request.form.get('status')
     JobService.update_application_status(app_id, status)
+    
+    from app.utils.notify import send_notification
+    from app.models.application import Application
+    from app.utils.email import send_email
+    from flask import url_for
+    
+    app_obj = Application.query.get(app_id)
+    if app_obj:
+        status_messages = {
+            'shortlisted': f"🎉 Congratulations! You've been shortlisted for a position.",
+            'rejected': f"Thank you for applying. Unfortunately, you were not selected this time.",
+            'hired': f"🏆 Amazing news! You've been selected for the role!"
+        }
+        msg = status_messages.get(status)
+        if msg:
+            send_notification(app_obj.user_id, msg)
+            
+            # Send actual email notification
+            user = app_obj.user
+            job = app_obj.job
+            dashboard_url = url_for('user.dashboard', _external=True)
+            
+            send_email(
+                to=user.email,
+                subject=f"Application Update: {job.title} at {job.company.name}",
+                template='status_update',
+                name=user.name,
+                job_title=job.title,
+                company_name=job.company.name,
+                status=status.capitalize(),
+                dashboard_url=dashboard_url
+            )
+            
     flash(f'Application status updated to {status}.', 'success')
     return redirect(request.referrer or url_for('recruiter.dashboard'))
 

@@ -138,4 +138,8 @@ class InterviewService:
                 if user:
                     BadgeService.check_and_award_interview_badge(user, scorecard['overall_score'], interview.job_role or "Technical")
             
+            from app.utils.notify import send_notification
+            send_notification(interview.user_id,
+              f"Interview complete! Your score: {scorecard['overall_score']}%")
+              
         return interview

@@ -21,7 +21,7 @@ class AuthService:
         if User.query.filter_by(email=email).first():
             return None, "Email already registered"
             
-        user = User(name=name, email=email, role=role)
+        user = User(name=name, email=email, role=role, is_verified=False)
         user.set_password(password)
         db.session.add(user)
         db.session.flush()
@@ -29,6 +29,8 @@ class AuthService:
         profile = Profile(user_id=user.id)
         db.session.add(profile)
         db.session.commit()
+        
+        AuthService.generate_and_send_otp(user)
         
         return user, None
 
@@ -38,9 +40,54 @@ class AuthService:
         if user and user.check_password(password):
             if not user.is_active:
                 return False, "Account is deactivated"
+            if not user.is_verified:
+                return False, "unverified"
             login_user(user, remember=remember)
             return True, None
         return False, "Invalid email or password"
+
+    @staticmethod
+    def generate_and_send_otp(user):
+        import random
+        from datetime import datetime, timedelta
+        from app.utils.email import send_email
+        
+        otp = str(random.randint(100000, 999999))
+        user.otp = otp
+        user.otp_expiry = datetime.utcnow() + timedelta(minutes=15)
+        db.session.commit()
+        
+        send_email(
+            to=user.email,
+            subject="Verify your Be Your account",
+            template='otp_verification',
+            name=user.name,
+            otp=otp
+        )
+        return True
+
+    @staticmethod
+    def verify_otp(email, otp_code):
+        from datetime import datetime
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return False, "User not found"
+        
+        if user.is_verified:
+            return True, None
+            
+        if user.otp != otp_code:
+            return False, "Invalid OTP code"
+            
+        if not user.otp_expiry or user.otp_expiry < datetime.utcnow():
+            return False, "OTP has expired"
+            
+        # OTP is valid
+        user.is_verified = True
+        user.otp = None
+        user.otp_expiry = None
+        db.session.commit()
+        return True, None
 
     @staticmethod
     def logout_user():

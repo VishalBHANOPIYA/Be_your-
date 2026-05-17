@@ -73,7 +73,7 @@
                 <label for="description" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Job Description</label>
                 <textarea id="description" name="description" rows="8" required
                     class="w-full bg-input border border-outline rounded-[2rem] p-8 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-white/10 leading-relaxed"
-                    placeholder="Describe the role, responsibilities, and qualifications..."></textarea>
+                    placeholder="Describe the role, responsibilities, and qualifications...">{{ job.description if job else '' }}</textarea>
             </div>
 
             <div class="pt-6">
@@ -85,11 +85,4 @@
         </form>
     </div>
 </div>
-
-<script>
-    // Initialize description if editing
-    {% if job %}
-    document.getElementById('description').value = `{{ job.description|safe }}`;
-    {% endif %}
-</script>
 {% endblock %}
