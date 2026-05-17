@@ -1,0 +1,202 @@
+# ── FILE: app/templates/recruiter/analytics.html ──
+{% extends "base.html" %}
+
+{% block title %}Recruiter Analytics | Be Your{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Sidebar Navigation (Standardized) -->
+        <aside class="col-span-1 space-y-6">
+            <div class="glass-card p-6 rounded-3xl text-center space-y-4">
+                <div class="w-20 h-20 bg-indigo-500/20 rounded-2xl mx-auto flex items-center justify-center text-indigo-400 text-3xl font-bold border border-indigo-500/30">
+                    {{ company.name[0] }}
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-on-surface">{{ current_user.name }}</h2>
+                        <p class="text-on-surface-variant text-sm">{{ company.name }}</p>
+                    </div>
+                    
+                    <a href="{{ url_for('recruiter.post_job') }}" class="block w-full py-3 rounded-xl indigo-gradient text-white text-sm font-bold text-center hover:scale-[1.02] transition-all">
+                        Post New Job
+                    </a>
+
+                    <button class="w-full py-3 rounded-xl border border-outline text-sm font-bold hover:bg-surface transition-all text-on-surface-variant">
+                        Company Profile
+                    </button>
+                </div>
+            </div>
+
+            <nav class="glass-card p-4 rounded-3xl space-y-1">
+                <a href="{{ url_for('recruiter.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="{{ url_for('recruiter.post_job') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                    <span class="material-symbols-outlined">post_add</span>
+                    Manage Jobs
+                </a>
+                <!-- Applicants -->
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                    <span class="material-symbols-outlined">group</span>
+                    Applicants
+                </a>
+                <a href="{{ url_for('recruiter.analytics') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-container/20 text-primary font-bold text-sm">
+                    <span class="material-symbols-outlined">analytics</span>
+                    Analytics
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="col-span-1 lg:col-span-3 space-y-8">
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-on-surface">Recruiter Analytics</h1>
+                    <p class="text-on-surface-variant">Performance metrics and job engagement statistics.</p>
+                </div>
+            </div>
+
+            <!-- Stats Grid (3 Premium Key Metric Cards) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-3xl space-y-2 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent"></div>
+                    <div class="relative space-y-2">
+                        <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Active Listings</p>
+                        <p class="text-4xl font-black text-primary">{{ total_jobs }}</p>
+                        <p class="text-[10px] text-green-400 font-semibold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[12px]">trending_up</span> Live on Platform
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 rounded-3xl space-y-2 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent"></div>
+                    <div class="relative space-y-2">
+                        <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Total Applications</p>
+                        <p class="text-4xl font-black text-secondary">{{ total_applications }}</p>
+                        <p class="text-[10px] text-green-400 font-semibold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[12px]">trending_up</span> Candidates Applied
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-3xl space-y-2 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent"></div>
+                    <div class="relative space-y-2">
+                        <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Conversion Rate</p>
+                        <p class="text-4xl font-black text-white">{{ conversion_rate }}%</p>
+                        <p class="text-[10px] text-purple-400 font-semibold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[12px]">psychology</span> Shortlisted or Hired
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Card -->
+            <div class="glass-card p-8 rounded-3xl space-y-6">
+                <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">bar_chart</span>
+                        <h3 class="text-lg font-bold text-on-surface">Application Breakdown</h3>
+                    </div>
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold bg-white/5 px-3 py-1.5 rounded-xl border border-outline">
+                        Interactive Metrics
+                    </span>
+                </div>
+                
+                {% if total_jobs > 0 %}
+                <div class="relative h-[320px] w-full">
+                    <canvas id="applicationsChart"></canvas>
+                </div>
+                {% else %}
+                <div class="py-20 text-center space-y-4">
+                    <span class="material-symbols-outlined text-4xl text-on-surface-variant">post_add</span>
+                    <p class="text-on-surface-variant">Post job listings to begin collecting real performance analytics.</p>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const chartElement = document.getElementById('applicationsChart');
+        if (!chartElement) return;
+
+        const ctx = chartElement.getContext('2d');
+        const labels = {{ job_titles | tojson }};
+        const data = {{ job_app_counts | tojson }};
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Applications per Job',
+                    data: data,
+                    backgroundColor: 'rgba(99, 102, 241, 0.25)',
+                    borderColor: 'rgba(99, 102, 241, 1)',
+                    borderWidth: 2,
+                    borderRadius: 12,
+                    hoverBackgroundColor: 'rgba(168, 85, 247, 0.45)',
+                    hoverBorderColor: 'rgba(168, 85, 247, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(24, 24, 27, 0.9)',
+                        titleColor: '#fafafa',
+                        bodyColor: '#fafafa',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 12,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.04)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)',
+                            font: {
+                                size: 11,
+                                weight: '600'
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.04)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)',
+                            font: {
+                                size: 11,
+                                weight: '600'
+                            },
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

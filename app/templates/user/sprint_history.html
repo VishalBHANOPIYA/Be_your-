@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .glass-panel {
+        background: rgba(24, 24, 27, 0.55);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass-panel:hover {
+        border-color: rgba(99, 102, 241, 0.25);
+        box-shadow: 0 15px 40px -12px rgba(99, 102, 241, 0.15);
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .accordion-header {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .accordion-header:hover {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+    
+    .accordion-item.active .accordion-content {
+        max-height: 1000px;
+        transition: max-height 0.5s ease-in;
+    }
+
+    .accordion-item.active .chevron-icon {
+        transform: rotate(180deg);
+    }
+
+    .chevron-icon {
+        transition: transform 0.3s ease;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8 relative">
+    
+    <!-- Decorative Glow Circles -->
+    <div class="glow-circle w-[400px] h-[400px] top-10 left-10"></div>
+    <div class="glow-circle w-[450px] h-[450px] bottom-10 right-10"></div>
+
+    <!-- Header Block -->
+    <div class="glass-panel p-8 rounded-3xl mb-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+            <div class="flex items-center gap-3 mb-2">
+                <span class="px-3.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">Sprint Records</span>
+                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold">
+                    <span class="material-symbols-outlined text-sm">history</span> Personal History
+                </span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-on-surface mb-2">
+                Daily Sprint History
+            </h1>
+            <p class="text-on-surface-variant max-w-xl text-sm leading-relaxed">
+                Review your lifetime career sprint record, check past AI feedback mentoring details, and track your gamified accuracy progression.
+            </p>
+        </div>
+        
+        <div>
+            <a href="{{ url_for('sprint.dashboard') }}" 
+               class="px-6 py-3.5 rounded-2xl border border-white/10 hover:border-primary/30 bg-white/5 hover:bg-white/10 text-on-surface text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">keyboard_backspace</span>
+                Back to Sprint
+            </a>
+        </div>
+    </div>
+
+    <!-- Stat Dashboard cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="stat-card p-6 rounded-2xl text-center">
+            <span class="material-symbols-outlined text-3xl text-indigo-400 mb-2">rocket_launch</span>
+            <span class="block text-3xl font-black text-on-surface">{{ total_completed }}</span>
+            <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Total Sprints</span>
+        </div>
+        <div class="stat-card p-6 rounded-2xl text-center">
+            <span class="material-symbols-outlined text-3xl text-green-400 mb-2">task_alt</span>
+            <span class="block text-3xl font-black text-on-surface">{{ correct_count }}</span>
+            <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Correct Answers</span>
+        </div>
+        <div class="stat-card p-6 rounded-2xl text-center">
+            <span class="material-symbols-outlined text-3xl text-amber-500 mb-2">insights</span>
+            <span class="block text-3xl font-black text-on-surface">{{ accuracy_pct }}%</span>
+            <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Accuracy Rate</span>
+        </div>
+        <div class="stat-card p-6 rounded-2xl text-center">
+            <span class="material-symbols-outlined text-3xl text-purple-400 mb-2">military_tech</span>
+            <span class="block text-3xl font-black text-on-surface">{{ total_xp_earned }}</span>
+            <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">XP Earned</span>
+        </div>
+    </div>
+
+    <!-- Submissions Accordion Table -->
+    <div class="glass-panel rounded-3xl overflow-hidden">
+        <div class="p-6 border-b border-outline bg-surface/50">
+            <h3 class="font-bold text-base text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">analytics</span>
+                Chronological Submissions
+            </h3>
+        </div>
+
+        {% if submissions %}
+        <div class="divide-y divide-outline/50">
+            {% for sub in submissions %}
+            <div class="accordion-item" id="sub-{{ sub.id }}">
+                <!-- Accordion Header row -->
+                <div class="accordion-header p-6 flex flex-wrap md:flex-nowrap justify-between items-center gap-4 text-sm" onclick="toggleAccordion('sub-{{ sub.id }}')">
+                    <div class="flex items-center gap-4 flex-1">
+                        <span class="text-xs text-on-surface-variant font-bold whitespace-nowrap">{{ sub.sprint_date.strftime('%b %d, %Y') }}</span>
+                        
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-extrabold uppercase tracking-wide">
+                                {{ sub.challenge_type }}
+                            </span>
+                            <span class="font-semibold text-on-surface text-sm">{{ sub.challenge_title }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-6">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase
+                            {% if sub.is_correct %}bg-green-500/10 text-green-400{% else %}bg-red-500/10 text-red-400{% endif %}">
+                            {% if sub.is_correct %}✓ Correct{% else %}✗ Incorrect{% endif %}
+                        </span>
+
+                        <span class="text-xs text-purple-400 font-extrabold tracking-wider">+{{ sub.xp_earned }} XP</span>
+
+                        <span class="material-symbols-outlined text-on-surface-variant chevron-icon">expand_more</span>
+                    </div>
+                </div>
+
+                <!-- Accordion Expandable Content -->
+                <div class="accordion-content bg-[#0d0d0f]/60 px-6 border-t border-outline/30">
+                    <div class="py-6 space-y-6">
+                        {% if sub.user_answer %}
+                        <div>
+                            <span class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Your Answer Submission</span>
+                            <pre class="bg-surface p-4 rounded-xl text-xs overflow-x-auto text-on-surface border border-outline/50"><code>{{ sub.user_answer }}</code></pre>
+                        </div>
+                        {% endif %}
+
+                        <div>
+                            <span class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">AI Mentor Feedback & Code Analysis</span>
+                            <div class="text-sm leading-relaxed text-on-surface/90 border-l-2 border-primary pl-4 py-1 markdown-content">
+                                {{ sub.ai_feedback | safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="p-16 text-center">
+            <span class="material-symbols-outlined text-5xl text-on-surface-variant mb-4">folder_open</span>
+            <h4 class="font-bold text-lg text-on-surface mb-1">No Sprint Record Found</h4>
+            <p class="text-xs text-on-surface-variant max-w-sm mx-auto mb-6">
+                You haven't completed any daily sprints yet. Get started today to build your streak calendar and earn XP!
+            </p>
+            <a href="{{ url_for('sprint.dashboard') }}" 
+               class="px-6 py-3.5 rounded-2xl indigo-gradient text-white text-xs font-bold uppercase tracking-widest hover:scale-[1.01] transition-all inline-block shadow-lg">
+                Start Today's Sprint
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function toggleAccordion(itemId) {
+        const item = document.getElementById(itemId);
+        const isActive = item.classList.contains('active');
+        
+        // Close other items
+        document.querySelectorAll('.accordion-item').forEach(i => {
+            i.classList.remove('active');
+            i.querySelector('.accordion-content').style.maxHeight = null;
+        });
+
+        if (!isActive) {
+            item.classList.add('active');
+            const content = item.querySelector('.accordion-content');
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
+    }
+</script>
+{% endblock %}

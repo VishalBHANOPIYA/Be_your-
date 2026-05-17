@@ -99,8 +99,9 @@ def builder():
     socials = profile.portfolio_socials or {"github": "", "linkedin": "", "twitter": "", "website": ""}
     projects = profile.portfolio_projects or []
     
-    # URL Slug representation for the current user
-    username_slug = current_user.name.lower().replace(" ", "-")
+    # URL Slug representation for the current user using unique 4-character UUID suffix
+    id_suffix = str(current_user.id).replace('-', '')[:4]
+    username_slug = current_user.name.lower().replace(" ", "-") + "-" + id_suffix
     public_url = url_for('portfolio.public_portfolio', username_slug=username_slug, _external=True)
     
     return render_template(
@@ -138,10 +139,21 @@ def public_portfolio(username_slug):
     # Lookup logic matching slugs, IDs, or emails robustly
     user = None
     
-    # 1. Try slug name (replace '-' with ' ')
-    search_name = username_slug.replace('-', ' ')
-    user = User.query.filter(User.name.ilike(search_name)).first()
-    
+    # 1. New lookup: extract suffix from slug, find user by UUID prefix
+    # Slug format: "name-parts-xxxx" where xxxx is first 4 chars of UUID (no dashes)
+    # Split on last '-' to get suffix
+    parts = username_slug.rsplit('-', 1)
+    if len(parts) == 2:
+        id_suffix = parts[1]  # e.g. "a3f2"
+        # Find all users whose UUID (no dashes) starts with id_suffix
+        users = User.query.all()
+        user = next((u for u in users if str(u.id).replace('-', '').startswith(id_suffix)), None)
+        
+    if not user:
+        # Fallback: try name match
+        search_name = username_slug.replace('-', ' ')
+        user = User.query.filter(User.name.ilike(f'%{search_name}%')).first()
+        
     # 2. Try raw UUID query
     if not user:
         try:

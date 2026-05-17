@@ -47,3 +47,14 @@ uploads/
 db_data/
 logs/
 .DS_Store
+
+# Heavy Binaries & Cloudflare Tunnel
+cloudflared*
+*.log
+logfile
+
+# Temporary Script & Debug Tools
+fix_inputs.py
+fix_styles.py
+verify_existing_users.py
+venv_clean/

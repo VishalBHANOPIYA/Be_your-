@@ -27,19 +27,20 @@
             </div>
 
             <nav class="glass-card p-4 rounded-3xl space-y-1">
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-container/20 text-primary font-bold text-sm">
+                <a href="{{ url_for('recruiter.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-container/20 text-primary font-bold text-sm">
                     <span class="material-symbols-outlined">dashboard</span>
                     Dashboard
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                <a href="{{ url_for('recruiter.post_job') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
                     <span class="material-symbols-outlined">post_add</span>
                     Manage Jobs
                 </a>
+                <!-- Applicants can stay as # with a comment or go to dashboard, since applicants are viewed per job -->
                 <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
                     <span class="material-symbols-outlined">group</span>
                     Applicants
                 </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                <a href="{{ url_for('recruiter.analytics') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
                     <span class="material-symbols-outlined">analytics</span>
                     Analytics
                 </a>
@@ -54,7 +55,7 @@
                     <h1 class="text-3xl font-bold text-on-surface">Recruiter Dashboard</h1>
                     <p class="text-on-surface-variant">Manage your hiring pipeline and job listings.</p>
                 </div>
-                <a href="#" class="px-8 py-4 rounded-2xl indigo-gradient text-white font-bold text-sm shadow-xl hover:scale-105 transition-all">
+                <a href="{{ url_for('recruiter.post_job') }}" class="px-8 py-4 rounded-2xl indigo-gradient text-white font-bold text-sm shadow-xl hover:scale-105 transition-all">
                     Post a New Job
                 </a>
             </div>

@@ -66,4 +66,36 @@ def submit():
         return jsonify({"success": False, "message": "Answer cannot be empty!"}), 400
         
     result = SprintService.evaluate_submission(current_user, answer)
+    if result.get('success'):
+        return jsonify({
+            "success": True,
+            "is_correct": result.get("is_correct"),
+            "feedback": result.get("ai_feedback"),
+            "streak": result.get("new_streak"),
+            "total_xp": result.get("new_xp"),
+            "xp_earned": result.get("xp_earned"),
+            "new_level": result.get("new_level"),
+            "level_up": result.get("level_up")
+        })
     return jsonify(result)
+
+@sprint_bp.route('/history')
+@login_required
+def history():
+    submissions = UserSprintSubmission.query.filter_by(user_id=current_user.id)\
+        .order_by(UserSprintSubmission.sprint_date.desc()).all()
+    
+    total_completed = len(submissions)
+    correct_count = sum(1 for s in submissions if s.is_correct)
+    accuracy_pct = int((correct_count / total_completed * 100)) if total_completed > 0 else 0
+    total_xp_earned = sum(s.xp_earned for s in submissions)
+    
+    return render_template(
+        'user/sprint_history.html',
+        submissions=submissions,
+        total_completed=total_completed,
+        correct_count=correct_count,
+        accuracy_pct=accuracy_pct,
+        total_xp_earned=total_xp_earned
+    )
+

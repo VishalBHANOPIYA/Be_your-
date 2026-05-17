@@ -102,6 +102,18 @@ def apply_job(job_id):
     send_notification(current_user.id,
       f"✅ You applied to '{job.title}'. Match score: {result['score']}%")
     
+    # Also notify the recruiter who owns this job
+    try:
+        recruiter_id = job.company.recruiter_id
+        if recruiter_id:
+            send_notification(
+                recruiter_id,
+                f"📩 New application! {current_user.name} applied to "
+                f"'{job.title}' with a {result['score']:.0f}% match score."
+            )
+    except Exception:
+        pass   # Never let notification failure break the apply flow
+    
     # 8. Flash success
     flash(f"Applied successfully! Your match score: {result['score']}%", "success")
     

@@ -24,3 +24,15 @@ class Job(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     applications = db.relationship('Application', backref='job', lazy=True)
+
+    @property
+    def days_left(self):
+        if not self.deadline:
+            return None
+        deadline_dt = self.deadline
+        if not isinstance(deadline_dt, datetime):
+            from datetime import date
+            if isinstance(deadline_dt, date):
+                deadline_dt = datetime.combine(deadline_dt, datetime.min.time())
+        delta = deadline_dt - datetime.utcnow()
+        return max(0, delta.days)

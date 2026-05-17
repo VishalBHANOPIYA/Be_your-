@@ -98,7 +98,18 @@ def create_app(config_name='development'):
 
     @app.route('/')
     def index():
-        return render_template('index.html')
+        from app.models.user import User
+        from app.models.job import Job
+        from app.models.application import Application
+        from app.models.interview import Interview
+
+        stats = {
+            'total_users': User.query.filter_by(role='seeker').count(),
+            'total_jobs': Job.query.filter_by(is_active=True).count(),
+            'total_interviews': Interview.query.filter_by(status='completed').count(),
+            'total_applications': Application.query.count()
+        }
+        return render_template('index.html', stats=stats)
         
     # Logging
     if not app.debug:

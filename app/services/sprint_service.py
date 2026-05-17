@@ -203,6 +203,392 @@ class SprintService:
             "explanation": "Microservices introduce distributed system trade-offs: latency over the network, network partitions, distributed transactions, and complicated routing systems.",
             "difficulty": "Medium",
             "xp": 100
+        },
+
+        # --- ADDITIONAL DEBUG SPRINT TRACK (16 - 25) ---
+        {
+            "id": 16,
+            "title": "Python: Fix the N+1 query problem in SQLAlchemy",
+            "type": "debug",
+            "category": "Backend",
+            "problem": "Explain how to resolve the N+1 query issue in the function below by ensuring users are eagerly loaded with posts in a single database query:\n\n```python\ndef get_posts_with_users():\n    posts = Post.query.all()\n    return [{ 'post_title': p.title, 'user_name': p.user.name } for p in posts]\n```",
+            "starter": "def get_posts_with_users():\n    posts = Post.query.options(db.joinedload(Post.user)).all()\n    return [{ 'post_title': p.title, 'user_name': p.user.name } for p in posts]",
+            "expected_keywords": ["joinedload", "options"],
+            "difficulty": "Hard",
+            "xp": 100
+        },
+        {
+            "id": 17,
+            "title": "Python: Fix memory leak in generator",
+            "type": "debug",
+            "category": "Backend",
+            "problem": "The following generator opens files and yields lines, but has a memory delegation leak. Fix the delegation to nested generators to properly yield from the sub-generator:\n\n```python\ndef read_logs(file_paths):\n    for path in file_paths:\n        for line in open_file(path):\n            yield line\n```",
+            "starter": "def read_logs(file_paths):\n    for path in file_paths:\n        yield from open_file(path)",
+            "expected_keywords": ["yield from"],
+            "difficulty": "Hard",
+            "xp": 100
+        },
+        {
+            "id": 18,
+            "title": "SQL: Fix missing index causing full table scan",
+            "type": "debug",
+            "category": "Database",
+            "problem": "Write a clean SQL query to create a standard database-level b-tree index on the `email` column of the `users` table to avoid slow full-table scans when running lookup queries:\n\n```sql\nSELECT * FROM users WHERE email = 'john@example.com';\n```",
+            "starter": "CREATE INDEX idx_users_email ON users(email);",
+            "expected_keywords": ["CREATE INDEX", "ON users", "email"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 19,
+            "title": "JavaScript: Missing await in promise chain",
+            "type": "debug",
+            "category": "Frontend",
+            "problem": "This async function returns a Promise containing the value instead of resolving the actual value first. Correct the missing keyword in the asynchronous fetching call:\n\n```javascript\nasync function getUserData(userId) {\n    const user = fetchUser(userId);\n    return user.name;\n}\n```",
+            "starter": "async function getUserData(userId) {\n    const user = await fetchUser(userId);\n    return user.name;\n}",
+            "expected_keywords": ["await"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 20,
+            "title": "Python: Race condition in threading without lock",
+            "type": "debug",
+            "category": "Backend",
+            "problem": "Explain or write a thread-safe increment operation for a shared counter using python's `threading.Lock()` to prevent race conditions during concurrent modifications:\n\n```python\ncounter = 0\ndef increment():\n    global counter\n    counter += 1\n```",
+            "starter": "import threading\nlock = threading.Lock()\ncounter = 0\ndef increment():\n    global counter\n    with lock:\n        counter += 1",
+            "expected_keywords": ["Lock", "with lock"],
+            "difficulty": "Hard",
+            "xp": 100
+        },
+        {
+            "id": 21,
+            "title": "CSS: Fix z-index stacking context broken by transform",
+            "type": "debug",
+            "category": "Frontend",
+            "problem": "The overlay card is rendering underneath other items because transform properties create a new stacking context. Show how to fix the CSS declaration below to restore normal stacking context flow:\n\n```css\n.modal {\n  position: absolute;\n  z-index: 9999;\n  transform: translate(0, 0);\n}\n```",
+            "starter": ".modal {\n  position: absolute;\n  z-index: 9999;\n}",
+            "expected_keywords": ["z-index", "transform"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 22,
+            "title": "Python: Fix incorrect list comprehension with side effects",
+            "type": "debug",
+            "category": "Backend",
+            "problem": "Do not modify a list dynamic structure while iterating over it, as this causes unexpected off-by-one skipping. Rewrite the structure to filter out even numbers safely:\n\n```python\nnumbers = [1, 2, 3, 4, 5]\n[numbers.remove(n) for n in numbers if n % 2 == 0]\n```",
+            "starter": "numbers = [1, 2, 3, 4, 5]\nnumbers = [n for n in numbers if n % 2 != 0]",
+            "expected_keywords": ["numbers = [", "% 2 != 0"],
+            "difficulty": "Easy",
+            "xp": 100
+        },
+        {
+            "id": 23,
+            "title": "SQL: Fix subquery returning multiple rows",
+            "type": "debug",
+            "category": "Database",
+            "problem": "Correct the operator used in this SQL lookup because the subquery returns multiple records instead of a single ID:\n\n```sql\nSELECT name FROM employees \nWHERE department_id = (SELECT id FROM departments WHERE region = 'US');\n```",
+            "starter": "SELECT name FROM employees \nWHERE department_id IN (SELECT id FROM departments WHERE region = 'US');",
+            "expected_keywords": ["IN (", "subquery"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 24,
+            "title": "JavaScript: Callback this-binding issue",
+            "type": "debug",
+            "category": "Frontend",
+            "problem": "Fix the callback scope definition inside this object's method because standard functions create their own context, rendering `this.name` undefined:\n\n```javascript\nconst obj = {\n  name: 'Be Your',\n  greet: function() {\n    setTimeout(function() {\n      console.log(this.name);\n    }, 100);\n  }\n};\n```",
+            "starter": "const obj = {\n  name: 'Be Your',\n  greet: function() {\n    setTimeout(() => {\n      console.log(this.name);\n    }, 100);\n  }\n};",
+            "expected_keywords": ["arrow function", "bind(this)", "() =>"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 25,
+            "title": "Python: Fix off-by-one binary search bug",
+            "type": "debug",
+            "category": "Math/CS",
+            "problem": "Identify the off-by-one boundary checking errors in the standard binary search logic below. Provide the correct index adjustments and condition check:\n\n```python\ndef binary_search(arr, x):\n    low = 0\n    high = len(arr)\n    while low < high:\n        mid = (low + high) // 2\n        if arr[mid] < x:\n            low = mid\n        elif arr[mid] > x:\n            high = mid\n        else: return mid\n    return -1\n```",
+            "starter": "def binary_search(arr, x):\n    low = 0\n    high = len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] < x:\n            low = mid + 1\n        elif arr[mid] > x:\n            high = mid - 1\n        else:\n            return mid\n    return -1",
+            "expected_keywords": ["low <= high", "mid + 1", "mid - 1"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+
+        # --- ADDITIONAL SYSTEM DESIGN MCQ TRACK (26 - 35) ---
+        {
+            "id": 26,
+            "title": "System Design: SQL INNER JOIN vs LEFT JOIN",
+            "type": "design",
+            "category": "Database Design",
+            "problem": "What is the structural differences between an SQL INNER JOIN and an SQL LEFT JOIN?",
+            "choices": [
+                "A) INNER JOIN returns only matching rows; LEFT JOIN returns all rows from the left table and matching rows from the right table.",
+                "B) INNER JOIN returns all rows from both tables; LEFT JOIN returns only matching rows.",
+                "C) LEFT JOIN is faster and returns only left keys; INNER JOIN is slower.",
+                "D) There is no structural difference; they perform the exact same logic."
+            ],
+            "correct_choice": "A",
+            "explanation": "INNER JOIN only returns rows where there is a match in both tables. LEFT JOIN returns all rows from the left table, and the matched rows from the right table, filling with NULL if no match exists.",
+            "difficulty": "Easy",
+            "xp": 100
+        },
+        {
+            "id": 27,
+            "title": "System Design: Redis vs Memcached Caching Strategy",
+            "type": "design",
+            "category": "System Caching",
+            "problem": "When should you choose Redis over Memcached for implementing caching structures in a highly scaled architecture?",
+            "choices": [
+                "A) Memcached supports rich data structures; Redis only supports strings.",
+                "B) Redis supports rich data structures, persistence options, and is single-threaded; Memcached is simple, multi-threaded, and purely in-memory.",
+                "C) Redis is strictly slower than Memcached for all caching scenarios.",
+                "D) Memcached should be used for pub/sub systems; Redis should not."
+            ],
+            "correct_choice": "B",
+            "explanation": "Redis supports complex data structures (hashes, lists, sets) and data persistence, making it highly versatile, while Memcached is a lighter, simpler, multi-threaded key-value store.",
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 28,
+            "title": "System Design: CAP Theorem & PostgreSQL Priorities",
+            "type": "design",
+            "category": "System Design",
+            "problem": "What core trade-offs are defined by the CAP Theorem? Which two properties does PostgreSQL natively prioritize as a ACID database?",
+            "choices": [
+                "A) Consistency, Availability, Partition Tolerance; PostgreSQL prioritizes Consistency and Availability (CA).",
+                "B) Consistency, Authority, Processing; PostgreSQL prioritizes Consistency and Authority.",
+                "C) Cost, Availability, Performance; PostgreSQL prioritizes Cost and Performance.",
+                "D) Cache, API, Portability; PostgreSQL prioritizes Cache and API."
+            ],
+            "correct_choice": "A",
+            "explanation": "CAP stands for Consistency, Availability, and Partition Tolerance. PostgreSQL is a traditional ACID relational database that guarantees Consistency and Availability (CA) under standard operations.",
+            "difficulty": "Easy",
+            "xp": 100
+        },
+        {
+            "id": 29,
+            "title": "System Design: REST vs GraphQL",
+            "type": "design",
+            "category": "System Integration",
+            "problem": "Under which network communication scenario does a GraphQL API have a clear advantage over a traditional REST API?",
+            "choices": [
+                "A) When you want to minimize network calls and fetch nested data dynamically without over-fetching or under-fetching.",
+                "B) When you need standard browser-level caching of resources natively.",
+                "C) When you need simple out-of-the-box file uploads.",
+                "D) When you want simple endpoint-based rate-limiting."
+            ],
+            "correct_choice": "A",
+            "explanation": "GraphQL allows clients to request exactly what they need in a single roundtrip, preventing over-fetching (getting unused data) and under-fetching (needing multiple REST calls).",
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 30,
+            "title": "System Design: Authentication vs Authorization",
+            "type": "design",
+            "category": "Security Design",
+            "problem": "What is the structural security difference between Authentication and Authorization in microservice platforms?",
+            "choices": [
+                "A) Authentication verifies WHO you are; Authorization verifies WHAT you are allowed to do.",
+                "B) Authentication gives database access; Authorization gives API access.",
+                "C) Authorization verifies WHO you are; Authentication verifies permissions.",
+                "D) They are synonyms and represent the same security protocol."
+            ],
+            "correct_choice": "A",
+            "explanation": "Authentication (AuthN) is the process of identifying a user (e.g. passwords, OTP). Authorization (AuthZ) is determining their permissions (e.g. role-based access control).",
+            "difficulty": "Easy",
+            "xp": 100
+        },
+        {
+            "id": 31,
+            "title": "System Design: Asynchronous Message Queues",
+            "type": "design",
+            "category": "Infrastructure",
+            "problem": "What is the primary advantage of utilizing Message Queues (e.g., RabbitMQ, Kafka) over direct HTTP requests in web applications?",
+            "choices": [
+                "A) To decouple microservices, enable asynchronous processing, handle traffic spikes, and ensure durability.",
+                "B) To replace standard PostgreSQL databases.",
+                "C) To decrease database query optimization times.",
+                "D) To encrypt API payload traffic automatically."
+            ],
+            "correct_choice": "A",
+            "explanation": "Message queues decouple system components, allowing tasks to process asynchronously. This prevents heavy background tasks from blocking web requests and protects downstream services from spikes.",
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 32,
+            "title": "System Design: Database Normalization vs Denormalization",
+            "type": "design",
+            "category": "Database Architecture",
+            "problem": "What is the purpose of database normalization, and in which architecture scenario should denormalization be used instead?",
+            "choices": [
+                "A) Normalization reduces redundancy by structuring tables; denormalization is used to speed up read-heavy queries by adding redundant data.",
+                "B) Normalization is used for document databases; denormalization is used for SQL.",
+                "C) Normalization duplicates tables; denormalization groups them.",
+                "D) Normalization is only for frontend caching."
+            ],
+            "correct_choice": "A",
+            "explanation": "Database normalization organizes schemas to minimize redundancy and dependency. Denormalization purposefully adds redundant data to optimize read performance by avoiding expensive JOINs.",
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 33,
+            "title": "System Design: N+1 Query Overhead",
+            "type": "design",
+            "category": "Database Design",
+            "problem": "What is the exact database N+1 query problem, and how can backend developers fix this issue in relational databases?",
+            "choices": [
+                "A) It happens when an application executes N additional queries to fetch child data for N parent records; it is fixed by eager loading or JOIN FETCH.",
+                "B) It happens when a loop has an off-by-one index mismatch; it is fixed by changing '<=' to '<'.",
+                "C) It is a memory leak issue inside browser cookies; it is fixed by setting HTTPOnly flag.",
+                "D) It is an API rate limit response code."
+            ],
+            "correct_choice": "A",
+            "explanation": "In ORMs, retrieving N records and fetching their association in a loop causes 1 initial query plus N subsequent queries. Eager loading loads parent and child records in a single JOIN query.",
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 34,
+            "title": "System Design: Real-time Communication Protocols",
+            "type": "design",
+            "category": "System Integration",
+            "problem": "When is it appropriate to choose WebSockets over Server-Sent Events (SSE) or simple HTTP Polling?",
+            "choices": [
+                "A) WebSockets for full-duplex real-time communication; Server-Sent Events (SSE) for unidirectional server-to-client streaming; HTTP polling for simple intervals.",
+                "B) HTTP polling for real-time video games; WebSockets for static blog pages.",
+                "C) Server-Sent Events only works on native mobile applications.",
+                "D) WebSockets are strictly unidirectional and cannot receive client inputs."
+            ],
+            "correct_choice": "A",
+            "explanation": "WebSockets provide bidirectional low-latency sockets. Server-Sent Events are standard unidirectional HTTP streams from server to client (great for notifications). Polling periodically makes requests.",
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 35,
+            "title": "System Design: SOLID Principles & Single Responsibility",
+            "type": "design",
+            "category": "Object-Oriented Design",
+            "problem": "What does SOLID stand for in system design, and what is the primary core of the Single Responsibility Principle (SRP)?",
+            "choices": [
+                "A) Five object-oriented design principles; Single Responsibility states that a class should have only one reason to change.",
+                "B) Structured Oriented Logical Integrated Design; Single Responsibility means single developer ownership.",
+                "C) Secure Operations Logical Integrated Deployment; Single Responsibility means writing one function.",
+                "D) Standard Object Logic In Databases; Single Responsibility is schema mapping."
+            ],
+            "correct_choice": "A",
+            "explanation": "SOLID represents: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion. Single Responsibility says a class/module should do exactly one thing.",
+            "difficulty": "Easy",
+            "xp": 100
+        },
+
+        # --- ADDITIONAL BEHAVIORAL & TECHNICAL INTERVIEW TRACK (36 - 45) ---
+        {
+            "id": 36,
+            "title": "Behavioral: Managing Tight Deadlines & Scope Creep",
+            "type": "interview",
+            "category": "Soft Skills",
+            "problem": "Explain how you handle a scenario where scope creep threatens a business-critical project deadline. How do you communicate and balance deliverables?",
+            "expected_keywords": ["prioritize", "communicate", "MVP", "stakeholder", "scope", "flexibility"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 37,
+            "title": "Behavioral: High-Pressure Production Debugging",
+            "type": "interview",
+            "category": "Soft Skills",
+            "problem": "Outline your structured engineering workflow for diagnosing and fixing an unexpected critical production issue at 3 AM.",
+            "expected_keywords": ["logs", "reproduce", "rollback", "isolate", "monitoring", "post-mortem"],
+            "difficulty": "Hard",
+            "xp": 100
+        },
+        {
+            "id": 38,
+            "title": "Technical Pitch: Explaining Technical Debt",
+            "type": "interview",
+            "category": "Tech Communication",
+            "problem": "Pitch the concept of 'Technical Debt' to a non-technical manager. Use an intuitive business analogy to explain why it requires allocation times.",
+            "expected_keywords": ["loan", "interest", "refactor", "velocity", "quality", "analogy"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 39,
+            "title": "Behavioral: Task Prioritization Under Strain",
+            "type": "interview",
+            "category": "Soft Skills",
+            "problem": "How do you decide what tasks to focus on when you have multiple stakeholders screaming that their issues are top-priority?",
+            "expected_keywords": ["Eisenhower", "impact", "effort", "alignment", "communication", "triage"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 40,
+            "title": "Behavioral: Fast Learning Curve",
+            "type": "interview",
+            "category": "Soft Skills",
+            "problem": "Provide a concrete instance from your engineering background where you had to adapt and build on a complex technical stack in under a week.",
+            "expected_keywords": ["documentation", "sandbox", "mentor", "prototype", "structured", "adapted"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 41,
+            "title": "Behavioral: Delivering Code Reviews & Feedback",
+            "type": "interview",
+            "category": "Soft Skills",
+            "problem": "How do you frame your architectural and style feedback in standard pull requests to ensure developers learn without feeling demotivated?",
+            "expected_keywords": ["empathy", "objective", "suggest", "standards", "pull request", "collaboration"],
+            "difficulty": "Easy",
+            "xp": 100
+        },
+        {
+            "id": 42,
+            "title": "Technical Pitch: Microservices Architecture",
+            "type": "interview",
+            "category": "Tech Communication",
+            "problem": "Explain the architectural difference between a monolithic and a microservice design to a business client, using a restaurant analogy.",
+            "expected_keywords": ["specialized", "teams", "decouple", "restaurant", "independent", "scale"],
+            "difficulty": "Medium",
+            "xp": 100
+        },
+        {
+            "id": 43,
+            "title": "Behavioral: Disagreements with Management Decisions",
+            "type": "interview",
+            "category": "Soft Skills",
+            "problem": "Tell me about a time you disagreed with an architectural directive from your manager. How did you advocate for your option, and what was the consensus?",
+            "expected_keywords": ["data", "respectful", "alternatives", "listen", "compromise", "consensus"],
+            "difficulty": "Hard",
+            "xp": 100
+        },
+        {
+            "id": 44,
+            "title": "Technical Pitch: Staying Current in Tech",
+            "type": "interview",
+            "category": "Tech Communication",
+            "problem": "How do you systematically structure your weekly reading to stay current with the rapidly shifting frontend and cloud infrastructure landscape?",
+            "expected_keywords": ["newsletters", "community", "side projects", "documentation", "podcasts", "learning"],
+            "difficulty": "Easy",
+            "xp": 100
+        },
+        {
+            "id": 45,
+            "title": "Behavioral: Accidentally Pushing Secrets to Git",
+            "type": "interview",
+            "category": "Soft Skills",
+            "problem": "You just realized you accidentally committed a high-privilege production API secret to a public repository. What precise steps do you execute immediately?",
+            "expected_keywords": ["revoke", "rotate", "secrets", "git filter-repo", "incident", "notify"],
+            "difficulty": "Hard",
+            "xp": 100
         }
     ]
 
@@ -329,12 +715,23 @@ class SprintService:
         # 4. Award XP and handle Streak Updates
         xp_earned = challenge["xp"]
         
-        # Check streak maintenance
+        # Check streak maintenance with Streak Freeze grace period logic
         yesterday = date.today() - timedelta(days=1)
+        day_before_yesterday = yesterday - timedelta(days=1)
+        
+        has_freeze = False
+        if user.profile and user.profile.badges:
+            has_freeze = any(x.get("name") in ["Streak Freeze", "Ignition Flame"] for x in user.profile.badges)
+            
         if user.last_sprint_date == yesterday:
             user.streak_count += 1
         elif user.last_sprint_date == today:
             pass # Already completed today
+        elif has_freeze and user.last_sprint_date == day_before_yesterday:
+            # Streak freeze triggered! Preserved streak and incremented
+            user.streak_count += 1
+            from app.utils.notify import send_notification
+            send_notification(user.id, f"❄️ Streak Freeze Triggered! Your {user.streak_count}-day active career sprint streak was saved.")
         else:
             user.streak_count = 1 # Streak broken or brand new
             
@@ -372,6 +769,7 @@ class SprintService:
             current_badges = user.profile.badges or []
             badge_milestones = [
                 {"streak": 3, "name": "Ignition Flame", "desc": "Completed a 3-Day Career Sprint streak!", "icon": "local_fire_department"},
+                {"streak": 5, "name": "Streak Freeze", "desc": "Unlocked a Streak Freeze! Preserves streak if you miss a single day.", "icon": "ac_unit"},
                 {"streak": 7, "name": "On Fire", "desc": "Completed a 7-Day Career Sprint streak!", "icon": "whatshot"},
                 {"streak": 14, "name": "Unstoppable", "desc": "Completed a 14-Day Career Sprint streak!", "icon": "bolt"},
             ]

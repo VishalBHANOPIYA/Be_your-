@@ -13,9 +13,8 @@ class ResumeService:
         
         try:
             if extension == '.pdf':
-                with pdfplumber.open(file_path) as pdf:
-                    for page in pdf.pages:
-                        text += page.extract_text() or ""
+                from app.utils.resume_parser import ResumeParser
+                text = ResumeParser.extract_text_from_pdf(file_path)
             elif extension == '.docx':
                 doc = docx.Document(file_path)
                 for para in doc.paragraphs:

@@ -200,36 +200,41 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="bg-surface border-t border-outline py-20 mt-32">
-        <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-4 gap-16">
-            <div class="col-span-1 md:col-span-2 space-y-8">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 indigo-gradient rounded-lg flex items-center justify-center text-white font-bold text-xs">B</div>
-                    <span class="text-xl font-heading font-bold">BE YOUR</span>
-                </div>
-                <p class="text-on-surface-variant leading-relaxed max-w-md">
-                    Engineered to decode human potential. We bridge the gap between aspiration and reality.
-                </p>
-            </div>
-            <div class="space-y-6">
-                <h4 class="text-xs font-bold text-primary uppercase tracking-widest">Platform</h4>
-                <ul class="space-y-4 text-sm text-on-surface-variant">
-                    <li><a href="#" class="hover:text-primary">Neural Matching</a></li>
-                    <li><a href="#" class="hover:text-primary">Voice Synthesis</a></li>
-                </ul>
-            </div>
-            <div class="space-y-6">
-                <h4 class="text-xs font-bold text-primary uppercase tracking-widest">Company</h4>
-                <ul class="space-y-4 text-sm text-on-surface-variant">
-                    <li><a href="#" class="hover:text-primary">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:text-primary">Contact Us</a></li>
-                </ul>
+    <footer class="border-t border-outline py-12 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-start mt-20">
+        <!-- Brand column -->
+        <div>
+            <div class="text-xl font-bold text-on-surface mb-2">Be Your</div>
+            <div class="text-xs text-on-surface-variant leading-relaxed max-w-xs">
+                AI-powered career platform helping students land their dream jobs.
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-8 mt-20 pt-10 border-t border-outline text-[10px] font-bold uppercase tracking-widest text-on-surface/30 text-center">
-            © 2024 NeuralPath Labs. All rights reserved.
+
+        <!-- Platform column -->
+        <div>
+            <div class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">Platform</div>
+            <div class="flex flex-col gap-2">
+                <a href="{{ url_for('jobs.list_jobs') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Browse Jobs</a>
+                <a href="{{ url_for('sprint.dashboard') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Daily Sprint</a>
+                <a href="{{ url_for('ai.start_interview') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Mock Interview</a>
+                <a href="{{ url_for('portfolio.portfolio_dashboard') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Portfolio Builder</a>
+                <a href="{{ url_for('user.roadmap') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Career Roadmap</a>
+            </div>
+        </div>
+
+        <!-- For Recruiters column -->
+        <div>
+            <div class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-3">For Recruiters</div>
+            <div class="flex flex-col gap-2">
+                <a href="{{ url_for('auth.register') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Post a Job Free</a>
+                <a href="{{ url_for('auth.login') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Recruiter Login</a>
+                <a href="{{ url_for('jobs.list_jobs') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Browse Candidates</a>
+            </div>
         </div>
     </footer>
+
+    <div class="text-center p-6 border-t border-outline/30 text-xs text-on-surface-variant/60">
+        © 2026 Be Your. Built with ❤️ for students and recruiters.
+    </div>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);

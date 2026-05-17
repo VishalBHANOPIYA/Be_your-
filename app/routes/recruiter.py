@@ -171,3 +171,86 @@ def setup_company():
         return redirect(url_for('recruiter.dashboard'))
         
     return render_template('recruiter/setup_company.html')
+
+@recruiter_bp.route('/analytics')
+@login_required
+@role_required('recruiter')
+def analytics():
+    if not current_user.company:
+        flash('Please set up your company profile first.', 'info')
+        return redirect(url_for('recruiter.setup_company'))
+    
+    # 1. Fetch all jobs belonging to the recruiter's company
+    jobs = Job.query.filter_by(company_id=current_user.company.id).all()
+    job_ids = [j.id for j in jobs]
+    
+    # 2. Get total applications count across all their jobs
+    total_apps = 0
+    shortlisted_hired = 0
+    job_app_counts = []
+    job_titles = []
+    
+    if job_ids:
+        # Get count per job
+        apps = Application.query.filter(Application.job_id.in_(job_ids)).all()
+        total_apps = len(apps)
+        
+        # Calculate conversion metrics
+        shortlisted_hired = sum(1 for a in apps if a.status in ['shortlisted', 'hired'])
+        
+        for job in jobs:
+            count = sum(1 for a in apps if a.job_id == job.id)
+            job_app_counts.append(count)
+            job_titles.append(job.title)
+            
+    # 3. Calculate conversion rate: (shortlisted + hired) / total applications * 100
+    conversion_rate = 0.0
+    if total_apps > 0:
+        conversion_rate = round((shortlisted_hired / total_apps) * 100, 1)
+        
+    return render_template(
+        'recruiter/analytics.html',
+        company=current_user.company,
+        total_jobs=len(jobs),
+        total_applications=total_apps,
+        conversion_rate=conversion_rate,
+        job_titles=job_titles,
+        job_app_counts=job_app_counts
+    )
+
+@recruiter_bp.route('/download_cv/<uuid:application_id>')
+@login_required
+@role_required('recruiter')
+def download_cv(application_id):
+    import os
+    from flask import current_app, send_file, abort
+    
+    app_record = Application.query.get_or_404(application_id)
+    
+    # Ensure the job belongs to this recruiter's company
+    if app_record.job.company_id != current_user.company.id:
+        abort(403)
+        
+    # Fetch seeker's profile
+    profile = app_record.user.profile
+    if not profile or not profile.resume_path:
+        flash('Candidate has not uploaded a resume.', 'error')
+        return redirect(request.referrer or url_for('recruiter.dashboard'))
+        
+    # Resolve physical path
+    file_path = os.path.join(current_app.root_path, 'static', profile.resume_path)
+    
+    if not os.path.exists(file_path):
+        flash('Resume file not found on server.', 'error')
+        return redirect(request.referrer or url_for('recruiter.dashboard'))
+        
+    mimetype = 'application/pdf'
+    if file_path.endswith('.docx'):
+        mimetype = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        
+    return send_file(
+        file_path,
+        mimetype=mimetype,
+        as_attachment=True,
+        download_name=f"CV_{app_record.user.name.replace(' ', '_')}{os.path.splitext(file_path)[1]}"
+    )

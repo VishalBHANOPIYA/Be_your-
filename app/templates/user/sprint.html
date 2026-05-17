@@ -147,9 +147,12 @@
             <h1 class="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-on-surface mb-2">
                 Daily AI Career Sprint
             </h1>
-            <p class="text-on-surface-variant max-w-xl text-sm leading-relaxed">
+            <p class="text-on-surface-variant max-w-xl text-sm leading-relaxed mb-4">
                 Complete today's targeted micro-prep challenge to feed your active learning streak, unlock premium badges, level up, and top the Be Your global leaderboard!
             </p>
+            <a href="{{ url_for('sprint.history') }}" class="inline-flex items-center gap-2 text-xs font-extrabold text-indigo-400 hover:text-indigo-300 uppercase tracking-widest transition-all">
+                <span class="material-symbols-outlined text-base">history</span> View Lifetime Sprint History →
+            </a>
         </div>
         
         <!-- Quick stats summary block -->
@@ -278,6 +281,51 @@
                     </div>
                 </div>
 
+                <!-- Social Share Card (Bug Fix / Missing Feature) -->
+                <div class="glass-panel p-6 rounded-3xl mt-6 space-y-6 border border-indigo-500/20 relative overflow-hidden" id="social-share-card">
+                    <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-50"></div>
+                    <div class="relative space-y-4">
+                        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-amber-500 text-sm">share</span>
+                                <h4 class="font-bold text-on-surface text-xs uppercase tracking-wider">Share Your Progress</h4>
+                            </div>
+                            <span class="text-[9px] bg-indigo-500/20 text-indigo-400 font-extrabold px-2.5 py-1 rounded-full uppercase">Sprint Locked</span>
+                        </div>
+                        
+                        <!-- Gamified Stats row inside card -->
+                        <div class="grid grid-cols-3 gap-4 text-center py-2">
+                            <div class="bg-white/[0.02] border border-white/5 p-3 rounded-2xl">
+                                <span class="block text-amber-500 text-lg">🔥</span>
+                                <span class="block text-base font-black text-on-surface mt-1">{{ current_user.streak_count }} Days</span>
+                                <span class="text-[9px] text-on-surface-variant uppercase font-bold tracking-widest">Active Streak</span>
+                            </div>
+                            <div class="bg-white/[0.02] border border-white/5 p-3 rounded-2xl">
+                                <span class="block text-primary text-lg">🏆</span>
+                                <span class="block text-base font-black text-on-surface mt-1">Level {{ current_user.level }}</span>
+                                <span class="text-[9px] text-on-surface-variant uppercase font-bold tracking-widest">Player Level</span>
+                            </div>
+                            <div class="bg-white/[0.02] border border-white/5 p-3 rounded-2xl">
+                                <span class="block text-purple-500 text-lg">⚡</span>
+                                <span class="block text-base font-black text-on-surface mt-1">+{{ challenge.today_submission.xp_earned }} XP</span>
+                                <span class="text-[9px] text-on-surface-variant uppercase font-bold tracking-widest">Today's XP</span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons layout -->
+                        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                            <button onclick="copyStreakToClipboard()" class="flex-1 py-3 px-4 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 font-bold text-[10px] uppercase tracking-wider hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-sm">content_copy</span>
+                                Copy to Clipboard
+                            </button>
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fsector-needs-saved-bookmarks.trycloudflare.com" target="_blank" class="flex-1 py-3 px-4 rounded-xl indigo-gradient text-white font-bold text-[10px] uppercase tracking-wider hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 text-center decoration-transparent">
+                                <span class="material-symbols-outlined text-sm">share</span>
+                                Share to LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Show evaluation details directly -->
                 <div class="bg-surface/50 border border-outline rounded-2xl p-6 space-y-4">
                     <h4 class="font-bold text-sm uppercase tracking-wider text-on-surface-variant">Evaluation Review</h4>
@@ -402,29 +450,37 @@
                     Career Milestones
                 </h3>
                 
-                <div class="grid grid-cols-3 gap-3">
+                <div class="grid grid-cols-4 gap-2">
                     <!-- Ignition Badge -->
-                    <div class="badge-card p-3 rounded-2xl flex flex-col items-center justify-center text-center
+                    <div class="badge-card p-2 rounded-2xl flex flex-col items-center justify-center text-center
                         {% if current_user.streak_count >= 3 %}unlocked{% else %}locked{% endif %}"
                         title="Ignition Flame: Unlocked at 3-Day streak count!">
                         <span class="material-symbols-outlined text-2xl text-amber-500">local_fire_department</span>
-                        <span class="text-[9px] font-black uppercase mt-1.5">Ignition</span>
+                        <span class="text-[8px] font-black uppercase mt-1.5">Ignition</span>
+                    </div>
+
+                    <!-- Streak Freeze Badge -->
+                    <div class="badge-card p-2 rounded-2xl flex flex-col items-center justify-center text-center
+                        {% if current_user.streak_count >= 5 %}unlocked{% else %}locked{% endif %}"
+                        title="Streak Freeze: Preserves your daily career streak if you miss a single day. Unlocked at 5-Day streak count!">
+                        <span class="material-symbols-outlined text-2xl text-blue-400">ac_unit</span>
+                        <span class="text-[8px] font-black uppercase mt-1.5">Freeze</span>
                     </div>
 
                     <!-- On Fire Badge -->
-                    <div class="badge-card p-3 rounded-2xl flex flex-col items-center justify-center text-center
+                    <div class="badge-card p-2 rounded-2xl flex flex-col items-center justify-center text-center
                         {% if current_user.streak_count >= 7 %}unlocked{% else %}locked{% endif %}"
                         title="On Fire: Unlocked at 7-Day streak count!">
                         <span class="material-symbols-outlined text-2xl text-red-500">whatshot</span>
-                        <span class="text-[9px] font-black uppercase mt-1.5">On Fire</span>
+                        <span class="text-[8px] font-black uppercase mt-1.5">On Fire</span>
                     </div>
 
                     <!-- Unstoppable Badge -->
-                    <div class="badge-card p-3 rounded-2xl flex flex-col items-center justify-center text-center
+                    <div class="badge-card p-2 rounded-2xl flex flex-col items-center justify-center text-center
                         {% if current_user.streak_count >= 14 %}unlocked{% else %}locked{% endif %}"
                         title="Unstoppable: Unlocked at 14-Day streak count!">
                         <span class="material-symbols-outlined text-2xl text-purple-500">bolt</span>
-                        <span class="text-[9px] font-black uppercase mt-1.5">Unstoppable</span>
+                        <span class="text-[8px] font-black uppercase mt-1.5">Unstoppable</span>
                     </div>
                 </div>
             </div>
@@ -564,6 +620,21 @@
             toast.className = toast.className.replace('translate-y-0', 'translate-y-20');
             setTimeout(() => toast.remove(), 500);
         }, 4000);
+    }
+
+    // Copy Streak to Clipboard with dynamic gamified statistics
+    function copyStreakToClipboard() {
+        const streak = "{{ current_user.streak_count }}";
+        const level = "{{ current_user.level }}";
+        const xp = "{{ challenge.today_submission.xp_earned }}";
+        const shareText = `🔥 I completed today's Daily Career Sprint on Be Your! 🚀 Streak: ${streak} Days | Player Level: ${level} | +${xp} XP earned! Join me and land your dream job: https://sector-needs-saved-bookmarks.trycloudflare.com`;
+        
+        navigator.clipboard.writeText(shareText).then(() => {
+            showToast("📋 Streak copied to clipboard successfully!");
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            showToast("❌ Failed to copy to clipboard", "error");
+        });
     }
 </script>
 {% endblock %}
