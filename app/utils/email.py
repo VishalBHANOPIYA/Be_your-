@@ -22,8 +22,18 @@ def send_email(to, subject, template, **kwargs):
     """
     sender = current_app.config.get('MAIL_USERNAME')
     if not sender:
-        current_app.logger.warning("MAIL_USERNAME is not set. Emails cannot be sent.")
-        return False
+        current_app.logger.warning("MAIL_USERNAME is not set. Emails cannot be sent via SMTP.")
+        # Development Fallback: Log and write to dev_emails.txt for easy developer access
+        otp = kwargs.get('otp', 'N/A')
+        log_msg = f"\n=== DEVELOPMENT EMAIL FALLBACK ===\nTo: {to}\nSubject: {subject}\nOTP Code: {otp}\n==================================\n"
+        current_app.logger.info(log_msg)
+        try:
+            with open("dev_emails.txt", "a") as f:
+                import datetime
+                f.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] To: {to} | OTP: {otp} | Subject: {subject}\n")
+        except Exception as e:
+            current_app.logger.error(f"Failed to write to dev_emails.txt: {e}")
+        return True
         
     msg = Message(
         subject,
