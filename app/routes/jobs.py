@@ -11,7 +11,7 @@ jobs_bp = Blueprint('jobs', __name__)
 
 @jobs_bp.route('/')
 def list_jobs():
-    query = request.args.get('q', '')
+    query = request.args.get('q') or request.args.get('title') or ''
     location = request.args.get('location', '')
     
     jobs_query = Job.query.filter_by(is_active=True)
@@ -31,6 +31,7 @@ def list_jobs():
         
     filters = {
         'q': query,
+        'title': query,
         'location': location,
         'job_type': request.args.get('job_type', '')
     }
