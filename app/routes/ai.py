@@ -107,3 +107,57 @@ def generate_cover_letter():
         
     letter = AIService.generate_cover_letter(current_user.profile, job)
     return jsonify({"success": True, "letter": letter})
+
+@ai_bp.route('/outreach', methods=['GET'])
+@login_required
+def outreach_workspace():
+    # Pre-fill options from URL query params (e.g. from Job Detail page)
+    job_id_str = request.args.get('job_id')
+    prefill_job = None
+    if job_id_str:
+        try:
+            job_id = uuid.UUID(job_id_str)
+            prefill_job = Job.query.get(job_id)
+        except (ValueError, TypeError):
+            pass
+
+    return render_template('ai/outreach.html', prefill_job=prefill_job)
+
+@ai_bp.route('/outreach/generate', methods=['POST'])
+@login_required
+def generate_outreach():
+    data = request.json or {}
+    job_title = data.get('job_title', '').strip()
+    company_name = data.get('company_name', '').strip()
+    job_description = data.get('job_description', '').strip()
+    tone = data.get('tone', 'professional').strip()
+    manual_skills_str = data.get('skills', '').strip()
+
+    if not job_title or not company_name:
+        return jsonify({"success": False, "error": "Job Title and Company Name are required."}), 400
+
+    manual_skills = []
+    if manual_skills_str:
+        manual_skills = [s.strip() for s in manual_skills_str.split(',') if s.strip()]
+
+    profile = current_user.profile if current_user.is_authenticated else None
+    
+    try:
+        outreach_data = AIService.generate_outreach_copy(
+            user_profile=profile,
+            job_title=job_title,
+            company_name=company_name,
+            job_description=job_description,
+            tone=tone,
+            manual_skills=manual_skills
+        )
+        return jsonify({
+            "success": True,
+            "cover_letter": outreach_data["cover_letter"],
+            "cold_email_subject": outreach_data["cold_email_subject"],
+            "cold_email_body": outreach_data["cold_email_body"],
+            "linkedin_message": outreach_data["linkedin_message"]
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+

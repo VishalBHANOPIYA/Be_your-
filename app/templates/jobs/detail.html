@@ -139,11 +139,11 @@
                         </div>
                     </div>
 
-                    <button id="gen-cover-letter" onclick="generateCoverLetter('{{ job.id }}')"
+                    <a href="{{ url_for('ai.outreach_workspace', job_id=job.id) }}"
                         class="w-full py-3 rounded-xl border border-primary/30 text-primary text-xs font-bold hover:bg-primary/10 transition-all flex items-center justify-center gap-2 mt-4">
-                        <span class="material-symbols-outlined text-sm">description</span>
-                        Generate AI Cover Letter
-                    </button>
+                        <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                        Generate AI Outreach Suite
+                    </a>
                 {% else %}
                     <p class="text-xs text-on-surface-variant italic">Complete your profile to see a detailed skill gap analysis.</p>
                     <a href="{{ url_for('user.dashboard') }}" class="block text-center text-xs font-bold text-primary hover:underline mt-2">Go to Profile</a>

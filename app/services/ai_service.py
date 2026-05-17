@@ -765,3 +765,156 @@ Best regards,
                 "Function structure is correct."
             ]
         }
+
+    @staticmethod
+    def generate_outreach_copy(user_profile, job_title, company_name, job_description, tone, manual_skills=None):
+        # Extract user details
+        name = "Job Seeker"
+        profile_skills = []
+        if user_profile and user_profile.user:
+            name = user_profile.user.name
+            profile_skills = user_profile.skills or []
+
+        # Merge profile skills with manually entered highlights/skills
+        skills = list(set(profile_skills + (manual_skills or [])))
+        if not skills:
+            skills = ["Full-Stack Engineering", "Software Development", "Problem Solving"]
+
+        skills_str = ", ".join(skills[:3])
+        skills_detailed = ", ".join(skills[:4])
+
+        # Formatting defaults
+        tone = (tone or "professional").lower()
+        job_title = job_title or "Software Developer"
+        company_name = company_name or "Target Company"
+
+        # Generate outreach assets based on tone
+        if tone == "enthusiastic":
+            # --- ENTHUSIASTIC TONE ---
+            cover_letter = f"""Dear Hiring Team at {company_name},
+
+I am writing this with absolute excitement to apply for the {job_title} position at {company_name}! I have been following your journey and am constantly inspired by your incredible team culture, commitment to excellence, and pioneering products. I would be thrilled to bring my energy, dedication, and technical expertise to your mission!
+
+As a developer skilled in {skills_detailed}, I love building high-quality, impactful software. In my past work, I've always prioritized clean architecture and collaborative problem-solving. Your goals at {company_name} align perfectly with my passion for creating seamless user experiences and robust systems.
+
+I'm incredibly eager to contribute to your upcoming projects. Thank you so much for your time and consideration. I would jump at the chance to jump on a quick call and discuss how my skills and high-energy approach can add value to your team!
+
+Best regards,
+{name}"""
+
+            cold_subject = f"Thrilled to connect! | {job_title} Application | {name}"
+            cold_body = f"""Hi,
+
+I hope you're having an amazing day!
+
+I've been following {company_name}'s recent innovations and was absolutely thrilled to see the opening for a {job_title}. I am a passionate developer with a strong background in {skills_str}, and I believe my creative approach to software development would fit perfectly into your team culture.
+
+I'd love to learn more about the team's goals and share how my enthusiasm and technical skills can support your vision. Would you be open to a quick 5-minute chat sometime this week?
+
+Thank you so much!
+
+Best regards,
+{name}"""
+
+            # Maximum 300 characters, high-energy hook
+            linkedin = f"Hi! I'm absolutely inspired by {company_name}'s vision and saw the {job_title} opening. With my background in {skills_str} and my passion for building high-impact software, I'd love to connect and learn more about your amazing team. Best, {name}."
+
+        elif tone == "bold":
+            # --- BOLD & METRIC-DRIVEN TONE ---
+            cover_letter = f"""Dear Hiring Manager,
+
+I don't just write clean code; I engineer robust solutions that directly drive business growth, optimize system performance, and solve high-scale technical challenges. I am writing to apply for the {job_title} position at {company_name}, where I am confident I can make an immediate, positive impact.
+
+With a strong foundation in {skills_detailed}, I have specialized in building highly-scalable architectures, reducing technical debt, and shipping resilient products. I approach engineering with a focus on metrics—whether that means boosting load speed, maximizing uptime, or improving developer velocity.
+
+I am looking for a high-impact environment where performance and technical execution are highly valued, which is exactly why {company_name} caught my attention. I welcome the opportunity to discuss how my technical expertise can translate into direct results for your engineering team.
+
+Best regards,
+{name}"""
+
+            cold_subject = f"Driving high-impact results as your next {job_title} | {name}"
+            cold_body = f"""Hi,
+
+I'll get straight to the point: I build robust, scalable systems that solve complex problems and drive software efficiency. 
+
+I saw your opening for a {job_title} at {company_name}. With my specialized skills in {skills_str}, I am confident I can immediately step in and contribute to optimizing your engineering workflows, boosting platform speed, and building resilient features.
+
+Let's cut through the red tape. I'd love to jump on a brief call to discuss the top engineering challenges you're currently facing and how I can help solve them.
+
+Best,
+{name}"""
+
+            # Maximum 300 characters, assertive hook
+            linkedin = f"Hi! I saw the {job_title} role at {company_name}. I specialize in engineering high-scale systems using {skills_str}. I'm confident my metric-driven, direct approach can add immediate value to your current projects. Let's connect to discuss. - {name}."
+
+        elif tone == "creative":
+            # --- CREATIVE & HOOK TONE ---
+            cover_letter = f"""Dear Hiring Team at {company_name},
+
+While most cover letters start with the usual standard phrases, I'd rather start by telling you why I love solving complex puzzles. I believe that engineering is the art of translating human problems into elegant, invisible solutions. I am applying to be your next {job_title} because your team at {company_name} builds exactly that kind of art.
+
+My toolkit includes {skills_detailed}, but my real strength lies in my curiosity and my ability to think outside conventional engineering boxes. Whether it's redesigning a slow API, creating a glassmorphic dashboard, or building clean features, I enjoy challenges that require both high engineering discipline and creative spark.
+
+I would love to bring my unique engineering perspective, standard-defying dedication, and collaborative spirit to {company_name}. Let's build something unforgettable together.
+
+Best regards,
+{name}"""
+
+            cold_subject = f"A slightly different pitch for the {job_title} role | {name}"
+            cold_body = f"""Hi,
+
+Every developer writes code, but I focus on crafting experiences that feel like magic. 
+
+I came across the {job_title} role at {company_name} and immediately felt a connection to how you approach product design and technical scaling. I am an engineer who blends deep technical skills in {skills_str} with a passion for creative, outside-the-box problem solving.
+
+If you're looking for someone who doesn't just check boxes but brings new ideas to the table, I'd love to chat. Could we connect for a quick virtual coffee this week?
+
+Cheers,
+{name}"""
+
+            # Maximum 300 characters, unique hook
+            linkedin = f"Hi! While most developers just write code, I focus on turning complex challenges into elegant technical art. I saw the {job_title} opening at {company_name} and would love to connect to discuss how my experience in {skills_str} can support your team! Cheers, {name}."
+
+        else:
+            # --- PROFESSIONAL TONE ---
+            cover_letter = f"""Dear Hiring Manager,
+
+I am writing to express my strong interest in the {job_title} position at {company_name}. With my solid background in software engineering, dedication to code quality, and proven expertise in {skills_detailed}, I am highly confident in my ability to make a valuable contribution to your development team.
+
+Throughout my career, I have consistently focused on building scalable, performant, and secure web applications. I understand the importance of robust database design, automated workflows, and clean code practices. Your current objectives at {company_name} align closely with my technical background and my commitment to delivering reliable software solutions.
+
+I am eager to apply my technical foundation and collaborative mindset to your engineering goals. Thank you for your time and consideration of my application. I would welcome the opportunity to discuss my qualifications with you in more detail.
+
+Sincerely,
+{name}"""
+
+            cold_subject = f"{job_title} Application - {name}"
+            cold_body = f"""Dear Hiring Manager,
+
+I hope this email finds you well.
+
+I am writing to express my interest in the {job_title} position currently open at {company_name}. I am a software engineer with extensive experience in {skills_str}, specializing in building reliable, scalable, and secure web services.
+
+Given the focus of {company_name} on technical excellence, I believe my professional experience and dedication to code quality would be a strong asset to your team.
+
+I have attached my details for your review and would appreciate the opportunity to schedule a brief introductory call at your convenience.
+
+Thank you for your time and consideration.
+
+Sincerely,
+{name}"""
+
+            # Maximum 300 characters, formal hook
+            linkedin = f"Hello. I am a software engineer specializing in {skills_str}. I recently saw the {job_title} opening at {company_name} and would appreciate the opportunity to connect and discuss how my technical background and focus on quality can benefit your team. Sincerely, {name}."
+
+        # Ensure LinkedIn outreach is strictly under 300 characters
+        if len(linkedin) > 297:
+            linkedin = linkedin[:294] + "..."
+
+        return {
+            "cover_letter": cover_letter.strip(),
+            "cold_email_subject": cold_subject.strip(),
+            "cold_email_body": cold_body.strip(),
+            "linkedin_message": linkedin.strip()
+        }
+

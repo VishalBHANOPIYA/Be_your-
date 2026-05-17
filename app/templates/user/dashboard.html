@@ -137,15 +137,35 @@
                 </div>
             </div>
 
-            <!-- Portfolio Analyzer Promo -->
-            <div class="glass-card p-10 rounded-[3rem] indigo-gradient text-white flex flex-col md:flex-row items-center justify-between gap-8">
-                <div class="space-y-4 text-center md:text-left">
-                    <h3 class="text-2xl font-heading font-bold">New: Portfolio Analyzer 🚀</h3>
-                    <p class="text-white/80 text-sm max-w-md">Connect your GitHub to get deep AI insights into your code quality and projects. Impress recruiters with real data.</p>
+            <!-- Interactive AI Workspaces Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Outreach Suite Card -->
+                <div class="glass-card p-8 rounded-[3.5rem] bg-indigo-500/10 border-indigo-500/20 text-on-surface flex flex-col justify-between gap-8 group hover:-translate-y-1 transition-all">
+                    <div class="space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-3xl">auto_awesome</span>
+                        </div>
+                        <h3 class="text-xl font-heading font-bold text-on-surface">AI Recruiter Outreach Suite</h3>
+                        <p class="text-on-surface-variant text-xs leading-relaxed">Generate high-converting cover letters, personalized cold emails, and LinkedIn connection notes across multiple custom tones.</p>
+                    </div>
+                    <a href="{{ url_for('ai.outreach_workspace') }}" class="w-full text-center py-4 rounded-2xl bg-primary text-white text-xs font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-indigo-500/25">
+                        Launch Outreach Suite
+                    </a>
                 </div>
-                <a href="{{ url_for('portfolio.portfolio_dashboard') }}" class="px-8 py-4 bg-white text-primary rounded-2xl font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl">
-                    Analyze My GitHub
-                </a>
+
+                <!-- Portfolio Analyzer Promo -->
+                <div class="glass-card p-8 rounded-[3.5rem] bg-violet-500/10 border-violet-500/20 text-on-surface flex flex-col justify-between gap-8 group hover:-translate-y-1 transition-all font-sans">
+                    <div class="space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-violet-500/20 flex items-center justify-center text-violet-400 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-3xl">terminal</span>
+                        </div>
+                        <h3 class="text-xl font-heading font-bold text-on-surface">AI Portfolio Analyzer</h3>
+                        <p class="text-on-surface-variant text-xs leading-relaxed">Connect your GitHub profile to get deep AI-driven code reviews, repository evaluations, and professional feedback.</p>
+                    </div>
+                    <a href="{{ url_for('portfolio.portfolio_dashboard') }}" class="w-full text-center py-4 rounded-2xl bg-violet-600 text-white text-xs font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-violet-500/25">
+                        Analyze GitHub
+                    </a>
+                </div>
             </div>
 
             <!-- Applications Table -->
