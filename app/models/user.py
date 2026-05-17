@@ -31,6 +31,13 @@ class User(UserMixin, db.Model):
     otp = db.Column(db.String(6))
     otp_expiry = db.Column(db.DateTime)
     is_active = db.Column(db.Boolean, default=True)
+    
+    # Gamification and Streaks
+    streak_count = db.Column(db.Integer, default=0)
+    last_sprint_date = db.Column(db.Date)
+    xp = db.Column(db.Integer, default=0)
+    level = db.Column(db.Integer, default=1)
+    
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     

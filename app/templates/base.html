@@ -109,6 +109,21 @@
             background-image: radial-gradient(circle at 2px 2px, var(--outline) 1px, transparent 0);
             background-size: 40px 40px;
         }
+        
+        /* Dynamic Animated Streak Flame Heatwave */
+        @keyframes flame-heat {
+            0% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.4)); }
+            50% { transform: scale(1.08) rotate(3deg); filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.8)); }
+            100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.4)); }
+        }
+        .active-flame-icon {
+            animation: flame-heat 2s infinite ease-in-out;
+            color: #ff7a00 !important;
+        }
+        .dimmed-flame-icon {
+            opacity: 0.5;
+            color: var(--on-surface-variant) !important;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -127,6 +142,7 @@
                 <a href="{{ url_for('jobs.list_jobs') }}" class="nav-link hover:text-primary transition-colors">Find Jobs</a>
                 <a href="{{ url_for('playground.dashboard') }}" class="nav-link hover:text-primary transition-colors">Playground</a>
                 <a href="{{ url_for('portfolio.portfolio_dashboard') }}" class="nav-link hover:text-primary transition-colors">Portfolio</a>
+                <a href="{{ url_for('sprint.dashboard') }}" class="nav-link hover:text-primary transition-colors">Daily Sprint</a>
             </nav>
 
             <div class="flex items-center gap-6">
@@ -135,6 +151,12 @@
                 </button>
 
                 {% if current_user.is_authenticated %}
+                    <!-- Streak Flame System -->
+                    <a href="{{ url_for('sprint.dashboard') }}" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-outline bg-surface hover:scale-105 transition-all group" title="{{ current_user.streak_count or 0 }} Day Streak! Keep the fire burning!" style="text-decoration:none">
+                        <span class="material-symbols-outlined text-2xl {% if current_user.streak_count > 0 %}active-flame-icon{% else %}dimmed-flame-icon{% endif %}">local_fire_department</span>
+                        <span class="text-xs font-extrabold text-on-surface">{{ current_user.streak_count or 0 }}</span>
+                    </a>
+
                     <!-- Notification Bell -->
                     <div style="position:relative;display:inline-block" id="notif-wrapper">
                         <button onclick="toggleNotifPanel()" style="background:none;border:none;cursor:pointer;color:var(--tw-color, #fafafa);position:relative;padding:8px">

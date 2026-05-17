@@ -1,0 +1,569 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    /* Premium Gamification Styles */
+    .glass-panel {
+        background: rgba(24, 24, 27, 0.55);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass-panel:hover {
+        border-color: rgba(99, 102, 241, 0.25);
+        box-shadow: 0 15px 40px -12px rgba(99, 102, 241, 0.15);
+    }
+    
+    .streak-calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+    }
+    
+    .grid-day-cell {
+        aspect-ratio: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 700;
+        transition: all 0.25s ease;
+    }
+    
+    .grid-day-cell.completed {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(245, 158, 11, 0.25) 100%);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
+        color: #ff9d00;
+    }
+    
+    .grid-day-cell.missed {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.25);
+    }
+    
+    .grid-day-cell.today-pulse {
+        border: 2px dashed var(--indigo-500);
+        animation: cell-pulse 2s infinite;
+        background: rgba(99, 102, 241, 0.05);
+    }
+    
+    @keyframes cell-pulse {
+        0% { border-color: rgba(99, 102, 241, 0.4); }
+        50% { border-color: rgba(168, 85, 247, 0.9); box-shadow: 0 0 10px rgba(168, 85, 247, 0.2); }
+        100% { border-color: rgba(99, 102, 241, 0.4); }
+    }
+    
+    .leaderboard-row {
+        transition: all 0.2s ease;
+    }
+    
+    .leaderboard-row:hover {
+        background: rgba(255, 255, 255, 0.04);
+        transform: translateX(4px);
+    }
+    
+    .gold-rank {
+        background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 850 !important;
+    }
+    
+    .silver-rank {
+        background: linear-gradient(135deg, #cbd5e1 0%, #64748b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .bronze-rank {
+        background: linear-gradient(135deg, #fb923c 0%, #c2410c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .badge-card {
+        transition: all 0.3s ease;
+    }
+    .badge-card.unlocked {
+        background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(168,85,247,0.1) 100%);
+        border: 1px solid rgba(168,85,247,0.3);
+        box-shadow: 0 4px 15px rgba(168,85,247,0.1);
+    }
+    .badge-card.locked {
+        opacity: 0.35;
+        filter: grayscale(100%);
+    }
+    
+    /* Code Editor Glassmorphism */
+    .sprint-editor {
+        font-family: 'Fira Code', 'Courier New', Courier, monospace;
+        background: #0d0d0f;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        color: #e2e8f0;
+    }
+
+    /* Radio button cards styling */
+    .choice-card {
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(255, 255, 255, 0.02);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .choice-card:hover {
+        background: rgba(99, 102, 241, 0.06);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+    .choice-card.selected {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(168, 85, 247, 0.12) 100%);
+        border-color: var(--indigo-500);
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8 relative">
+    
+    <!-- Decorative Glow Circles -->
+    <div class="glow-circle w-[400px] h-[400px] top-10 left-10"></div>
+    <div class="glow-circle w-[450px] h-[450px] bottom-10 right-10"></div>
+
+    <!-- Header Block -->
+    <div class="glass-panel p-8 rounded-3xl mb-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+            <div class="flex items-center gap-3 mb-2">
+                <span class="px-3.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">Wordle-Style Daily Prep</span>
+                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-500 text-xs font-bold">
+                    <span class="material-symbols-outlined text-sm">auto_awesome</span> Global Synchronized
+                </span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-on-surface mb-2">
+                Daily AI Career Sprint
+            </h1>
+            <p class="text-on-surface-variant max-w-xl text-sm leading-relaxed">
+                Complete today's targeted micro-prep challenge to feed your active learning streak, unlock premium badges, level up, and top the Be Your global leaderboard!
+            </p>
+        </div>
+        
+        <!-- Quick stats summary block -->
+        <div class="flex items-center gap-8 bg-surface/50 border border-outline px-8 py-5 rounded-2xl">
+            <div class="text-center">
+                <div class="flex items-center gap-1 text-amber-500 justify-center">
+                    <span class="material-symbols-outlined text-3xl {% if current_user.streak_count > 0 %}active-flame-icon{% endif %}">local_fire_department</span>
+                </div>
+                <span class="block text-2xl font-black mt-1">{{ current_user.streak_count or 0 }}</span>
+                <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Active Streak</span>
+            </div>
+            <div class="h-10 w-px bg-outline"></div>
+            <div class="text-center">
+                <span class="material-symbols-outlined text-3xl text-primary block">military_tech</span>
+                <span class="block text-2xl font-black mt-1">Lvl {{ current_user.level or 1 }}</span>
+                <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Player Level</span>
+            </div>
+            <div class="h-10 w-px bg-outline"></div>
+            <div class="text-center">
+                <span class="material-symbols-outlined text-3xl text-purple-500 block">stars</span>
+                <span class="block text-2xl font-black mt-1">{{ current_user.xp or 0 }}</span>
+                <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Total XP</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Workspace Split Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left Side: Interactive Sprint Workspace (Takes 2 Cols) -->
+        <div class="lg:col-span-2 flex flex-col gap-8">
+            
+            <!-- Dynamic Challenge Card -->
+            <div class="glass-panel p-8 rounded-3xl relative overflow-hidden" id="challenge-card">
+                
+                <!-- Category and details row -->
+                <div class="flex flex-wrap justify-between items-center gap-4 border-b border-outline pb-6 mb-6">
+                    <div class="flex items-center gap-3">
+                        <span class="px-3.5 py-1.5 rounded-xl bg-purple-500/10 text-purple-400 font-extrabold text-xs tracking-wider uppercase">
+                            {{ challenge.category }}
+                        </span>
+                        <span class="px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider
+                            {% if challenge.difficulty == 'Easy' %}bg-green-500/10 text-green-400
+                            {% elif challenge.difficulty == 'Medium' %}bg-amber-500/10 text-amber-400
+                            {% else %}bg-red-500/10 text-red-400{% endif %}">
+                            {{ challenge.difficulty }}
+                        </span>
+                    </div>
+                    
+                    <!-- Countdown to next daily sprint -->
+                    <div class="flex items-center gap-2 text-xs font-bold text-on-surface-variant bg-surface/30 px-3.5 py-1.5 rounded-xl border border-outline">
+                        <span class="material-symbols-outlined text-sm text-primary animate-spin">schedule</span>
+                        Next Sprint: <span id="countdown-ticker" class="text-on-surface font-extrabold">--:--:--</span>
+                    </div>
+                </div>
+
+                <h2 class="text-xl md:text-2xl font-bold mb-4 text-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">psychology</span>
+                    {{ challenge.title }}
+                </h2>
+                
+                <div class="text-on-surface/90 text-sm md:text-base leading-relaxed mb-6 whitespace-pre-line">
+                    {{ challenge.problem | safe }}
+                </div>
+
+                <!-- Submission Form Area -->
+                {% if not challenge.has_completed %}
+                <form id="sprint-form" class="space-y-6">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    
+                    {% if challenge.type == 'design' %}
+                        <!-- Radio selection buttons -->
+                        <div class="flex flex-col gap-3" id="choices-container">
+                            {% for choice in challenge.choices %}
+                            <label class="choice-card p-5 rounded-2xl flex items-start gap-4 transition-all" onclick="selectChoice(this)">
+                                <input type="radio" name="answer" value="{{ choice[:1] }}" class="mt-1 accent-indigo-500 hidden">
+                                <div class="w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center flex-shrink-0 mt-0.5 choice-radio-visual">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-primary hidden"></div>
+                                </div>
+                                <span class="text-sm font-semibold leading-normal text-on-surface/90">{{ choice }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        
+                    {% elif challenge.type == 'debug' %}
+                        <!-- Code workspace box -->
+                        <div class="rounded-2xl overflow-hidden border border-outline shadow-2xl">
+                            <div class="sprint-editor p-4 flex items-center justify-between border-b border-outline text-xs">
+                                <span class="font-extrabold text-on-surface-variant tracking-wider uppercase">Interactive Python Workspace</span>
+                                <span class="px-2 py-0.5 bg-green-500/10 text-green-400 rounded">python</span>
+                            </div>
+                            <textarea name="answer" rows="9" 
+                                class="w-full sprint-editor p-5 focus:outline-none focus:ring-1 focus:ring-primary text-xs leading-relaxed resize-y"
+                                placeholder="# Type your corrected solution code here..."></textarea>
+                        </div>
+                        
+                    {% elif challenge.type == 'interview' %}
+                        <!-- Detailed behavioral elevator pitch textarea -->
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Your Structured Response (Elevator Pitch)</label>
+                            <textarea name="answer" rows="6" 
+                                class="w-full bg-surface border border-outline rounded-2xl p-5 text-sm focus:outline-none focus:ring-1 focus:ring-primary leading-relaxed"
+                                placeholder="State your response here using the Situation, Action, and Results (STAR) format..."></textarea>
+                            <p class="text-[11px] text-on-surface-variant italic">
+                               💡 Pro-tip: Evaluator checks for key industry terminology, completeness, and structured resolution paths.
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <button type="submit" id="submit-btn" 
+                        class="w-full py-4 rounded-2xl indigo-gradient text-white text-xs font-bold uppercase tracking-widest hover:scale-[1.01] active:scale-95 transition-all shadow-xl shadow-indigo-500/10 flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-sm">local_fire_department</span>
+                        Lock In Today's Sprint Answer
+                    </button>
+                </form>
+                
+                {% else %}
+                <!-- Already completed state -->
+                <div class="bg-primary/5 border border-primary/20 rounded-2xl p-6 mb-4 flex items-start gap-4">
+                    <span class="material-symbols-outlined text-4xl text-amber-500 active-flame-icon">workspace_premium</span>
+                    <div>
+                        <h4 class="font-bold text-on-surface mb-1">You Completed Today's Career Sprint!</h4>
+                        <p class="text-xs text-on-surface-variant leading-relaxed">
+                            Your submission is saved, and you earned **{{ challenge.today_submission.xp_earned }} XP**. Your active streak is locked at **{{ current_user.streak_count }} Days**. Excellent work keeping the career flame burning!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Show evaluation details directly -->
+                <div class="bg-surface/50 border border-outline rounded-2xl p-6 space-y-4">
+                    <h4 class="font-bold text-sm uppercase tracking-wider text-on-surface-variant">Evaluation Review</h4>
+                    <div class="text-sm border-l-2 border-primary pl-4 py-1 leading-relaxed text-on-surface/90">
+                        {{ challenge.today_submission.ai_feedback | safe }}
+                    </div>
+                    {% if challenge.today_submission.user_answer %}
+                    <div class="mt-4">
+                        <span class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Your Answer Submission</span>
+                        <pre class="bg-surface p-4 rounded-xl text-xs overflow-x-auto text-on-surface-variant border border-outline"><code>{{ challenge.today_submission.user_answer }}</code></pre>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Asynchronous evaluation result rendering box -->
+                <div id="evaluation-card" class="hidden mt-6 space-y-4">
+                    <div id="eval-status-box" class="border rounded-2xl p-6 flex items-start gap-4">
+                        <!-- Icon injects here -->
+                        <div id="eval-message-container">
+                            <h4 class="font-bold text-on-surface mb-1" id="eval-status-title">Evaluating Submission...</h4>
+                            <p class="text-xs text-on-surface-variant leading-relaxed" id="eval-status-desc"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-surface/50 border border-outline rounded-2xl p-6">
+                        <h4 class="font-bold text-sm uppercase tracking-wider text-on-surface-variant mb-3">AI Mentor Insights</h4>
+                        <div id="eval-ai-feedback" class="text-sm leading-relaxed text-on-surface/90 border-l-2 border-primary pl-4 py-1">
+                            Analyzing answer profile metrics...
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Right Side: Gamified Progression & Streak Grid (Takes 1 Col) -->
+        <div class="flex flex-col gap-8">
+            
+            <!-- Progression Card -->
+            <div class="glass-panel p-6 rounded-3xl">
+                <h3 class="text-lg font-bold mb-4 text-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">military_tech</span>
+                    Progression Dashboard
+                </h3>
+                
+                <!-- Player Level Info -->
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Level {{ current_user.level or 1 }}</span>
+                        <span class="text-xs font-extrabold text-primary">{{ xp_in_level }} / 500 XP to Level Up</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-outline rounded-full overflow-hidden">
+                        <div class="h-full indigo-gradient transition-all duration-1000 shadow-[0_0_10px_rgba(99,102,241,0.5)]" style="width: {{ level_progress }}%"></div>
+                    </div>
+                </div>
+
+                <!-- 30-Day Streak Grid representing a visual calendar -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">30-Day Streak Track</span>
+                        <span class="text-[10px] text-amber-500 font-extrabold uppercase flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">local_fire_department</span> Active Grid
+                        </span>
+                    </div>
+                    
+                    <div class="streak-calendar-grid bg-surface/30 border border-outline p-4 rounded-2xl">
+                        {% for day in calendar_grid %}
+                        <div class="grid-day-cell {% if day.is_completed %}completed{% elif day.is_today %}today-pulse{% else %}missed{% endif %}"
+                             title="{{ day.date_str }} {% if day.is_completed %}(Completed!){% elif day.is_today %}(Today - Pending!){% elif day.is_future %}(Locked){% else %}(Missed){% endif %}">
+                            
+                            {% if day.is_completed %}
+                                <span class="material-symbols-outlined text-sm font-bold text-amber-500">local_fire_department</span>
+                            {% else %}
+                                <span>{{ day.label }}</span>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Top Streaks Leaderboard -->
+            <div class="glass-panel p-6 rounded-3xl">
+                <h3 class="text-lg font-bold mb-4 text-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-purple-400">workspace_premium</span>
+                    Sprint Leaderboard
+                </h3>
+                
+                <div class="space-y-3.5 max-h-[300px] overflow-y-auto pr-1">
+                    {% for row in leaderboard %}
+                    <div class="leaderboard-row flex items-center justify-between p-3 rounded-2xl border border-outline/35 bg-surface/30">
+                        <div class="flex items-center gap-3">
+                            <div class="w-6 text-center text-xs font-black text-on-surface-variant">
+                                {% if loop.index == 1 %}<span class="gold-rank text-base">🥇</span>
+                                {% elif loop.index == 2 %}<span class="silver-rank text-base">🥈</span>
+                                {% elif loop.index == 3 %}<span class="bronze-rank text-base">🥉</span>
+                                {% else %}{{ loop.index }}{% endif %}
+                            </div>
+                            <div class="w-8 h-8 rounded-full border border-outline flex items-center justify-center text-xs font-black uppercase tracking-wider text-white bg-indigo-500/20">
+                                {{ row.name[:2] }}
+                            </div>
+                            <div>
+                                <span class="block text-xs font-bold text-on-surface leading-tight">{{ row.name }}</span>
+                                <span class="text-[9px] text-on-surface-variant font-extrabold uppercase">Lvl {{ row.level }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-xl border border-amber-500/15">
+                            <span class="material-symbols-outlined text-sm text-amber-500 font-bold active-flame-icon">local_fire_department</span>
+                            <span class="text-xs font-black text-amber-500">{{ row.streak }}d</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Milestone Badges Showcase -->
+            <div class="glass-panel p-6 rounded-3xl">
+                <h3 class="text-lg font-bold mb-4 text-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-amber-500">emoji_events</span>
+                    Career Milestones
+                </h3>
+                
+                <div class="grid grid-cols-3 gap-3">
+                    <!-- Ignition Badge -->
+                    <div class="badge-card p-3 rounded-2xl flex flex-col items-center justify-center text-center
+                        {% if current_user.streak_count >= 3 %}unlocked{% else %}locked{% endif %}"
+                        title="Ignition Flame: Unlocked at 3-Day streak count!">
+                        <span class="material-symbols-outlined text-2xl text-amber-500">local_fire_department</span>
+                        <span class="text-[9px] font-black uppercase mt-1.5">Ignition</span>
+                    </div>
+
+                    <!-- On Fire Badge -->
+                    <div class="badge-card p-3 rounded-2xl flex flex-col items-center justify-center text-center
+                        {% if current_user.streak_count >= 7 %}unlocked{% else %}locked{% endif %}"
+                        title="On Fire: Unlocked at 7-Day streak count!">
+                        <span class="material-symbols-outlined text-2xl text-red-500">whatshot</span>
+                        <span class="text-[9px] font-black uppercase mt-1.5">On Fire</span>
+                    </div>
+
+                    <!-- Unstoppable Badge -->
+                    <div class="badge-card p-3 rounded-2xl flex flex-col items-center justify-center text-center
+                        {% if current_user.streak_count >= 14 %}unlocked{% else %}locked{% endif %}"
+                        title="Unstoppable: Unlocked at 14-Day streak count!">
+                        <span class="material-symbols-outlined text-2xl text-purple-500">bolt</span>
+                        <span class="text-[9px] font-black uppercase mt-1.5">Unstoppable</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 1. Multiple Choice helper styling triggers
+    function selectChoice(card) {
+        document.querySelectorAll('.choice-card').forEach(c => {
+            c.classList.remove('selected');
+            c.querySelector('.choice-radio-visual div').classList.add('hidden');
+        });
+        card.classList.add('selected');
+        const radio = card.querySelector('input[type="radio"]');
+        radio.checked = true;
+        card.querySelector('.choice-radio-visual div').classList.remove('hidden');
+    }
+
+    // 2. Midnight Daily countdown ticker helper
+    function initializeCountdown() {
+        const ticker = document.getElementById('countdown-ticker');
+        if (!ticker) return;
+
+        function updateTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            const diff = tomorrow - now;
+
+            const hours = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+            const minutes = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
+            const seconds = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+
+            ticker.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    }
+    
+    initializeCountdown();
+
+    // 3. Asynchronous evaluation form submission
+    const form = document.getElementById('sprint-form');
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span class="animate-spin material-symbols-outlined text-sm">rotate_right</span> Evaluating Answer...`;
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch("{{ url_for('sprint.submit') }}", {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Hide form immediately
+                    form.classList.add('hidden');
+                    
+                    // Style evaluation box
+                    const evalCard = document.getElementById('evaluation-card');
+                    const statusBox = document.getElementById('eval-status-box');
+                    const statusTitle = document.getElementById('eval-status-title');
+                    const statusDesc = document.getElementById('eval-status-desc');
+                    const feedbackBox = document.getElementById('eval-ai-feedback');
+                    
+                    evalCard.classList.remove('hidden');
+                    feedbackBox.innerHTML = result.ai_feedback;
+                    
+                    if (result.is_correct) {
+                        statusBox.className = "border border-green-500/20 bg-green-500/5 rounded-2xl p-6 flex items-start gap-4";
+                        statusTitle.innerHTML = "🎯 Today's Sprint Solved!";
+                        statusTitle.className = "font-bold text-green-400 mb-1";
+                        statusDesc.textContent = `Excellent job! You locked in the correct answer and earned +${result.xp_earned} XP. Your streak has progressed to ${result.new_streak} Days.`;
+                    } else {
+                        statusBox.className = "border border-amber-500/20 bg-amber-500/5 rounded-2xl p-6 flex items-start gap-4";
+                        statusTitle.innerHTML = "⚠️ Closer review recommended";
+                        statusTitle.className = "font-bold text-amber-400 mb-1";
+                        statusDesc.textContent = `Nice try! Today's answer was incorrect, but you still locked in your submission and earned +${result.xp_earned} XP. Keep practicing!`;
+                    }
+                    
+                    // Show a toast or congratulations pop-up if leveled up
+                    if (result.level_up) {
+                        showToast(`🎉 LEVEL UP! You reached Level ${result.new_level}!`);
+                    }
+                    
+                    // Check if any badges earned
+                    if (result.badges_earned && result.badges_earned.length > 0) {
+                        showToast(`🏆 Badge Unlocked: ${result.badges_earned.join(', ')}!`);
+                    }
+                    
+                    // Reload details after 3 seconds to synchronize calendar grid state smoothly
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 4000);
+                    
+                } else {
+                    showToast(result.message || "Submission failed.", "error");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `<span class="material-symbols-outlined text-sm">local_fire_department</span> Lock In Today's Sprint Answer`;
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("An unexpected server connection error occurred.", "error");
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<span class="material-symbols-outlined text-sm">local_fire_department</span> Lock In Today's Sprint Answer`;
+            }
+        });
+    }
+
+    // Helper toast alerts
+    function showToast(message, type = "success") {
+        const toast = document.createElement('div');
+        toast.className = `fixed bottom-5 right-5 px-6 py-4 rounded-2xl shadow-2xl text-xs font-bold uppercase tracking-widest z-[99999] transition-all duration-500 transform translate-y-20 border
+            ${type === 'success' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-red-500/10 border-red-500/20 text-red-400'}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        // Triggers animation transition slide up
+        setTimeout(() => {
+            toast.className = toast.className.replace('translate-y-20', 'translate-y-0');
+        }, 10);
+
+        // Hide toast
+        setTimeout(() => {
+            toast.className = toast.className.replace('translate-y-0', 'translate-y-20');
+            setTimeout(() => toast.remove(), 500);
+        }, 4000);
+    }
+</script>
+{% endblock %}

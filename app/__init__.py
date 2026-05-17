@@ -21,6 +21,10 @@ def create_app(config_name='development'):
     limiter.init_app(app)
     compress.init_app(app)
 
+    # Idempotent DB Upgrades
+    from .utils.db_upgrade import upgrade_database
+    upgrade_database(app)
+
     oauth.register(
         name='google',
         server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
@@ -39,6 +43,7 @@ def create_app(config_name='development'):
     from .routes.ai import ai_bp
     from .routes.portfolio import portfolio_bp
     from .routes.resume import resume_bp
+    from .routes.sprint import sprint_bp
     
     from .routes.playground import playground_bp
     
@@ -50,6 +55,7 @@ def create_app(config_name='development'):
     app.register_blueprint(ai_bp, url_prefix='/ai')
     app.register_blueprint(portfolio_bp, url_prefix='/portfolio')
     app.register_blueprint(resume_bp, url_prefix='/resume')
+    app.register_blueprint(sprint_bp, url_prefix='/user/sprint')
     app.register_blueprint(playground_bp, url_prefix='/playground')
     
     # Security Headers

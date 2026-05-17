@@ -103,6 +103,30 @@
 
         <!-- Main Dashboard -->
         <div class="lg:col-span-9 space-y-10">
+            <!-- Daily Sprint Promotional Banner -->
+            <div class="glass-card p-8 rounded-[2.5rem] relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6 group border border-amber-500/20 shadow-2xl">
+                <div class="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-purple-500/5 to-indigo-500/5 opacity-80 group-hover:scale-105 transition-transform duration-500 pointer-events-none"></div>
+                <div class="relative z-10 flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center flex-shrink-0 text-amber-500 shadow-xl">
+                        <span class="material-symbols-outlined text-3xl active-flame-icon">local_fire_department</span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 text-[9px] font-black uppercase tracking-wider">Wordle-Style Daily Prep</span>
+                            <span class="text-xs text-on-surface-variant font-bold">•</span>
+                            <span class="text-xs text-on-surface font-extrabold">{{ current_user.streak_count or 0 }} Day Streak</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-on-surface mb-1">Feed the Career Fire: Solve Today's Sprint Challenge</h4>
+                        <p class="text-xs text-on-surface-variant max-w-xl leading-relaxed">
+                            A quick, 2-minute daily career micro-prep bite tailored to your skills. Test your debugging, design, or behavioral interview capabilities and claim +100 XP!
+                        </p>
+                    </div>
+                </div>
+                <a href="{{ url_for('sprint.dashboard') }}" class="px-6 py-3.5 rounded-xl indigo-gradient text-white text-xs font-bold uppercase tracking-widest shadow-xl shadow-indigo-500/10 hover:scale-105 active:scale-95 transition-all flex-shrink-0 relative z-20" style="text-decoration:none">
+                    Solve Now
+                </a>
+            </div>
+
             <!-- Hero Stats -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="glass-card p-10 rounded-[3rem] space-y-4 hover:-translate-y-2 transition-transform">
