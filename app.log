@@ -7,588 +7,756 @@ WARNING: This is a development server. Do not use it in a production deployment.
 Press CTRL+C to quit
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
-127.0.0.1 - - [16/May/2026 22:17:25] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:17:30] "GET /ai/interview/start HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:17:34] "POST /ai/interview/start HTTP/1.1" 302 -
-127.0.0.1 - - [16/May/2026 22:17:34] "GET /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:18:08] "POST /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2/finish HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:18:11] "GET /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2/analysis HTTP/1.1" 500 -
-Traceback (most recent call last):
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
-    return self.wsgi_app(environ, start_response)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
-    response = self.handle_exception(e)
-               ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
-    return current_app.ensure_sync(func)(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/Downloads/Be_your/app/routes/ai.py", line 61, in interview_analysis
-    return render_template('ai/analysis.html', interview=interview)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
-    return _render(app, template, context)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
-    rv = template.render(context)
-         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 1304, in render
-    self.environment.handle_exception()
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 939, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "/home/vish/Downloads/Be_your/app/templates/ai/analysis.html", line 1, in top-level template code
-    {% extends "base.html" %}
-  File "/home/vish/Downloads/Be_your/app/templates/base.html", line 165, in top-level template code
-    {% block content %}{% endblock %}
-  File "/home/vish/Downloads/Be_your/app/templates/ai/analysis.html", line 72, in block 'content'
-    {{ interview.feedback[i|string].score }}%
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 487, in getattr
-    return getattr(obj, attribute)
-           ^^^^^^^^^^^^^^^^^^^^^^^
-jinja2.exceptions.UndefinedError: 'dict object' has no attribute '0'
-127.0.0.1 - - [16/May/2026 22:18:12] "GET /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2/analysis?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:18:12] "GET /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2/analysis?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:18:12] "GET /ai/interview/2751490d-8d8a-4e8f-9fd2-e09246cab9a2/analysis?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:19:57] "GET /portfolio/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:20:01] "GET /jobs/ HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:20:38] "GET /ai/interview/start HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:20:40] "POST /ai/interview/start HTTP/1.1" 302 -
-127.0.0.1 - - [16/May/2026 22:20:40] "GET /ai/interview/3d7d6f83-be16-4100-9572-a16c43c5f1b7 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:20:53] "POST /ai/interview/3d7d6f83-be16-4100-9572-a16c43c5f1b7/finish HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:20:56] "GET /ai/interview/3d7d6f83-be16-4100-9572-a16c43c5f1b7/analysis HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:21:09] "GET /user/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 22:21:09] "GET /static/uploads/avatars/avatar_ff0adbd3-0600-42d2-86cb-faae784fc7ea_Professional_headshot_in_formal_attire.png HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 22:21:10] "GET /ai/recommendations HTTP/1.1" 200 -
- * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
- * Restarting with watchdog (inotify)
- * Debugger is active!
- * Debugger PIN: 925-023-670
+ * Debugger PIN: 810-721-663
+127.0.0.1 - - [17/May/2026 11:49:56] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 11:49:58] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 11:50:00] "GET /auth/logout HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 11:50:01] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 11:50:04] "GET /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 11:50:41] "POST /auth/register HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 11:50:41] "GET /auth/verify-otp HTTP/1.1" 200 -
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-STARTTLS\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nSTARTTLS\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'STARTTLS\r\n'
+reply: b'220 2.0.0 Ready to start TLS\r\n'
+reply: retcode (220); Msg: b'2.0.0 Ready to start TLS'
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nAUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'AUTH PLAIN AHZpc2hiaGFub3BpeWFAZ21haWwuY29tAEljeGZ4b3lkdHNvbGJicWs=\r\n'
+reply: b'235 2.7.0 Accepted\r\n'
+reply: retcode (235); Msg: b'2.7.0 Accepted'
+send: 'mail FROM:<vishbhanopiya@gmail.com> size=3451\r\n'
+reply: b'250 2.1.0 OK 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.0 OK 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp'
+send: 'rcpt TO:<salonibhanopiya@gmail.com>\r\n'
+reply: b'250 2.1.5 OK 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.5 OK 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp'
+send: 'data\r\n'
+reply: b'354 Go ahead 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp\r\n'
+reply: retcode (354); Msg: b'Go ahead 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp'
+data: (354, b'Go ahead 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp')
+send: b'Content-Type: multipart/mixed; boundary="===============9104487753139964545=="\r\nMIME-Version: 1.0\r\nSubject: Verify your Be Your account\r\nFrom: =?utf-8?q?Be_Your_Platform?= <vishbhanopiya@gmail.com>\r\nTo: salonibhanopiya@gmail.com\r\nDate: Sun, 17 May 2026 11:50:42 +0530\r\nMessage-ID: <177899884120.13175.10589794898122239386@vish.vish>\r\n\r\n--===============9104487753139964545==\r\nContent-Type: multipart/alternative;\r\n boundary="===============6451080550786717022=="\r\nMIME-Version: 1.0\r\n\r\n--===============6451080550786717022==\r\nContent-Type: text/plain; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n\r\n--===============6451080550786717022==\r\nContent-Type: text/html; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8">\r\n    <style>\r\n        body {\r\n            font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\r\n            background-color: #f4f4f5;\r\n            color: #09090b;\r\n            line-height: 1.6;\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 40px auto;\r\n            background-color: #ffffff;\r\n            border-radius: 12px;\r\n            overflow: hidden;\r\n            box-shadow: 0 4px 20px rgba(0,0,0,0.05);\r\n        }\r\n        .header {\r\n            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\r\n            padding: 30px;\r\n            text-align: center;\r\n        }\r\n        .header h1 {\r\n            color: #ffffff;\r\n            margin: 0;\r\n            font-size: 24px;\r\n            letter-spacing: 1px;\r\n        }\r\n        .content {\r\n            padding: 40px 30px;\r\n            text-align: center;\r\n        }\r\n        .otp-box {\r\n            background-color: #f8fafc;\r\n            border: 2px dashed #cbd5e1;\r\n            border-radius: 12px;\r\n            padding: 20px;\r\n            margin: 30px auto;\r\n            max-width: 300px;\r\n            font-size: 36px;\r\n            font-weight: bold;\r\n            letter-spacing: 10px;\r\n            color: #4f46e5;\r\n            text-align: center;\r\n        }\r\n        .footer {\r\n            background-color: #fafafa;\r\n            padding: 20px;\r\n            text-align: center;\r\n            font-size: 12px;\r\n            color: #71717a;\r\n            border-top: 1px solid #e4e4e7;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class="container">\r\n        <div class="header">\r\n            <h1>BE YOUR</h1>\r\n        </div>\r\n        <div class="content">\r\n            <h2 style="margin-top: 0;">Verify Your Email Address</h2>\r\n            <p>Hi <strong>saloni Bhanopiya </strong>,</p>\r\n            \r\n            <p>Welcome to Be Your! To complete your registration and secure your account, please enter the following 6-digit verification code on the website:</p>\r\n            \r\n            <div class="otp-box">\r\n                468363\r\n            </div>\r\n            \r\n            <p style="font-size: 13px; color: #71717a;">This code will expire in 15 minutes. If you did not request this verification, please ignore this email.</p>\r\n            \r\n        </div>\r\n        <div class="footer">\r\n            <p>Engineered to decode human potential.</p>\r\n            <p>&copy; 2026 NeuralPath Labs. All rights reserved.</p>\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>\r\n--===============6451080550786717022==--\r\n\r\n--===============9104487753139964545==--\r\n.\r\n'
+reply: b'250 2.0.0 OK  1778998844 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.0.0 OK  1778998844 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp'
+data: (250, b'2.0.0 OK  1778998844 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp')
+send: 'quit\r\n'
+reply: b'221 2.0.0 closing connection 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp\r\n'
+reply: retcode (221); Msg: b'2.0.0 closing connection 41be03b00d2f7-c82bb121cd6sm9835441a12.30 - gsmtp'
+[2026-05-17 11:50:44,856] INFO in email: Email sent successfully to ['salonibhanopiya@gmail.com']
+127.0.0.1 - - [17/May/2026 11:51:10] "POST /auth/resend-otp HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 11:51:10] "GET /auth/verify-otp HTTP/1.1" 200 -
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-STARTTLS\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nSTARTTLS\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'STARTTLS\r\n'
+reply: b'220 2.0.0 Ready to start TLS\r\n'
+reply: retcode (220); Msg: b'2.0.0 Ready to start TLS'
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nAUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'AUTH PLAIN AHZpc2hiaGFub3BpeWFAZ21haWwuY29tAEljeGZ4b3lkdHNvbGJicWs=\r\n'
+reply: b'235 2.7.0 Accepted\r\n'
+reply: retcode (235); Msg: b'2.7.0 Accepted'
+send: 'mail FROM:<vishbhanopiya@gmail.com> size=3450\r\n'
+reply: b'250 2.1.0 OK d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.0 OK d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp'
+send: 'rcpt TO:<salonibhanopiya@gmail.com>\r\n'
+reply: b'250 2.1.5 OK d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.5 OK d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp'
+send: 'data\r\n'
+reply: b'354 Go ahead d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp\r\n'
+reply: retcode (354); Msg: b'Go ahead d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp'
+data: (354, b'Go ahead d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp')
+send: b'Content-Type: multipart/mixed; boundary="===============2359996787741738113=="\r\nMIME-Version: 1.0\r\nSubject: Verify your Be Your account\r\nFrom: =?utf-8?q?Be_Your_Platform?= <vishbhanopiya@gmail.com>\r\nTo: salonibhanopiya@gmail.com\r\nDate: Sun, 17 May 2026 11:51:12 +0530\r\nMessage-ID: <177899887046.13175.9240850681506918087@vish.vish>\r\n\r\n--===============2359996787741738113==\r\nContent-Type: multipart/alternative;\r\n boundary="===============1567864866333431149=="\r\nMIME-Version: 1.0\r\n\r\n--===============1567864866333431149==\r\nContent-Type: text/plain; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n\r\n--===============1567864866333431149==\r\nContent-Type: text/html; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8">\r\n    <style>\r\n        body {\r\n            font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\r\n            background-color: #f4f4f5;\r\n            color: #09090b;\r\n            line-height: 1.6;\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 40px auto;\r\n            background-color: #ffffff;\r\n            border-radius: 12px;\r\n            overflow: hidden;\r\n            box-shadow: 0 4px 20px rgba(0,0,0,0.05);\r\n        }\r\n        .header {\r\n            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\r\n            padding: 30px;\r\n            text-align: center;\r\n        }\r\n        .header h1 {\r\n            color: #ffffff;\r\n            margin: 0;\r\n            font-size: 24px;\r\n            letter-spacing: 1px;\r\n        }\r\n        .content {\r\n            padding: 40px 30px;\r\n            text-align: center;\r\n        }\r\n        .otp-box {\r\n            background-color: #f8fafc;\r\n            border: 2px dashed #cbd5e1;\r\n            border-radius: 12px;\r\n            padding: 20px;\r\n            margin: 30px auto;\r\n            max-width: 300px;\r\n            font-size: 36px;\r\n            font-weight: bold;\r\n            letter-spacing: 10px;\r\n            color: #4f46e5;\r\n            text-align: center;\r\n        }\r\n        .footer {\r\n            background-color: #fafafa;\r\n            padding: 20px;\r\n            text-align: center;\r\n            font-size: 12px;\r\n            color: #71717a;\r\n            border-top: 1px solid #e4e4e7;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class="container">\r\n        <div class="header">\r\n            <h1>BE YOUR</h1>\r\n        </div>\r\n        <div class="content">\r\n            <h2 style="margin-top: 0;">Verify Your Email Address</h2>\r\n            <p>Hi <strong>saloni Bhanopiya </strong>,</p>\r\n            \r\n            <p>Welcome to Be Your! To complete your registration and secure your account, please enter the following 6-digit verification code on the website:</p>\r\n            \r\n            <div class="otp-box">\r\n                514593\r\n            </div>\r\n            \r\n            <p style="font-size: 13px; color: #71717a;">This code will expire in 15 minutes. If you did not request this verification, please ignore this email.</p>\r\n            \r\n        </div>\r\n        <div class="footer">\r\n            <p>Engineered to decode human potential.</p>\r\n            <p>&copy; 2026 NeuralPath Labs. All rights reserved.</p>\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>\r\n--===============1567864866333431149==--\r\n\r\n--===============2359996787741738113==--\r\n.\r\n'
+reply: b'250 2.0.0 OK  1778998873 d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.0.0 OK  1778998873 d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp'
+data: (250, b'2.0.0 OK  1778998873 d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp')
+send: 'quit\r\n'
+reply: b'221 2.0.0 closing connection d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp\r\n'
+reply: retcode (221); Msg: b'2.0.0 closing connection d9443c01a7336-2bd5c05f287sm145954895ad.24 - gsmtp'
+[2026-05-17 11:51:14,359] INFO in email: Email sent successfully to ['salonibhanopiya@gmail.com']
+127.0.0.1 - - [17/May/2026 11:51:29] "GET /auth/verify-otp HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 11:51:43] "POST /auth/register HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 11:51:43] "GET /auth/verify-otp HTTP/1.1" 200 -
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-STARTTLS\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nSTARTTLS\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'STARTTLS\r\n'
+reply: b'220 2.0.0 Ready to start TLS\r\n'
+reply: retcode (220); Msg: b'2.0.0 Ready to start TLS'
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nAUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'AUTH PLAIN AHZpc2hiaGFub3BpeWFAZ21haWwuY29tAEljeGZ4b3lkdHNvbGJicWs=\r\n'
+reply: b'235 2.7.0 Accepted\r\n'
+reply: retcode (235); Msg: b'2.7.0 Accepted'
+send: 'mail FROM:<vishbhanopiya@gmail.com> size=3453\r\n'
+reply: b'250 2.1.0 OK d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.0 OK d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp'
+send: 'rcpt TO:<salonibhanopiya192@gmail.com>\r\n'
+reply: b'250 2.1.5 OK d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.5 OK d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp'
+send: 'data\r\n'
+reply: b'354 Go ahead d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp\r\n'
+reply: retcode (354); Msg: b'Go ahead d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp'
+data: (354, b'Go ahead d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp')
+send: b'Content-Type: multipart/mixed; boundary="===============8314963777801348991=="\r\nMIME-Version: 1.0\r\nSubject: Verify your Be Your account\r\nFrom: =?utf-8?q?Be_Your_Platform?= <vishbhanopiya@gmail.com>\r\nTo: salonibhanopiya192@gmail.com\r\nDate: Sun, 17 May 2026 11:51:44 +0530\r\nMessage-ID: <177899890324.13175.6287403876284074929@vish.vish>\r\n\r\n--===============8314963777801348991==\r\nContent-Type: multipart/alternative;\r\n boundary="===============0143186674300766015=="\r\nMIME-Version: 1.0\r\n\r\n--===============0143186674300766015==\r\nContent-Type: text/plain; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n\r\n--===============0143186674300766015==\r\nContent-Type: text/html; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8">\r\n    <style>\r\n        body {\r\n            font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\r\n            background-color: #f4f4f5;\r\n            color: #09090b;\r\n            line-height: 1.6;\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 40px auto;\r\n            background-color: #ffffff;\r\n            border-radius: 12px;\r\n            overflow: hidden;\r\n            box-shadow: 0 4px 20px rgba(0,0,0,0.05);\r\n        }\r\n        .header {\r\n            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\r\n            padding: 30px;\r\n            text-align: center;\r\n        }\r\n        .header h1 {\r\n            color: #ffffff;\r\n            margin: 0;\r\n            font-size: 24px;\r\n            letter-spacing: 1px;\r\n        }\r\n        .content {\r\n            padding: 40px 30px;\r\n            text-align: center;\r\n        }\r\n        .otp-box {\r\n            background-color: #f8fafc;\r\n            border: 2px dashed #cbd5e1;\r\n            border-radius: 12px;\r\n            padding: 20px;\r\n            margin: 30px auto;\r\n            max-width: 300px;\r\n            font-size: 36px;\r\n            font-weight: bold;\r\n            letter-spacing: 10px;\r\n            color: #4f46e5;\r\n            text-align: center;\r\n        }\r\n        .footer {\r\n            background-color: #fafafa;\r\n            padding: 20px;\r\n            text-align: center;\r\n            font-size: 12px;\r\n            color: #71717a;\r\n            border-top: 1px solid #e4e4e7;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class="container">\r\n        <div class="header">\r\n            <h1>BE YOUR</h1>\r\n        </div>\r\n        <div class="content">\r\n            <h2 style="margin-top: 0;">Verify Your Email Address</h2>\r\n            <p>Hi <strong>saloni Bhanopiya </strong>,</p>\r\n            \r\n            <p>Welcome to Be Your! To complete your registration and secure your account, please enter the following 6-digit verification code on the website:</p>\r\n            \r\n            <div class="otp-box">\r\n                858974\r\n            </div>\r\n            \r\n            <p style="font-size: 13px; color: #71717a;">This code will expire in 15 minutes. If you did not request this verification, please ignore this email.</p>\r\n            \r\n        </div>\r\n        <div class="footer">\r\n            <p>Engineered to decode human potential.</p>\r\n            <p>&copy; 2026 NeuralPath Labs. All rights reserved.</p>\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>\r\n--===============0143186674300766015==--\r\n\r\n--===============8314963777801348991==--\r\n.\r\n'
+reply: b'250 2.0.0 OK  1778998906 d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.0.0 OK  1778998906 d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp'
+data: (250, b'2.0.0 OK  1778998906 d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp')
+send: 'quit\r\n'
+reply: b'221 2.0.0 closing connection d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp\r\n'
+reply: retcode (221); Msg: b'2.0.0 closing connection d9443c01a7336-2bd5bd5ef27sm138974735ad.8 - gsmtp'
+[2026-05-17 11:51:46,923] INFO in email: Email sent successfully to ['salonibhanopiya192@gmail.com']
+127.0.0.1 - - [17/May/2026 11:52:41] "POST /auth/resend-otp HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 11:52:42] "GET /auth/verify-otp HTTP/1.1" 200 -
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-STARTTLS\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nSTARTTLS\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'STARTTLS\r\n'
+reply: b'220 2.0.0 Ready to start TLS\r\n'
+reply: retcode (220); Msg: b'2.0.0 Ready to start TLS'
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nAUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'AUTH PLAIN AHZpc2hiaGFub3BpeWFAZ21haWwuY29tAEljeGZ4b3lkdHNvbGJicWs=\r\n'
+reply: b'235 2.7.0 Accepted\r\n'
+reply: retcode (235); Msg: b'2.7.0 Accepted'
+send: 'mail FROM:<vishbhanopiya@gmail.com> size=3453\r\n'
+reply: b'250 2.1.0 OK d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.0 OK d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp'
+send: 'rcpt TO:<salonibhanopiya192@gmail.com>\r\n'
+reply: b'250 2.1.5 OK d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.5 OK d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp'
+send: 'data\r\n'
+reply: b'354 Go ahead d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp\r\n'
+reply: retcode (354); Msg: b'Go ahead d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp'
+data: (354, b'Go ahead d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp')
+send: b'Content-Type: multipart/mixed; boundary="===============2152647929661068408=="\r\nMIME-Version: 1.0\r\nSubject: Verify your Be Your account\r\nFrom: =?utf-8?q?Be_Your_Platform?= <vishbhanopiya@gmail.com>\r\nTo: salonibhanopiya192@gmail.com\r\nDate: Sun, 17 May 2026 11:52:43 +0530\r\nMessage-ID: <177899896194.13175.5909937469651817821@vish.vish>\r\n\r\n--===============2152647929661068408==\r\nContent-Type: multipart/alternative;\r\n boundary="===============4174648360907972317=="\r\nMIME-Version: 1.0\r\n\r\n--===============4174648360907972317==\r\nContent-Type: text/plain; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n\r\n--===============4174648360907972317==\r\nContent-Type: text/html; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8">\r\n    <style>\r\n        body {\r\n            font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\r\n            background-color: #f4f4f5;\r\n            color: #09090b;\r\n            line-height: 1.6;\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 40px auto;\r\n            background-color: #ffffff;\r\n            border-radius: 12px;\r\n            overflow: hidden;\r\n            box-shadow: 0 4px 20px rgba(0,0,0,0.05);\r\n        }\r\n        .header {\r\n            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\r\n            padding: 30px;\r\n            text-align: center;\r\n        }\r\n        .header h1 {\r\n            color: #ffffff;\r\n            margin: 0;\r\n            font-size: 24px;\r\n            letter-spacing: 1px;\r\n        }\r\n        .content {\r\n            padding: 40px 30px;\r\n            text-align: center;\r\n        }\r\n        .otp-box {\r\n            background-color: #f8fafc;\r\n            border: 2px dashed #cbd5e1;\r\n            border-radius: 12px;\r\n            padding: 20px;\r\n            margin: 30px auto;\r\n            max-width: 300px;\r\n            font-size: 36px;\r\n            font-weight: bold;\r\n            letter-spacing: 10px;\r\n            color: #4f46e5;\r\n            text-align: center;\r\n        }\r\n        .footer {\r\n            background-color: #fafafa;\r\n            padding: 20px;\r\n            text-align: center;\r\n            font-size: 12px;\r\n            color: #71717a;\r\n            border-top: 1px solid #e4e4e7;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class="container">\r\n        <div class="header">\r\n            <h1>BE YOUR</h1>\r\n        </div>\r\n        <div class="content">\r\n            <h2 style="margin-top: 0;">Verify Your Email Address</h2>\r\n            <p>Hi <strong>saloni Bhanopiya </strong>,</p>\r\n            \r\n            <p>Welcome to Be Your! To complete your registration and secure your account, please enter the following 6-digit verification code on the website:</p>\r\n            \r\n            <div class="otp-box">\r\n                292063\r\n            </div>\r\n            \r\n            <p style="font-size: 13px; color: #71717a;">This code will expire in 15 minutes. If you did not request this verification, please ignore this email.</p>\r\n            \r\n        </div>\r\n        <div class="footer">\r\n            <p>Engineered to decode human potential.</p>\r\n            <p>&copy; 2026 NeuralPath Labs. All rights reserved.</p>\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>\r\n--===============4174648360907972317==--\r\n\r\n--===============2152647929661068408==--\r\n.\r\n'
+reply: b'250 2.0.0 OK  1778998965 d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.0.0 OK  1778998965 d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp'
+data: (250, b'2.0.0 OK  1778998965 d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp')
+send: 'quit\r\n'
+reply: b'221 2.0.0 closing connection d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp\r\n'
+reply: retcode (221); Msg: b'2.0.0 closing connection d2e1a72fcca58-83f19f7cc9asm13378288b3a.53 - gsmtp'
+[2026-05-17 11:52:45,700] INFO in email: Email sent successfully to ['salonibhanopiya192@gmail.com']
+127.0.0.1 - - [17/May/2026 11:53:07] "GET /jobs/ HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 11:53:55] "GET /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:02:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:06:09] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:06:19] "GET /user/roadmap HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:06:20] "GET /auth/login?next=/user/roadmap HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:06:28] "POST /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:06:40] "POST /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:06:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:07:40] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:07:53] "POST /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:08:09] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:08:25] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:08:28] "GET / HTTP/1.1" 200 -
  * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
  * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
- * Detected change in '/home/vish/Downloads/Be_your/app/routes/resume.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/routes/resume.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/routes/resume.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/routes/resume.py', reloading
+ * Debugger PIN: 810-721-663
+127.0.0.1 - - [17/May/2026 12:12:15] "GET /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:12:16] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [17/May/2026 12:13:13] "POST /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:14:08] "POST /auth/register HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:14:08] "GET /auth/verify-otp HTTP/1.1" 200 -
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-STARTTLS\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nSTARTTLS\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'STARTTLS\r\n'
+reply: b'220 2.0.0 Ready to start TLS\r\n'
+reply: retcode (220); Msg: b'2.0.0 Ready to start TLS'
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nAUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'AUTH PLAIN AHZpc2hiaGFub3BpeWFAZ21haWwuY29tAEljeGZ4b3lkdHNvbGJicWs=\r\n'
+reply: b'235 2.7.0 Accepted\r\n'
+reply: retcode (235); Msg: b'2.7.0 Accepted'
+send: 'mail FROM:<vishbhanopiya@gmail.com> size=3448\r\n'
+reply: b'250 2.1.0 OK d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.0 OK d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp'
+send: 'rcpt TO:<testuser_unique_123@example.com>\r\n'
+reply: b'250 2.1.5 OK d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.5 OK d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp'
+send: 'data\r\n'
+reply: b'354 Go ahead d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp\r\n'
+reply: retcode (354); Msg: b'Go ahead d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp'
+data: (354, b'Go ahead d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp')
+send: b'Content-Type: multipart/mixed; boundary="===============0495966776958859643=="\r\nMIME-Version: 1.0\r\nSubject: Verify your Be Your account\r\nFrom: =?utf-8?q?Be_Your_Platform?= <vishbhanopiya@gmail.com>\r\nTo: testuser_unique_123@example.com\r\nDate: Sun, 17 May 2026 12:14:09 +0530\r\nMessage-ID: <177900024819.14409.7171575776075373965@vish.vish>\r\n\r\n--===============0495966776958859643==\r\nContent-Type: multipart/alternative;\r\n boundary="===============8676810791538158558=="\r\nMIME-Version: 1.0\r\n\r\n--===============8676810791538158558==\r\nContent-Type: text/plain; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n\r\n--===============8676810791538158558==\r\nContent-Type: text/html; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8">\r\n    <style>\r\n        body {\r\n            font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\r\n            background-color: #f4f4f5;\r\n            color: #09090b;\r\n            line-height: 1.6;\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 40px auto;\r\n            background-color: #ffffff;\r\n            border-radius: 12px;\r\n            overflow: hidden;\r\n            box-shadow: 0 4px 20px rgba(0,0,0,0.05);\r\n        }\r\n        .header {\r\n            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\r\n            padding: 30px;\r\n            text-align: center;\r\n        }\r\n        .header h1 {\r\n            color: #ffffff;\r\n            margin: 0;\r\n            font-size: 24px;\r\n            letter-spacing: 1px;\r\n        }\r\n        .content {\r\n            padding: 40px 30px;\r\n            text-align: center;\r\n        }\r\n        .otp-box {\r\n            background-color: #f8fafc;\r\n            border: 2px dashed #cbd5e1;\r\n            border-radius: 12px;\r\n            padding: 20px;\r\n            margin: 30px auto;\r\n            max-width: 300px;\r\n            font-size: 36px;\r\n            font-weight: bold;\r\n            letter-spacing: 10px;\r\n            color: #4f46e5;\r\n            text-align: center;\r\n        }\r\n        .footer {\r\n            background-color: #fafafa;\r\n            padding: 20px;\r\n            text-align: center;\r\n            font-size: 12px;\r\n            color: #71717a;\r\n            border-top: 1px solid #e4e4e7;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class="container">\r\n        <div class="header">\r\n            <h1>BE YOUR</h1>\r\n        </div>\r\n        <div class="content">\r\n            <h2 style="margin-top: 0;">Verify Your Email Address</h2>\r\n            <p>Hi <strong>Test User</strong>,</p>\r\n            \r\n            <p>Welcome to Be Your! To complete your registration and secure your account, please enter the following 6-digit verification code on the website:</p>\r\n            \r\n            <div class="otp-box">\r\n                215011\r\n            </div>\r\n            \r\n            <p style="font-size: 13px; color: #71717a;">This code will expire in 15 minutes. If you did not request this verification, please ignore this email.</p>\r\n            \r\n        </div>\r\n        <div class="footer">\r\n            <p>Engineered to decode human potential.</p>\r\n            <p>&copy; 2026 NeuralPath Labs. All rights reserved.</p>\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>\r\n--===============8676810791538158558==--\r\n\r\n--===============0495966776958859643==--\r\n.\r\n'
+reply: b'250 2.0.0 OK  1779000251 d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.0.0 OK  1779000251 d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp'
+data: (250, b'2.0.0 OK  1779000251 d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp')
+send: 'quit\r\n'
+reply: b'221 2.0.0 closing connection d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp\r\n'
+reply: retcode (221); Msg: b'2.0.0 closing connection d2e1a72fcca58-83f19661261sm13512996b3a.3 - gsmtp'
+[2026-05-17 12:14:11,796] INFO in email: Email sent successfully to ['testuser_unique_123@example.com']
+127.0.0.1 - - [17/May/2026 12:15:26] "GET /jobs/ HTTP/1.1" 200 -
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/jobs.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/jobs.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/jobs.py', reloading
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
- * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
- * Restarting with watchdog (inotify)
- * Debugger is active!
- * Debugger PIN: 925-023-670
-127.0.0.1 - - [16/May/2026 23:12:48] "GET /jobs/ HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:12:53] "GET /ai/interview/start HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:12:55] "GET /jobs/ HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:12:56] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:15:11] "GET /ai/interview/start HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:15:13] "POST /ai/interview/start HTTP/1.1" 302 -
-127.0.0.1 - - [16/May/2026 23:15:13] "GET /ai/interview/e3045e9c-2c63-44be-b3b0-b8a4fb139d75 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:15:42] "GET /jobs/ HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:15:48] "GET /ai/interview/start HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:16:54] "GET /portfolio/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:17:01] "POST /portfolio/analyze HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:17:06] "GET /user/roadmap HTTP/1.1" 500 -
-Traceback (most recent call last):
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
-    return self.wsgi_app(environ, start_response)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
-    response = self.handle_exception(e)
-               ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
-    return current_app.ensure_sync(func)(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/Downloads/Be_your/app/routes/user.py", line 53, in roadmap
-    return render_template('user/roadmap.html', roadmap=None)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/templating.py", line 149, in render_template
-    template = app.jinja_env.get_or_select_template(template_name_or_list)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 1084, in get_or_select_template
-    return self.get_template(template_name_or_list, parent, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 1013, in get_template
-    return self._load_template(name, globals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 972, in _load_template
-    template = self.loader.load(self, name, self.make_globals(globals))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/loaders.py", line 138, in load
-    code = environment.compile(source, name, filename)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 768, in compile
-    self.handle_exception(source=source_hint)
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/jinja2/environment.py", line 939, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "/home/vish/Downloads/Be_your/app/templates/user/roadmap.html", line 193, in template
-    {% endblock %}
-jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'.
-127.0.0.1 - - [16/May/2026 23:17:06] "GET /user/roadmap?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:17:06] "GET /user/roadmap?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:17:06] "GET /user/roadmap?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:17:35] "GET /user/roadmap HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:17:40] "GET /user/roadmap HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:17:44] "POST /ai/roadmap/generate HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:20:30] "POST /ai/roadmap/generate HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:20:51] "GET /resume/resume/optimize HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:20:53] "GET /user/roadmap HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:20:58] "POST /ai/roadmap/generate HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:23:18] "POST /ai/roadmap/generate HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:24:32] "POST /ai/roadmap/generate HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:24:34] "GET /user/roadmap HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:24:38] "GET /user/roadmap HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:24:40] "GET /user/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:24:40] "GET /static/uploads/avatars/avatar_ff0adbd3-0600-42d2-86cb-faae784fc7ea_Professional_headshot_in_formal_attire.png HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 23:24:41] "GET /ai/recommendations HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:24:43] "GET /user/roadmap HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:24:53] "GET /user/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:24:54] "GET /static/uploads/avatars/avatar_ff0adbd3-0600-42d2-86cb-faae784fc7ea_Professional_headshot_in_formal_attire.png HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 23:24:54] "GET /ai/recommendations HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:24:55] "GET /user/roadmap HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:26:57] "GET /user/roadmap HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:27:01] "POST /ai/roadmap/generate HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:27:11] "POST /ai/roadmap/generate HTTP/1.1" 200 -
+ * Debugger PIN: 810-721-663
  * Detected change in '/home/vish/Downloads/Be_your/app/models/user.py', reloading
  * Detected change in '/home/vish/Downloads/Be_your/app/models/user.py', reloading
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
- * Detected change in '/home/vish/Downloads/Be_your/app/services/badge_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/badge_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/badge_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/badge_service.py', reloading
+ * Debugger PIN: 810-721-663
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/sprint.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/sprint.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/sprint.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/sprint.py', reloading
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
- * Detected change in '/home/vish/Downloads/Be_your/app/services/interview_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/interview_service.py', reloading
+ * Debugger PIN: 810-721-663
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/__init__.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/models/__init__.py', reloading
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
- * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/resume_service.py', reloading
+ * Debugger PIN: 810-721-663
+ * Detected change in '/home/vish/Downloads/Be_your/app/utils/db_upgrade.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/utils/db_upgrade.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/utils/db_upgrade.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/utils/db_upgrade.py', reloading
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
-127.0.0.1 - - [16/May/2026 23:29:34] "GET /ai/interview/start HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:29:43] "GET /user/dashboard HTTP/1.1" 500 -
-Traceback (most recent call last):
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
-    cursor.execute(statement, parameters)
-psycopg2.errors.UndefinedColumn: column profiles.badges does not exist
-LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
-                                                             ^
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
-    return self.wsgi_app(environ, start_response)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
-    response = self.handle_exception(e)
-               ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
-    return current_app.ensure_sync(func)(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/Downloads/Be_your/app/routes/user.py", line 35, in dashboard
-    if current_user.profile:
-       ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 566, in __get__
-    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1086, in get
-    value = self._fire_loader_callables(state, key, passive)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1121, in _fire_loader_callables
-    return self.callable_(state, passive)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 978, in _load_for_state
-    return self._emit_lazyload(
-           ^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 1141, in _emit_lazyload
-    result = session.execute(
-             ^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
-    return self._execute_internal(
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
-    result: Result[Any] = compile_state_cls.orm_execute_statement(
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
-    result = conn.execute(
-             ^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
-    return meth(
-           ^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
-    ret = self._execute_context(
-          ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
-    return self._exec_single_context(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
-    self._handle_dbapi_exception(
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column profiles.badges does not exist
-LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
-                                                             ^
-
-[SQL: SELECT profiles.id AS profiles_id, profiles.user_id AS profiles_user_id, profiles.headline AS profiles_headline, profiles.bio AS profiles_bio, profiles.skills AS profiles_skills, profiles.experience AS profiles_experience, profiles.education AS profiles_education, profiles.location AS profiles_location, profiles.github_url AS profiles_github_url, profiles.linkedin_url AS profiles_linkedin_url, profiles.resume_path AS profiles_resume_path, profiles.resume_text AS profiles_resume_text, profiles.resume_score AS profiles_resume_score, profiles.badges AS profiles_badges, profiles.visibility AS profiles_visibility 
-FROM profiles 
-WHERE %(param_1)s::UUID = profiles.user_id]
-[parameters: {'param_1': UUID('ff0adbd3-0600-42d2-86cb-faae784fc7ea')}]
-(Background on this error at: https://sqlalche.me/e/20/f405)
-127.0.0.1 - - [16/May/2026 23:29:43] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 23:29:43] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 23:29:43] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 23:29:48] "GET /user/dashboard HTTP/1.1" 500 -
-Traceback (most recent call last):
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
-    cursor.execute(statement, parameters)
-psycopg2.errors.UndefinedColumn: column profiles.badges does not exist
-LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
-                                                             ^
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
-    return self.wsgi_app(environ, start_response)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
-    response = self.handle_exception(e)
-               ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
-    return current_app.ensure_sync(func)(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/Downloads/Be_your/app/routes/user.py", line 35, in dashboard
-    if current_user.profile:
-       ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 566, in __get__
-    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1086, in get
-    value = self._fire_loader_callables(state, key, passive)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1121, in _fire_loader_callables
-    return self.callable_(state, passive)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 978, in _load_for_state
-    return self._emit_lazyload(
-           ^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 1141, in _emit_lazyload
-    result = session.execute(
-             ^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
-    return self._execute_internal(
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
-    result: Result[Any] = compile_state_cls.orm_execute_statement(
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
-    result = conn.execute(
-             ^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
-    return meth(
-           ^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
-    ret = self._execute_context(
-          ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
-    return self._exec_single_context(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
-    self._handle_dbapi_exception(
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column profiles.badges does not exist
-LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
-                                                             ^
-
-[SQL: SELECT profiles.id AS profiles_id, profiles.user_id AS profiles_user_id, profiles.headline AS profiles_headline, profiles.bio AS profiles_bio, profiles.skills AS profiles_skills, profiles.experience AS profiles_experience, profiles.education AS profiles_education, profiles.location AS profiles_location, profiles.github_url AS profiles_github_url, profiles.linkedin_url AS profiles_linkedin_url, profiles.resume_path AS profiles_resume_path, profiles.resume_text AS profiles_resume_text, profiles.resume_score AS profiles_resume_score, profiles.badges AS profiles_badges, profiles.visibility AS profiles_visibility 
-FROM profiles 
-WHERE %(param_1)s::UUID = profiles.user_id]
-[parameters: {'param_1': UUID('ff0adbd3-0600-42d2-86cb-faae784fc7ea')}]
-(Background on this error at: https://sqlalche.me/e/20/f405)
-127.0.0.1 - - [16/May/2026 23:29:48] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 23:29:48] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 23:30:00] "GET /user/dashboard HTTP/1.1" 500 -
-Traceback (most recent call last):
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
-    cursor.execute(statement, parameters)
-psycopg2.errors.UndefinedColumn: column profiles.badges does not exist
-LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
-                                                             ^
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1498, in __call__
-    return self.wsgi_app(environ, start_response)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1476, in wsgi_app
-    response = self.handle_exception(e)
-               ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
-    return current_app.ensure_sync(func)(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/Downloads/Be_your/app/routes/user.py", line 35, in dashboard
-    if current_user.profile:
-       ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 566, in __get__
-    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1086, in get
-    value = self._fire_loader_callables(state, key, passive)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/attributes.py", line 1121, in _fire_loader_callables
-    return self.callable_(state, passive)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 978, in _load_for_state
-    return self._emit_lazyload(
-           ^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 1141, in _emit_lazyload
-    result = session.execute(
-             ^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
-    return self._execute_internal(
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
-    result: Result[Any] = compile_state_cls.orm_execute_statement(
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
-    result = conn.execute(
-             ^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
-    return meth(
-           ^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
-    return connection._execute_clauseelement(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
-    ret = self._execute_context(
-          ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
-    return self._exec_single_context(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
-    self._handle_dbapi_exception(
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
-    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
-    self.dialect.do_execute(
-  File "/home/vish/anaconda3/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column profiles.badges does not exist
-LINE 1: ..., profiles.resume_score AS profiles_resume_score, profiles.b...
-                                                             ^
-
-[SQL: SELECT profiles.id AS profiles_id, profiles.user_id AS profiles_user_id, profiles.headline AS profiles_headline, profiles.bio AS profiles_bio, profiles.skills AS profiles_skills, profiles.experience AS profiles_experience, profiles.education AS profiles_education, profiles.location AS profiles_location, profiles.github_url AS profiles_github_url, profiles.linkedin_url AS profiles_linkedin_url, profiles.resume_path AS profiles_resume_path, profiles.resume_text AS profiles_resume_text, profiles.resume_score AS profiles_resume_score, profiles.badges AS profiles_badges, profiles.visibility AS profiles_visibility 
-FROM profiles 
-WHERE %(param_1)s::UUID = profiles.user_id]
-[parameters: {'param_1': UUID('ff0adbd3-0600-42d2-86cb-faae784fc7ea')}]
-(Background on this error at: https://sqlalche.me/e/20/f405)
-127.0.0.1 - - [16/May/2026 23:30:00] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 23:30:00] "GET /user/dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
- * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/c035c14eb577_add_badges_to_profile.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/c035c14eb577_add_badges_to_profile.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/c035c14eb577_add_badges_to_profile.py', reloading
- * Restarting with watchdog (inotify)
- * Debugger is active!
- * Debugger PIN: 925-023-670
-127.0.0.1 - - [16/May/2026 23:31:59] "GET /user/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:31:59] "GET /static/uploads/avatars/avatar_ff0adbd3-0600-42d2-86cb-faae784fc7ea_Professional_headshot_in_formal_attire.png HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 23:32:00] "GET /ai/recommendations HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:32:02] "GET /user/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:32:02] "GET /static/uploads/avatars/avatar_ff0adbd3-0600-42d2-86cb-faae784fc7ea_Professional_headshot_in_formal_attire.png HTTP/1.1" 304 -
-127.0.0.1 - - [16/May/2026 23:32:02] "GET /ai/recommendations HTTP/1.1" 200 -
- * Detected change in '/home/vish/Downloads/Be_your/app/models/code_challenge.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/models/code_challenge.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/models/code_challenge.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/models/code_challenge.py', reloading
- * Restarting with watchdog (inotify)
- * Debugger is active!
- * Debugger PIN: 925-023-670
- * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
- * Restarting with watchdog (inotify)
- * Debugger is active!
- * Debugger PIN: 925-023-670
- * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
- * Restarting with watchdog (inotify)
- * Debugger is active!
- * Debugger PIN: 925-023-670
- * Detected change in '/home/vish/Downloads/Be_your/app/routes/playground.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/routes/playground.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/routes/playground.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/routes/playground.py', reloading
- * Restarting with watchdog (inotify)
- * Debugger is active!
- * Debugger PIN: 925-023-670
+ * Debugger PIN: 810-721-663
  * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
  * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
- * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/faa619f26c50_add_code_challenge_table.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/faa619f26c50_add_code_challenge_table.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/migrations/versions/faa619f26c50_add_code_challenge_table.py', reloading
+ * Debugger PIN: 810-721-663
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/sprint_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/sprint_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/sprint_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/sprint_service.py', reloading
+[DB-UPGRADE] Upgrading database with engine: postgresql
+[DB-UPGRADE] Adding column 'users.streak_count'...
+[DB-UPGRADE] Column 'users.streak_count' added successfully!
+[DB-UPGRADE] Adding column 'users.last_sprint_date'...
+[DB-UPGRADE] Column 'users.last_sprint_date' added successfully!
+[DB-UPGRADE] Adding column 'users.xp'...
+[DB-UPGRADE] Column 'users.xp' added successfully!
+[DB-UPGRADE] Adding column 'users.level'...
+[DB-UPGRADE] Column 'users.level' added successfully!
+[DB-UPGRADE] Table 'user_sprint_submissions' does not exist. Creating it...
+[DB-UPGRADE] Table 'user_sprint_submissions' created successfully!
+[DB-UPGRADE] Database upgrade checks completed.
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
-127.0.0.1 - - [16/May/2026 23:36:03] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:36:16] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:36:28] "GET /playground/playground/new HTTP/1.1" 302 -
-127.0.0.1 - - [16/May/2026 23:36:29] "GET /playground/playground/solve/128a0f3d-7508-4436-be08-4e94a6007654 HTTP/1.1" 200 -
+ * Debugger PIN: 810-721-663
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/sprint.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/sprint.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/sprint.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/sprint.py', reloading
+[DB-UPGRADE] Upgrading database with engine: postgresql
+[DB-UPGRADE] Column 'users.streak_count' already exists.
+[DB-UPGRADE] Column 'users.last_sprint_date' already exists.
+[DB-UPGRADE] Column 'users.xp' already exists.
+[DB-UPGRADE] Column 'users.level' already exists.
+[DB-UPGRADE] Table 'user_sprint_submissions' already exists.
+[DB-UPGRADE] Database upgrade checks completed.
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 810-721-663
  * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
  * Detected change in '/home/vish/Downloads/Be_your/app/__init__.py', reloading
+[DB-UPGRADE] Upgrading database with engine: postgresql
+[DB-UPGRADE] Column 'users.streak_count' already exists.
+[DB-UPGRADE] Column 'users.last_sprint_date' already exists.
+[DB-UPGRADE] Column 'users.xp' already exists.
+[DB-UPGRADE] Column 'users.level' already exists.
+[DB-UPGRADE] Table 'user_sprint_submissions' already exists.
+[DB-UPGRADE] Database upgrade checks completed.
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
-127.0.0.1 - - [16/May/2026 23:40:45] "GET /playground/playground/solve/128a0f3d-7508-4436-be08-4e94a6007654 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:41:48] "POST /playground/playground/submit/128a0f3d-7508-4436-be08-4e94a6007654 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:42:59] "GET /playground/playground/solve/128a0f3d-7508-4436-be08-4e94a6007654 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:43:22] "POST /playground/playground/submit/128a0f3d-7508-4436-be08-4e94a6007654 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:43:25] "GET /playground/playground/new HTTP/1.1" 302 -
-127.0.0.1 - - [16/May/2026 23:43:25] "GET /playground/playground/solve/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:43:26] "GET /playground/playground/solve/stackframe.js HTTP/1.1" 404 -
-127.0.0.1 - - [16/May/2026 23:44:02] "POST /playground/playground/submit/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:46:56] "GET /playground/playground/solve/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:46:56] "GET /playground/playground/solve/stackframe.js HTTP/1.1" 404 -
-127.0.0.1 - - [16/May/2026 23:47:39] "POST /playground/playground/submit/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
- * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Debugger PIN: 810-721-663
+127.0.0.1 - - [17/May/2026 12:27:26] "GET /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:28:06] "POST /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:28:50] "POST /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:29:45] "POST /auth/register HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:29:45] "GET /auth/verify-otp HTTP/1.1" 200 -
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-STARTTLS\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nSTARTTLS\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'STARTTLS\r\n'
+reply: b'220 2.0.0 Ready to start TLS\r\n'
+reply: retcode (220); Msg: b'2.0.0 Ready to start TLS'
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nAUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'AUTH PLAIN AHZpc2hiaGFub3BpeWFAZ21haWwuY29tAEljeGZ4b3lkdHNvbGJicWs=\r\n'
+reply: b'235 2.7.0 Accepted\r\n'
+reply: retcode (235); Msg: b'2.7.0 Accepted'
+send: 'mail FROM:<vishbhanopiya@gmail.com> size=3443\r\n'
+reply: b'250 2.1.0 OK 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.0 OK 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp'
+send: 'rcpt TO:<gamify_test@gmail.com>\r\n'
+reply: b'250 2.1.5 OK 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.5 OK 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp'
+send: 'data\r\n'
+reply: b'354 Go ahead 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp\r\n'
+reply: retcode (354); Msg: b'Go ahead 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp'
+data: (354, b'Go ahead 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp')
+send: b'Content-Type: multipart/mixed; boundary="===============8840752879564355825=="\r\nMIME-Version: 1.0\r\nSubject: Verify your Be Your account\r\nFrom: =?utf-8?q?Be_Your_Platform?= <vishbhanopiya@gmail.com>\r\nTo: gamify_test@gmail.com\r\nDate: Sun, 17 May 2026 12:29:47 +0530\r\nMessage-ID: <177900118588.15576.811682681607839561@vish.vish>\r\n\r\n--===============8840752879564355825==\r\nContent-Type: multipart/alternative;\r\n boundary="===============6120903436041474371=="\r\nMIME-Version: 1.0\r\n\r\n--===============6120903436041474371==\r\nContent-Type: text/plain; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n\r\n--===============6120903436041474371==\r\nContent-Type: text/html; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8">\r\n    <style>\r\n        body {\r\n            font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\r\n            background-color: #f4f4f5;\r\n            color: #09090b;\r\n            line-height: 1.6;\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 40px auto;\r\n            background-color: #ffffff;\r\n            border-radius: 12px;\r\n            overflow: hidden;\r\n            box-shadow: 0 4px 20px rgba(0,0,0,0.05);\r\n        }\r\n        .header {\r\n            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\r\n            padding: 30px;\r\n            text-align: center;\r\n        }\r\n        .header h1 {\r\n            color: #ffffff;\r\n            margin: 0;\r\n            font-size: 24px;\r\n            letter-spacing: 1px;\r\n        }\r\n        .content {\r\n            padding: 40px 30px;\r\n            text-align: center;\r\n        }\r\n        .otp-box {\r\n            background-color: #f8fafc;\r\n            border: 2px dashed #cbd5e1;\r\n            border-radius: 12px;\r\n            padding: 20px;\r\n            margin: 30px auto;\r\n            max-width: 300px;\r\n            font-size: 36px;\r\n            font-weight: bold;\r\n            letter-spacing: 10px;\r\n            color: #4f46e5;\r\n            text-align: center;\r\n        }\r\n        .footer {\r\n            background-color: #fafafa;\r\n            padding: 20px;\r\n            text-align: center;\r\n            font-size: 12px;\r\n            color: #71717a;\r\n            border-top: 1px solid #e4e4e7;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class="container">\r\n        <div class="header">\r\n            <h1>BE YOUR</h1>\r\n        </div>\r\n        <div class="content">\r\n            <h2 style="margin-top: 0;">Verify Your Email Address</h2>\r\n            <p>Hi <strong>Gamify Champion</strong>,</p>\r\n            \r\n            <p>Welcome to Be Your! To complete your registration and secure your account, please enter the following 6-digit verification code on the website:</p>\r\n            \r\n            <div class="otp-box">\r\n                613790\r\n            </div>\r\n            \r\n            <p style="font-size: 13px; color: #71717a;">This code will expire in 15 minutes. If you did not request this verification, please ignore this email.</p>\r\n            \r\n        </div>\r\n        <div class="footer">\r\n            <p>Engineered to decode human potential.</p>\r\n            <p>&copy; 2026 NeuralPath Labs. All rights reserved.</p>\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>\r\n--===============6120903436041474371==--\r\n\r\n--===============8840752879564355825==--\r\n.\r\n'
+reply: b'250 2.0.0 OK  1779001189 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.0.0 OK  1779001189 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp'
+data: (250, b'2.0.0 OK  1779001189 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp')
+send: 'quit\r\n'
+reply: b'221 2.0.0 closing connection 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp\r\n'
+reply: retcode (221); Msg: b'2.0.0 closing connection 98e67ed59e1d1-369517aadb1sm7251645a91.9 - gsmtp'
+[2026-05-17 12:29:49,429] INFO in email: Email sent successfully to ['gamify_test@gmail.com']
+127.0.0.1 - - [17/May/2026 12:29:53] "GET /user/dashboard HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:29:53] "GET /auth/login?next=/user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:30:46] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:30:46] "GET /auth/verify-otp HTTP/1.1" 200 -
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-STARTTLS\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nSTARTTLS\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'STARTTLS\r\n'
+reply: b'220 2.0.0 Ready to start TLS\r\n'
+reply: retcode (220); Msg: b'2.0.0 Ready to start TLS'
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nAUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'AUTH PLAIN AHZpc2hiaGFub3BpeWFAZ21haWwuY29tAEljeGZ4b3lkdHNvbGJicWs=\r\n'
+reply: b'235 2.7.0 Accepted\r\n'
+reply: retcode (235); Msg: b'2.7.0 Accepted'
+send: 'mail FROM:<vishbhanopiya@gmail.com> size=3445\r\n'
+reply: b'250 2.1.0 OK 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.0 OK 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp'
+send: 'rcpt TO:<gamify_test@gmail.com>\r\n'
+reply: b'250 2.1.5 OK 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.5 OK 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp'
+send: 'data\r\n'
+reply: b'354 Go ahead 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp\r\n'
+reply: retcode (354); Msg: b'Go ahead 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp'
+data: (354, b'Go ahead 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp')
+send: b'Content-Type: multipart/mixed; boundary="===============3659683356420207955=="\r\nMIME-Version: 1.0\r\nSubject: Verify your Be Your account\r\nFrom: =?utf-8?q?Be_Your_Platform?= <vishbhanopiya@gmail.com>\r\nTo: gamify_test@gmail.com\r\nDate: Sun, 17 May 2026 12:30:48 +0530\r\nMessage-ID: <177900124689.15576.10263838751696524979@vish.vish>\r\n\r\n--===============3659683356420207955==\r\nContent-Type: multipart/alternative;\r\n boundary="===============8743845685129692872=="\r\nMIME-Version: 1.0\r\n\r\n--===============8743845685129692872==\r\nContent-Type: text/plain; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n\r\n--===============8743845685129692872==\r\nContent-Type: text/html; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8">\r\n    <style>\r\n        body {\r\n            font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\r\n            background-color: #f4f4f5;\r\n            color: #09090b;\r\n            line-height: 1.6;\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 40px auto;\r\n            background-color: #ffffff;\r\n            border-radius: 12px;\r\n            overflow: hidden;\r\n            box-shadow: 0 4px 20px rgba(0,0,0,0.05);\r\n        }\r\n        .header {\r\n            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\r\n            padding: 30px;\r\n            text-align: center;\r\n        }\r\n        .header h1 {\r\n            color: #ffffff;\r\n            margin: 0;\r\n            font-size: 24px;\r\n            letter-spacing: 1px;\r\n        }\r\n        .content {\r\n            padding: 40px 30px;\r\n            text-align: center;\r\n        }\r\n        .otp-box {\r\n            background-color: #f8fafc;\r\n            border: 2px dashed #cbd5e1;\r\n            border-radius: 12px;\r\n            padding: 20px;\r\n            margin: 30px auto;\r\n            max-width: 300px;\r\n            font-size: 36px;\r\n            font-weight: bold;\r\n            letter-spacing: 10px;\r\n            color: #4f46e5;\r\n            text-align: center;\r\n        }\r\n        .footer {\r\n            background-color: #fafafa;\r\n            padding: 20px;\r\n            text-align: center;\r\n            font-size: 12px;\r\n            color: #71717a;\r\n            border-top: 1px solid #e4e4e7;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class="container">\r\n        <div class="header">\r\n            <h1>BE YOUR</h1>\r\n        </div>\r\n        <div class="content">\r\n            <h2 style="margin-top: 0;">Verify Your Email Address</h2>\r\n            <p>Hi <strong>Gamify Champion</strong>,</p>\r\n            \r\n            <p>Welcome to Be Your! To complete your registration and secure your account, please enter the following 6-digit verification code on the website:</p>\r\n            \r\n            <div class="otp-box">\r\n                336085\r\n            </div>\r\n            \r\n            <p style="font-size: 13px; color: #71717a;">This code will expire in 15 minutes. If you did not request this verification, please ignore this email.</p>\r\n            \r\n        </div>\r\n        <div class="footer">\r\n            <p>Engineered to decode human potential.</p>\r\n            <p>&copy; 2026 NeuralPath Labs. All rights reserved.</p>\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>\r\n--===============8743845685129692872==--\r\n\r\n--===============3659683356420207955==--\r\n.\r\n'
+reply: b'250 2.0.0 OK  1779001249 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.0.0 OK  1779001249 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp'
+data: (250, b'2.0.0 OK  1779001249 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp')
+send: 'quit\r\n'
+reply: b'221 2.0.0 closing connection 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp\r\n'
+reply: retcode (221); Msg: b'2.0.0 closing connection 98e67ed59e1d1-36951584654sm7456083a91.7 - gsmtp'
+[2026-05-17 12:30:50,255] INFO in email: Email sent successfully to ['gamify_test@gmail.com']
+127.0.0.1 - - [17/May/2026 12:31:43] "POST /auth/verify-otp HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:31:52] "GET /user/sprint HTTP/1.1" 308 -
+127.0.0.1 - - [17/May/2026 12:31:52] "GET /user/sprint/ HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:31:52] "GET /auth/login?next=/user/sprint/ HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:32:00] "GET /admin HTTP/1.1" 404 -
+127.0.0.1 - - [17/May/2026 12:32:16] "GET /auth/verify-otp HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:32:47] "POST /auth/verify-otp HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:33:04] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:33:11] "GET /user/sprint/ HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:33:12] "GET /auth/login?next=/user/sprint/ HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:33:21] "POST /auth/verify-otp HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:33:28] "GET /debug HTTP/1.1" 404 -
+127.0.0.1 - - [17/May/2026 12:33:30] "POST /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:33:34] "GET /auth/verify-otp HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:33:38] "GET /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:34:05] "POST /auth/resend-otp HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:34:05] "GET /auth/verify-otp HTTP/1.1" 200 -
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-STARTTLS\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nSTARTTLS\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'STARTTLS\r\n'
+reply: b'220 2.0.0 Ready to start TLS\r\n'
+reply: retcode (220); Msg: b'2.0.0 Ready to start TLS'
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nAUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'AUTH PLAIN AHZpc2hiaGFub3BpeWFAZ21haWwuY29tAEljeGZ4b3lkdHNvbGJicWs=\r\n'
+reply: b'235 2.7.0 Accepted\r\n'
+reply: retcode (235); Msg: b'2.7.0 Accepted'
+send: 'mail FROM:<vishbhanopiya@gmail.com> size=3445\r\n'
+reply: b'250 2.1.0 OK 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.0 OK 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp'
+send: 'rcpt TO:<gamify_test@gmail.com>\r\n'
+reply: b'250 2.1.5 OK 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.5 OK 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp'
+send: 'data\r\n'
+reply: b'354 Go ahead 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp\r\n'
+reply: retcode (354); Msg: b'Go ahead 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp'
+data: (354, b'Go ahead 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp')
+send: b'Content-Type: multipart/mixed; boundary="===============5239862229004621332=="\r\nMIME-Version: 1.0\r\nSubject: Verify your Be Your account\r\nFrom: =?utf-8?q?Be_Your_Platform?= <vishbhanopiya@gmail.com>\r\nTo: gamify_test@gmail.com\r\nDate: Sun, 17 May 2026 12:34:07 +0530\r\nMessage-ID: <177900144554.15576.10382983486810096085@vish.vish>\r\n\r\n--===============5239862229004621332==\r\nContent-Type: multipart/alternative;\r\n boundary="===============4213955628522785293=="\r\nMIME-Version: 1.0\r\n\r\n--===============4213955628522785293==\r\nContent-Type: text/plain; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n\r\n--===============4213955628522785293==\r\nContent-Type: text/html; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8">\r\n    <style>\r\n        body {\r\n            font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\r\n            background-color: #f4f4f5;\r\n            color: #09090b;\r\n            line-height: 1.6;\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 40px auto;\r\n            background-color: #ffffff;\r\n            border-radius: 12px;\r\n            overflow: hidden;\r\n            box-shadow: 0 4px 20px rgba(0,0,0,0.05);\r\n        }\r\n        .header {\r\n            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\r\n            padding: 30px;\r\n            text-align: center;\r\n        }\r\n        .header h1 {\r\n            color: #ffffff;\r\n            margin: 0;\r\n            font-size: 24px;\r\n            letter-spacing: 1px;\r\n        }\r\n        .content {\r\n            padding: 40px 30px;\r\n            text-align: center;\r\n        }\r\n        .otp-box {\r\n            background-color: #f8fafc;\r\n            border: 2px dashed #cbd5e1;\r\n            border-radius: 12px;\r\n            padding: 20px;\r\n            margin: 30px auto;\r\n            max-width: 300px;\r\n            font-size: 36px;\r\n            font-weight: bold;\r\n            letter-spacing: 10px;\r\n            color: #4f46e5;\r\n            text-align: center;\r\n        }\r\n        .footer {\r\n            background-color: #fafafa;\r\n            padding: 20px;\r\n            text-align: center;\r\n            font-size: 12px;\r\n            color: #71717a;\r\n            border-top: 1px solid #e4e4e7;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class="container">\r\n        <div class="header">\r\n            <h1>BE YOUR</h1>\r\n        </div>\r\n        <div class="content">\r\n            <h2 style="margin-top: 0;">Verify Your Email Address</h2>\r\n            <p>Hi <strong>Gamify Champion</strong>,</p>\r\n            \r\n            <p>Welcome to Be Your! To complete your registration and secure your account, please enter the following 6-digit verification code on the website:</p>\r\n            \r\n            <div class="otp-box">\r\n                485511\r\n            </div>\r\n            \r\n            <p style="font-size: 13px; color: #71717a;">This code will expire in 15 minutes. If you did not request this verification, please ignore this email.</p>\r\n            \r\n        </div>\r\n        <div class="footer">\r\n            <p>Engineered to decode human potential.</p>\r\n            <p>&copy; 2026 NeuralPath Labs. All rights reserved.</p>\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>\r\n--===============4213955628522785293==--\r\n\r\n--===============5239862229004621332==--\r\n.\r\n'
+reply: b'250 2.0.0 OK  1779001448 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.0.0 OK  1779001448 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp'
+data: (250, b'2.0.0 OK  1779001448 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp')
+send: 'quit\r\n'
+reply: b'221 2.0.0 closing connection 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp\r\n'
+reply: retcode (221); Msg: b'2.0.0 closing connection 41be03b00d2f7-c82bb114c08sm10344849a12.23 - gsmtp'
+[2026-05-17 12:34:09,000] INFO in email: Email sent successfully to ['gamify_test@gmail.com']
+127.0.0.1 - - [17/May/2026 12:34:33] "POST /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:34:41] "POST /auth/verify-otp HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:35:16] "GET /auth/verify-otp HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:35:30] "POST /auth/register HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:35:30] "GET /auth/verify-otp HTTP/1.1" 200 -
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-STARTTLS\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nSTARTTLS\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'STARTTLS\r\n'
+reply: b'220 2.0.0 Ready to start TLS\r\n'
+reply: retcode (220); Msg: b'2.0.0 Ready to start TLS'
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nAUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'AUTH PLAIN AHZpc2hiaGFub3BpeWFAZ21haWwuY29tAEljeGZ4b3lkdHNvbGJicWs=\r\n'
+reply: b'235 2.7.0 Accepted\r\n'
+reply: retcode (235); Msg: b'2.7.0 Accepted'
+send: 'mail FROM:<vishbhanopiya@gmail.com> size=3445\r\n'
+reply: b'250 2.1.0 OK d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.0 OK d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp'
+send: 'rcpt TO:<vishal.bhanopiya@cdgi.edu.in>\r\n'
+reply: b'250 2.1.5 OK d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.5 OK d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp'
+send: 'data\r\n'
+reply: b'354 Go ahead d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp\r\n'
+reply: retcode (354); Msg: b'Go ahead d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp'
+data: (354, b'Go ahead d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp')
+send: b'Content-Type: multipart/mixed; boundary="===============5017541587349557285=="\r\nMIME-Version: 1.0\r\nSubject: Verify your Be Your account\r\nFrom: =?utf-8?q?Be_Your_Platform?= <vishbhanopiya@gmail.com>\r\nTo: vishal.bhanopiya@cdgi.edu.in\r\nDate: Sun, 17 May 2026 12:35:31 +0530\r\nMessage-ID: <177900153004.15576.16992700570889089348@vish.vish>\r\n\r\n--===============5017541587349557285==\r\nContent-Type: multipart/alternative;\r\n boundary="===============4233737578326392878=="\r\nMIME-Version: 1.0\r\n\r\n--===============4233737578326392878==\r\nContent-Type: text/plain; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n\r\n--===============4233737578326392878==\r\nContent-Type: text/html; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8">\r\n    <style>\r\n        body {\r\n            font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\r\n            background-color: #f4f4f5;\r\n            color: #09090b;\r\n            line-height: 1.6;\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 40px auto;\r\n            background-color: #ffffff;\r\n            border-radius: 12px;\r\n            overflow: hidden;\r\n            box-shadow: 0 4px 20px rgba(0,0,0,0.05);\r\n        }\r\n        .header {\r\n            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\r\n            padding: 30px;\r\n            text-align: center;\r\n        }\r\n        .header h1 {\r\n            color: #ffffff;\r\n            margin: 0;\r\n            font-size: 24px;\r\n            letter-spacing: 1px;\r\n        }\r\n        .content {\r\n            padding: 40px 30px;\r\n            text-align: center;\r\n        }\r\n        .otp-box {\r\n            background-color: #f8fafc;\r\n            border: 2px dashed #cbd5e1;\r\n            border-radius: 12px;\r\n            padding: 20px;\r\n            margin: 30px auto;\r\n            max-width: 300px;\r\n            font-size: 36px;\r\n            font-weight: bold;\r\n            letter-spacing: 10px;\r\n            color: #4f46e5;\r\n            text-align: center;\r\n        }\r\n        .footer {\r\n            background-color: #fafafa;\r\n            padding: 20px;\r\n            text-align: center;\r\n            font-size: 12px;\r\n            color: #71717a;\r\n            border-top: 1px solid #e4e4e7;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class="container">\r\n        <div class="header">\r\n            <h1>BE YOUR</h1>\r\n        </div>\r\n        <div class="content">\r\n            <h2 style="margin-top: 0;">Verify Your Email Address</h2>\r\n            <p>Hi <strong>Vishal  </strong>,</p>\r\n            \r\n            <p>Welcome to Be Your! To complete your registration and secure your account, please enter the following 6-digit verification code on the website:</p>\r\n            \r\n            <div class="otp-box">\r\n                238878\r\n            </div>\r\n            \r\n            <p style="font-size: 13px; color: #71717a;">This code will expire in 15 minutes. If you did not request this verification, please ignore this email.</p>\r\n            \r\n        </div>\r\n        <div class="footer">\r\n            <p>Engineered to decode human potential.</p>\r\n            <p>&copy; 2026 NeuralPath Labs. All rights reserved.</p>\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>\r\n--===============4233737578326392878==--\r\n\r\n--===============5017541587349557285==--\r\n.\r\n'
+reply: b'250 2.0.0 OK  1779001533 d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.0.0 OK  1779001533 d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp'
+data: (250, b'2.0.0 OK  1779001533 d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp')
+send: 'quit\r\n'
+reply: b'221 2.0.0 closing connection d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp\r\n'
+reply: retcode (221); Msg: b'2.0.0 closing connection d9443c01a7336-2bd5cfe47bdsm113194535ad.44 - gsmtp'
+[2026-05-17 12:35:33,678] INFO in email: Email sent successfully to ['vishal.bhanopiya@cdgi.edu.in']
+127.0.0.1 - - [17/May/2026 12:35:58] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:36:05] "POST /auth/verify-otp HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:36:19] "POST /auth/verify-otp HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:36:19] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:36:27] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:36:27] "GET /auth/verify-otp HTTP/1.1" 200 -
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-STARTTLS\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nSTARTTLS\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'STARTTLS\r\n'
+reply: b'220 2.0.0 Ready to start TLS\r\n'
+reply: retcode (220); Msg: b'2.0.0 Ready to start TLS'
+send: 'ehlo vish.vish\r\n'
+reply: b'250-smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\r\n'
+reply: b'250-SIZE 35882577\r\n'
+reply: b'250-8BITMIME\r\n'
+reply: b'250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n'
+reply: b'250-ENHANCEDSTATUSCODES\r\n'
+reply: b'250-PIPELINING\r\n'
+reply: b'250-CHUNKING\r\n'
+reply: b'250 SMTPUTF8\r\n'
+reply: retcode (250); Msg: b'smtp.gmail.com at your service, [2401:4900:1c19:ed02:2da3:c88b:14a7:f390]\nSIZE 35882577\n8BITMIME\nAUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\nENHANCEDSTATUSCODES\nPIPELINING\nCHUNKING\nSMTPUTF8'
+send: 'AUTH PLAIN AHZpc2hiaGFub3BpeWFAZ21haWwuY29tAEljeGZ4b3lkdHNvbGJicWs=\r\n'
+reply: b'235 2.7.0 Accepted\r\n'
+reply: retcode (235); Msg: b'2.7.0 Accepted'
+send: 'mail FROM:<vishbhanopiya@gmail.com> size=3444\r\n'
+reply: b'250 2.1.0 OK 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.0 OK 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp'
+send: 'rcpt TO:<gamify_test@gmail.com>\r\n'
+reply: b'250 2.1.5 OK 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.1.5 OK 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp'
+send: 'data\r\n'
+reply: b'354 Go ahead 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp\r\n'
+reply: retcode (354); Msg: b'Go ahead 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp'
+data: (354, b'Go ahead 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp')
+send: b'Content-Type: multipart/mixed; boundary="===============5988585108128824892=="\r\nMIME-Version: 1.0\r\nSubject: Verify your Be Your account\r\nFrom: =?utf-8?q?Be_Your_Platform?= <vishbhanopiya@gmail.com>\r\nTo: gamify_test@gmail.com\r\nDate: Sun, 17 May 2026 12:36:28 +0530\r\nMessage-ID: <177900158759.15576.6354813323229669569@vish.vish>\r\n\r\n--===============5988585108128824892==\r\nContent-Type: multipart/alternative;\r\n boundary="===============4340968074520441567=="\r\nMIME-Version: 1.0\r\n\r\n--===============4340968074520441567==\r\nContent-Type: text/plain; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n\r\n--===============4340968074520441567==\r\nContent-Type: text/html; charset="utf-8"\r\nMIME-Version: 1.0\r\nContent-Transfer-Encoding: 7bit\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset="utf-8">\r\n    <style>\r\n        body {\r\n            font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\r\n            background-color: #f4f4f5;\r\n            color: #09090b;\r\n            line-height: 1.6;\r\n            margin: 0;\r\n            padding: 0;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: 40px auto;\r\n            background-color: #ffffff;\r\n            border-radius: 12px;\r\n            overflow: hidden;\r\n            box-shadow: 0 4px 20px rgba(0,0,0,0.05);\r\n        }\r\n        .header {\r\n            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\r\n            padding: 30px;\r\n            text-align: center;\r\n        }\r\n        .header h1 {\r\n            color: #ffffff;\r\n            margin: 0;\r\n            font-size: 24px;\r\n            letter-spacing: 1px;\r\n        }\r\n        .content {\r\n            padding: 40px 30px;\r\n            text-align: center;\r\n        }\r\n        .otp-box {\r\n            background-color: #f8fafc;\r\n            border: 2px dashed #cbd5e1;\r\n            border-radius: 12px;\r\n            padding: 20px;\r\n            margin: 30px auto;\r\n            max-width: 300px;\r\n            font-size: 36px;\r\n            font-weight: bold;\r\n            letter-spacing: 10px;\r\n            color: #4f46e5;\r\n            text-align: center;\r\n        }\r\n        .footer {\r\n            background-color: #fafafa;\r\n            padding: 20px;\r\n            text-align: center;\r\n            font-size: 12px;\r\n            color: #71717a;\r\n            border-top: 1px solid #e4e4e7;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class="container">\r\n        <div class="header">\r\n            <h1>BE YOUR</h1>\r\n        </div>\r\n        <div class="content">\r\n            <h2 style="margin-top: 0;">Verify Your Email Address</h2>\r\n            <p>Hi <strong>Gamify Champion</strong>,</p>\r\n            \r\n            <p>Welcome to Be Your! To complete your registration and secure your account, please enter the following 6-digit verification code on the website:</p>\r\n            \r\n            <div class="otp-box">\r\n                557755\r\n            </div>\r\n            \r\n            <p style="font-size: 13px; color: #71717a;">This code will expire in 15 minutes. If you did not request this verification, please ignore this email.</p>\r\n            \r\n        </div>\r\n        <div class="footer">\r\n            <p>Engineered to decode human potential.</p>\r\n            <p>&copy; 2026 NeuralPath Labs. All rights reserved.</p>\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>\r\n--===============4340968074520441567==--\r\n\r\n--===============5988585108128824892==--\r\n.\r\n'
+reply: b'250 2.0.0 OK  1779001590 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp\r\n'
+reply: retcode (250); Msg: b'2.0.0 OK  1779001590 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp'
+data: (250, b'2.0.0 OK  1779001590 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp')
+send: 'quit\r\n'
+reply: b'221 2.0.0 closing connection 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp\r\n'
+reply: retcode (221); Msg: b'2.0.0 closing connection 41be03b00d2f7-c82bb123986sm10680262a12.32 - gsmtp'
+[2026-05-17 12:36:30,688] INFO in email: Email sent successfully to ['gamify_test@gmail.com']
+127.0.0.1 - - [17/May/2026 12:36:35] "POST /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:36:40] "POST /auth/verify-otp HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:37:36] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:37:37] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:37:39] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:37:39] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:38:16] "GET /ai/outreach HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:38:18] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:38:42] "GET /user/sprint/ HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:38:44] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:38:44] "POST /auth/verify-otp HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:38:45] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:39:14] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:39:16] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:39:42] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:39:42] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:40:12] "GET /user/dashboard HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:40:12] "GET /auth/login?next=/user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:40:13] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [17/May/2026 12:40:36] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:40:36] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:40:37] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:40:38] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:40:53] "GET /user/sprint/ HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:40:54] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:41:37] "POST /user/sprint/submit HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:41:41] "GET /user/sprint/ HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:41:41] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:42:00] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:42:00] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:42:01] "GET /user/notifications/count HTTP/1.1" 200 -
+ * Detected change in '/home/vish/Downloads/Be_your/app/utils/db_upgrade.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/utils/db_upgrade.py', reloading
+[DB-UPGRADE] Upgrading database with engine: postgresql
+[DB-UPGRADE] Column 'users.streak_count' already exists.
+[DB-UPGRADE] Column 'users.last_sprint_date' already exists.
+[DB-UPGRADE] Column 'users.xp' already exists.
+[DB-UPGRADE] Column 'users.level' already exists.
+[DB-UPGRADE] Table 'user_sprint_submissions' already exists.
+[DB-UPGRADE] Database upgrade checks completed.
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
-127.0.0.1 - - [16/May/2026 23:50:42] "GET /playground/playground/solve/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:50:47] "GET /playground/playground/solve/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:51:12] "POST /playground/playground/submit/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:51:46] "POST /playground/playground/submit/9f6c8496-760f-4116-9123-c869a7ff929d HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:51:55] "GET /playground/playground/new HTTP/1.1" 302 -
-127.0.0.1 - - [16/May/2026 23:51:55] "GET /playground/playground/solve/45e814ca-c381-41af-aef4-dd8b87f775b8 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:52:33] "POST /playground/playground/submit/45e814ca-c381-41af-aef4-dd8b87f775b8 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:53:20] "POST /playground/playground/submit/45e814ca-c381-41af-aef4-dd8b87f775b8 HTTP/1.1" 200 -
- * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
- * Detected change in '/home/vish/Downloads/Be_your/app/services/ai_service.py', reloading
+ * Debugger PIN: 810-721-663
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/portfolio_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/portfolio_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/portfolio_service.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/services/portfolio_service.py', reloading
+[DB-UPGRADE] Upgrading database with engine: postgresql
+[DB-UPGRADE] Column 'users.streak_count' already exists.
+[DB-UPGRADE] Column 'users.last_sprint_date' already exists.
+[DB-UPGRADE] Column 'users.xp' already exists.
+[DB-UPGRADE] Column 'users.level' already exists.
+[DB-UPGRADE] Table 'user_sprint_submissions' already exists.
+[DB-UPGRADE] Adding column 'profiles.portfolio_theme'...
+[DB-UPGRADE] Column 'profiles.portfolio_theme' added successfully!
+[DB-UPGRADE] Adding column 'profiles.portfolio_projects'...
+[DB-UPGRADE] Column 'profiles.portfolio_projects' added successfully!
+[DB-UPGRADE] Adding column 'profiles.portfolio_socials'...
+[DB-UPGRADE] Column 'profiles.portfolio_socials' added successfully!
+[DB-UPGRADE] Database upgrade checks completed.
  * Restarting with watchdog (inotify)
  * Debugger is active!
- * Debugger PIN: 925-023-670
-127.0.0.1 - - [16/May/2026 23:54:27] "GET /playground/playground/solve/45e814ca-c381-41af-aef4-dd8b87f775b8 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:54:45] "POST /playground/playground/submit/45e814ca-c381-41af-aef4-dd8b87f775b8 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:55:18] "GET /jobs/ HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:55:22] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:58:25] "GET /portfolio/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:58:28] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:58:35] "GET /playground/playground/new HTTP/1.1" 302 -
-127.0.0.1 - - [16/May/2026 23:58:36] "GET /playground/playground/solve/4aa44b86-64fa-48e4-96f1-3ad29566a390 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:58:45] "POST /playground/playground/submit/4aa44b86-64fa-48e4-96f1-3ad29566a390 HTTP/1.1" 200 -
-127.0.0.1 - - [16/May/2026 23:59:32] "GET /playground/playground/solve/4aa44b86-64fa-48e4-96f1-3ad29566a390 HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:02:12] "GET /playground/playground/solve/4aa44b86-64fa-48e4-96f1-3ad29566a390 HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:02:23] "POST /playground/playground/submit/4aa44b86-64fa-48e4-96f1-3ad29566a390 HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:02:33] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:04:34] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:04:38] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:04:39] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:04:53] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:10:52] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:11:08] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:11:11] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:11:16] "GET /playground/playground HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:11:19] "GET /portfolio/dashboard HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:11:22] "GET /resume/resume/optimize HTTP/1.1" 200 -
-127.0.0.1 - - [17/May/2026 00:11:27] "GET /user/roadmap HTTP/1.1" 200 -
+ * Debugger PIN: 810-721-663
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/portfolio.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/portfolio.py', reloading
+ * Detected change in '/home/vish/Downloads/Be_your/app/routes/portfolio.py', reloading
+[DB-UPGRADE] Upgrading database with engine: postgresql
+[DB-UPGRADE] Column 'users.streak_count' already exists.
+[DB-UPGRADE] Column 'users.last_sprint_date' already exists.
+[DB-UPGRADE] Column 'users.xp' already exists.
+[DB-UPGRADE] Column 'users.level' already exists.
+[DB-UPGRADE] Table 'user_sprint_submissions' already exists.
+[DB-UPGRADE] Column 'profiles.portfolio_theme' already exists.
+[DB-UPGRADE] Column 'profiles.portfolio_projects' already exists.
+[DB-UPGRADE] Column 'profiles.portfolio_socials' already exists.
+[DB-UPGRADE] Database upgrade checks completed.
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 810-721-663
+127.0.0.1 - - [17/May/2026 12:46:36] "GET /portfolio/builder HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:46:36] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:46:50] "POST /portfolio/generate HTTP/1.1" 400 -
+127.0.0.1 - - [17/May/2026 12:47:08] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:47:09] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:47:09] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:47:20] "GET /auth/logout HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:47:20] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:47:50] "POST /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:48:06] "GET /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:48:56] "POST /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:50:02] "POST /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:51:01] "POST /auth/register HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:51:12] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:51:50] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:51:50] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:51:51] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:51:51] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:52:26] "GET /portfolio/builder HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:52:27] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:52:35] "POST /portfolio/generate HTTP/1.1" 400 -
+127.0.0.1 - - [17/May/2026 12:52:42] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:52:42] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:52:42] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:52:55] "GET /user/edit-profile HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:52:55] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:16] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:16] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:16] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:24] "GET /playground/playground HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:25] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:37] "GET /jobs/ HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:37] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:43] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:43] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:43] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:52] "GET /user/sprint/ HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:52] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:58] "GET /portfolio/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:53:59] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:54:13] "GET /auth/logout HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:54:13] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:54:49] "POST /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:55:45] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:55:45] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:55:45] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:55:45] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:57:38] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:58:30] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:58:30] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:58:31] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:58:42] "GET /jobs/ HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:58:42] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:58:52] "GET /jobs/98b453a3-c3ed-4b36-8441-2683d1f1057e HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:58:52] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 12:59:14] "GET /auth/logout HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 12:59:14] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:01:01] "POST /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:01:54] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 13:01:54] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:01:54] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:01:54] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:02:10] "GET /user/edit-profile HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:02:11] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:02:47] "POST /user/edit-profile HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 13:02:47] "GET /user/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:02:47] "GET /ai/recommendations HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:02:47] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:02:55] "GET /portfolio/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:02:56] "GET /user/notifications/count HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:03:05] "POST /portfolio/analyze HTTP/1.1" 404 -
+127.0.0.1 - - [17/May/2026 13:04:53] "GET /portfolio/dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:05:31] "GET /portfolio/builder HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:05:50] "GET /portfolio/builder HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:06:06] "GET /portfolio/builder HTTP/1.1" 302 -
+127.0.0.1 - - [17/May/2026 13:06:06] "GET /auth/login?next=/portfolio/builder HTTP/1.1" 200 -
+127.0.0.1 - - [17/May/2026 13:06:06] "GET /favicon.ico HTTP/1.1" 404 -

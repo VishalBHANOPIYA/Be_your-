@@ -95,3 +95,65 @@
 2026-05-16 23:59:27.803 IST [9340] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.306 s, sync=0.003 s, total=0.318 s; sync files=4, longest=0.002 s, average=0.001 s; distance=8 kB, estimate=143 kB; lsn=0/1AECD08, redo lsn=0/1AECCB0
 2026-05-17 00:04:27.901 IST [9340] LOG:  checkpoint starting: time
 2026-05-17 00:04:28.021 IST [9340] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.104 s, sync=0.004 s, total=0.120 s; sync files=2, longest=0.002 s, average=0.002 s; distance=6 kB, estimate=130 kB; lsn=0/1AEE5B0, redo lsn=0/1AEE558
+2026-05-17 00:29:36.401 IST [9339] LOG:  received smart shutdown request
+2026-05-17 00:29:36.405 IST [31253] FATAL:  terminating connection due to administrator command
+2026-05-17 00:29:36.413 IST [9339] LOG:  background worker "logical replication launcher" (PID 9345) exited with exit code 1
+2026-05-17 00:29:36.418 IST [9340] LOG:  shutting down
+2026-05-17 00:29:36.419 IST [9340] LOG:  checkpoint starting: shutdown immediate
+2026-05-17 00:29:36.428 IST [9340] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.011 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=117 kB; lsn=0/1AEE660, redo lsn=0/1AEE660
+2026-05-17 00:29:36.442 IST [9339] LOG:  database system is shut down
+2026-05-17 11:07:35.759 IST [9494] LOG:  starting PostgreSQL 17.4 (Debian 17.4-1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-17) 14.2.0, 64-bit
+2026-05-17 11:07:35.759 IST [9494] LOG:  could not bind IPv6 address "::1": Address already in use
+2026-05-17 11:07:35.759 IST [9494] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2026-05-17 11:07:35.759 IST [9494] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2026-05-17 11:07:35.759 IST [9494] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2026-05-17 11:07:35.759 IST [9494] WARNING:  could not create listen socket for "localhost"
+2026-05-17 11:07:35.759 IST [9494] FATAL:  could not create any TCP/IP sockets
+2026-05-17 11:07:35.761 IST [9494] LOG:  database system is shut down
+2026-05-17 11:07:42.907 IST [9504] LOG:  starting PostgreSQL 17.4 (Debian 17.4-1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-17) 14.2.0, 64-bit
+2026-05-17 11:07:42.907 IST [9504] LOG:  listening on IPv6 address "::1", port 5433
+2026-05-17 11:07:42.907 IST [9504] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-05-17 11:07:42.909 IST [9504] FATAL:  could not create lock file "/var/run/postgresql/.s.PGSQL.5433.lock": Permission denied
+2026-05-17 11:07:42.910 IST [9504] LOG:  database system is shut down
+2026-05-17 11:07:49.152 IST [9513] LOG:  starting PostgreSQL 17.4 (Debian 17.4-1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-17) 14.2.0, 64-bit
+2026-05-17 11:07:49.152 IST [9513] LOG:  listening on IPv6 address "::1", port 5433
+2026-05-17 11:07:49.152 IST [9513] LOG:  listening on IPv4 address "127.0.0.1", port 5433
+2026-05-17 11:07:49.156 IST [9513] LOG:  listening on Unix socket "/home/vish/Downloads/Be_your/db_data/.s.PGSQL.5433"
+2026-05-17 11:07:49.164 IST [9516] LOG:  database system was shut down at 2026-05-17 00:29:36 IST
+2026-05-17 11:07:49.174 IST [9513] LOG:  database system is ready to accept connections
+2026-05-17 11:12:49.265 IST [9514] LOG:  checkpoint starting: time
+2026-05-17 11:12:50.688 IST [9514] LOG:  checkpoint complete: wrote 17 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.412 s, sync=0.004 s, total=1.425 s; sync files=16, longest=0.002 s, average=0.001 s; distance=40 kB, estimate=40 kB; lsn=0/1AF86D0, redo lsn=0/1AF8678
+2026-05-17 11:17:49.786 IST [9514] LOG:  checkpoint starting: time
+2026-05-17 11:17:50.308 IST [9514] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.507 s, sync=0.004 s, total=0.523 s; sync files=6, longest=0.003 s, average=0.001 s; distance=11 kB, estimate=37 kB; lsn=0/1AFB360, redo lsn=0/1AFB308
+2026-05-17 11:52:50.005 IST [9514] LOG:  checkpoint starting: time
+2026-05-17 11:52:50.524 IST [9514] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.506 s, sync=0.003 s, total=0.520 s; sync files=6, longest=0.002 s, average=0.001 s; distance=13 kB, estimate=34 kB; lsn=0/1AFE8F0, redo lsn=0/1AFE898
+2026-05-17 12:17:50.929 IST [9514] LOG:  checkpoint starting: time
+2026-05-17 12:17:51.445 IST [9514] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.507 s, sync=0.003 s, total=0.516 s; sync files=6, longest=0.002 s, average=0.001 s; distance=9 kB, estimate=32 kB; lsn=0/1B01098, redo lsn=0/1B01040
+2026-05-17 12:26:00.261 IST [15513] ERROR:  column "streak_count" does not exist at character 8
+2026-05-17 12:26:00.261 IST [15513] STATEMENT:  SELECT streak_count FROM users LIMIT 1
+2026-05-17 12:26:00.287 IST [15513] ERROR:  column "last_sprint_date" does not exist at character 8
+2026-05-17 12:26:00.287 IST [15513] STATEMENT:  SELECT last_sprint_date FROM users LIMIT 1
+2026-05-17 12:26:00.297 IST [15513] ERROR:  column "xp" does not exist at character 8
+2026-05-17 12:26:00.297 IST [15513] STATEMENT:  SELECT xp FROM users LIMIT 1
+2026-05-17 12:26:00.307 IST [15513] ERROR:  column "level" does not exist at character 8
+2026-05-17 12:26:00.307 IST [15513] STATEMENT:  SELECT level FROM users LIMIT 1
+2026-05-17 12:26:00.315 IST [15513] ERROR:  relation "user_sprint_submissions" does not exist at character 16
+2026-05-17 12:26:00.315 IST [15513] STATEMENT:  SELECT id FROM user_sprint_submissions LIMIT 1
+2026-05-17 12:27:50.645 IST [9514] LOG:  checkpoint starting: time
+2026-05-17 12:27:55.030 IST [9514] LOG:  checkpoint complete: wrote 44 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.364 s, sync=0.007 s, total=4.385 s; sync files=36, longest=0.002 s, average=0.001 s; distance=208 kB, estimate=208 kB; lsn=0/1B35408, redo lsn=0/1B353B0
+2026-05-17 12:32:50.129 IST [9514] LOG:  checkpoint starting: time
+2026-05-17 12:32:50.766 IST [9514] LOG:  checkpoint complete: wrote 7 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.613 s, sync=0.006 s, total=0.638 s; sync files=7, longest=0.005 s, average=0.001 s; distance=10 kB, estimate=189 kB; lsn=0/1B37F78, redo lsn=0/1B37F20
+2026-05-17 12:37:50.865 IST [9514] LOG:  checkpoint starting: time
+2026-05-17 12:37:51.399 IST [9514] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.512 s, sync=0.004 s, total=0.534 s; sync files=6, longest=0.003 s, average=0.001 s; distance=12 kB, estimate=171 kB; lsn=0/1B3B238, redo lsn=0/1B3B1E0
+2026-05-17 12:42:50.500 IST [9514] LOG:  checkpoint starting: time
+2026-05-17 12:42:51.135 IST [9514] LOG:  checkpoint complete: wrote 7 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.618 s, sync=0.003 s, total=0.636 s; sync files=5, longest=0.002 s, average=0.001 s; distance=7 kB, estimate=154 kB; lsn=0/1B3CE38, redo lsn=0/1B3CDE0
+2026-05-17 12:44:42.262 IST [17570] ERROR:  column "portfolio_theme" does not exist at character 8
+2026-05-17 12:44:42.262 IST [17570] STATEMENT:  SELECT portfolio_theme FROM profiles LIMIT 1
+2026-05-17 12:44:42.271 IST [17570] ERROR:  column "portfolio_projects" does not exist at character 8
+2026-05-17 12:44:42.271 IST [17570] STATEMENT:  SELECT portfolio_projects FROM profiles LIMIT 1
+2026-05-17 12:44:42.275 IST [17570] ERROR:  column "portfolio_socials" does not exist at character 8
+2026-05-17 12:44:42.275 IST [17570] STATEMENT:  SELECT portfolio_socials FROM profiles LIMIT 1
+2026-05-17 12:47:50.233 IST [9514] LOG:  checkpoint starting: time
+2026-05-17 12:47:51.273 IST [9514] LOG:  checkpoint complete: wrote 11 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.016 s, sync=0.006 s, total=1.040 s; sync files=11, longest=0.002 s, average=0.001 s; distance=43 kB, estimate=143 kB; lsn=0/1B47DF8, redo lsn=0/1B47DA0
+2026-05-17 13:02:50.572 IST [9514] LOG:  checkpoint starting: time
+2026-05-17 13:02:50.714 IST [9514] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.122 s, sync=0.004 s, total=0.145 s; sync files=2, longest=0.003 s, average=0.002 s; distance=3 kB, estimate=129 kB; lsn=0/1B48B18, redo lsn=0/1B48AC0

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.name }} | AI-Verified Web Resume</title>
+    
+    <!-- TailwindCSS for seamless structural utility -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Material icons & Premium Font families -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Theme Core Styling mappings */
+        {% if theme == 'zinc_indigo' %}
+            :root {
+                --bg-primary: #09090b;
+                --bg-surface: rgba(20, 20, 23, 0.65);
+                --border-color: rgba(255, 255, 255, 0.08);
+                --text-primary: #f4f4f5;
+                --text-secondary: #a1a1aa;
+                --accent-color: #6366f1;
+                --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+                --font-stack: 'Inter', sans-serif;
+            }
+            body {
+                background-color: var(--bg-primary);
+                background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+                                  radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
+            }
+            .glass-card {
+                background: var(--bg-surface);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border: 1px solid var(--border-color);
+                box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s ease;
+            }
+            .glass-card:hover {
+                border-color: rgba(99, 102, 241, 0.25);
+                box-shadow: 0 15px 45px -12px rgba(99, 102, 241, 0.15);
+            }
+            
+        {% elif theme == 'cyberpunk' %}
+            @keyframes scanline {
+                0% { transform: translateY(-100%); }
+                100% { transform: translateY(100%); }
+            }
+            :root {
+                --bg-primary: #050508;
+                --bg-surface: #0a0a12;
+                --border-color: #00f0ff;
+                --text-primary: #39ff14;
+                --text-secondary: #00f0ff;
+                --accent-color: #ff007f;
+                --accent-gradient: linear-gradient(135deg, #ff007f 0%, #00f0ff 100%);
+                --font-stack: 'Fira Code', monospace;
+            }
+            body {
+                background-color: var(--bg-primary);
+                position: relative;
+                overflow-x: hidden;
+            }
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+                background-size: 100% 4px, 6px 100__;
+                z-index: 9999;
+                pointer-events: none;
+            }
+            .glass-card {
+                background: var(--bg-surface);
+                border: 2px solid var(--border-color);
+                box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+                transition: all 0.2s ease;
+            }
+            .glass-card:hover {
+                border-color: var(--accent-color);
+                box-shadow: 0 0 25px rgba(255, 0, 127, 0.3);
+                transform: translate(-2px, -2px);
+            }
+            
+        {% elif theme == 'minimalist' %}
+            :root {
+                --bg-primary: #f8fafc;
+                --bg-surface: #ffffff;
+                --border-color: #e2e8f0;
+                --text-primary: #0f172a;
+                --text-secondary: #475569;
+                --accent-color: #3b82f6;
+                --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+                --font-stack: 'Lora', serif;
+            }
+            body {
+                background-color: var(--bg-primary);
+            }
+            .glass-card {
+                background: var(--bg-surface);
+                border: 1px solid var(--border-color);
+                box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+                transition: all 0.3s ease;
+            }
+            .glass-card:hover {
+                box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08);
+                transform: translateY(-2px);
+            }
+        {% endif %}
+
+        body {
+            font-family: var(--font-stack);
+            color: var(--text-primary);
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent-color) 0%, transparent 100%);
+        }
+
+        .pulsing-heatwave {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+            animation: pulse-wave 2s infinite;
+        }
+        @keyframes pulse-wave {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(245, 158, 11, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+        }
+    </style>
+</head>
+<body class="min-h-screen py-16 px-4 md:px-8 relative">
+
+    <div class="max-w-4xl mx-auto space-y-12">
+        
+        <!-- Header / Hero section -->
+        <div class="glass-card p-8 md:p-12 rounded-[2.5rem] relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    {% if theme == 'cyberpunk' %}
+                        <span class="text-xs font-bold uppercase tracking-wider text-pink-500 bg-pink-500/10 px-3 py-1 border border-pink-500/20">SYSTEM OPERATOR</span>
+                    {% elif theme == 'minimalist' %}
+                        <span class="text-[10px] uppercase tracking-widest text-slate-500 font-extrabold">Executive Profile</span>
+                    {% else %}
+                        <span class="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold uppercase tracking-wider">AI-Verified Specialist</span>
+                    {% endif %}
+                    
+                    {% if profile.resume_score %}
+                    <span class="flex items-center gap-1 text-xs font-bold text-amber-500 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">
+                        <span class="material-symbols-outlined text-sm font-bold">verified</span> ATS {{ profile.resume_score | int }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div class="space-y-2">
+                    <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight">{{ user.name }}</h1>
+                    <p class="text-lg md:text-xl font-medium text-opacity-80 opacity-90" style="color: var(--text-secondary)">{{ profile.headline or 'Professional Technologist' }}</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-4 text-xs font-bold text-opacity-70 opacity-80" style="color: var(--text-secondary)">
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> {{ profile.location or 'Global Developer' }}</span>
+                    <span>•</span>
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">mail</span> {{ user.email }}</span>
+                    {% if user.streak_count > 0 %}
+                    <span>•</span>
+                    <span class="flex items-center gap-1 text-amber-500 font-extrabold"><span class="material-symbols-outlined text-sm">local_fire_department</span> {{ user.streak_count }}d Sprint Streak</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Profile Avatar / Image -->
+            <div class="flex-shrink-0">
+                {% if user.avatar_url %}
+                    <img src="{{ url_for('static', filename=user.avatar_url) }}" alt="Avatar" class="w-24 h-24 rounded-3xl object-cover border-2 border-indigo-500/30 shadow-2xl">
+                {% else %}
+                    <div class="w-24 h-24 rounded-3xl flex items-center justify-center text-3xl font-bold uppercase border-2 shadow-2xl"
+                         style="background: var(--accent-color); color: #fff; border-color: rgba(255,255,255,0.1)">
+                        {{ user.name[:2] }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Biography Summary -->
+        {% if profile.bio %}
+        <div class="glass-card p-8 md:p-10 rounded-[2.5rem] space-y-4">
+            <h3 class="text-lg font-extrabold uppercase tracking-wider flex items-center gap-2" style="color: var(--accent-color)">
+                <span class="material-symbols-outlined text-md">article</span> Executive Summary
+            </h3>
+            <p class="text-sm md:text-base leading-relaxed opacity-95 text-justify" style="color: var(--text-primary)">
+                {{ profile.bio }}
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- Skill Badges Showcase -->
+        {% if profile.skills %}
+        <div class="glass-card p-8 md:p-10 rounded-[2.5rem] space-y-6">
+            <h3 class="text-lg font-extrabold uppercase tracking-wider flex items-center gap-2" style="color: var(--accent-color)">
+                <span class="material-symbols-outlined text-md">stars</span> AI-Verified Technical Skill Badges
+            </h3>
+            
+            <div class="flex flex-wrap gap-3">
+                {% for skill in profile.skills %}
+                <div class="px-4 py-2.5 rounded-2xl bg-white/5 border border-outline flex items-center gap-2 text-xs font-semibold hover:border-indigo-500/30 transition-all shadow-sm">
+                    <span class="w-2 h-2 rounded-full" style="background: var(--accent-color)"></span>
+                    <span>{{ skill }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Experience Timeline -->
+        {% if profile.experience %}
+        <div class="glass-card p-8 md:p-10 rounded-[2.5rem] space-y-8">
+            <h3 class="text-lg font-extrabold uppercase tracking-wider flex items-center gap-2" style="color: var(--accent-color)">
+                <span class="material-symbols-outlined text-md">work</span> Professional Timeline
+            </h3>
+
+            <div class="relative pl-12 space-y-8">
+                <!-- Vertical Progress Line -->
+                <div class="timeline-line"></div>
+
+                {% for exp in profile.experience %}
+                <div class="relative space-y-2">
+                    <!-- Dot anchor -->
+                    <div class="absolute -left-[50px] top-1.5 w-4 h-4 rounded-full border-2 bg-zinc-950" style="border-color: var(--accent-color)"></div>
+                    
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                        <div>
+                            <h4 class="text-md font-bold text-on-surface">{{ exp.role }}</h4>
+                            <span class="text-xs font-semibold opacity-75" style="color: var(--text-secondary)">{{ exp.company }}</span>
+                        </div>
+                        <span class="text-[10px] font-black uppercase bg-white/5 border border-outline px-3 py-1 rounded-lg">{{ exp.period }}</span>
+                    </div>
+                    
+                    <p class="text-xs md:text-sm leading-relaxed opacity-85 text-justify" style="color: var(--text-secondary)">
+                        {{ exp.description }}
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Showcase Projects -->
+        {% if projects %}
+        <div class="glass-card p-8 md:p-10 rounded-[2.5rem] space-y-6">
+            <h3 class="text-lg font-extrabold uppercase tracking-wider flex items-center gap-2" style="color: var(--accent-color)">
+                <span class="material-symbols-outlined text-md">inventory_2</span> Highlight Showcase Projects
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for proj in projects %}
+                <div class="p-6 rounded-3xl bg-white/5 border border-outline flex flex-col justify-between space-y-4 hover:border-indigo-500/20 transition-all">
+                    <div class="space-y-2">
+                        <h4 class="text-sm font-bold text-on-surface flex items-center gap-2">
+                            <span class="material-symbols-outlined text-xs">folder_open</span> {{ proj.title }}
+                        </h4>
+                        <p class="text-[11px] leading-relaxed opacity-75" style="color: var(--text-secondary)">{{ proj.desc }}</p>
+                    </div>
+                    
+                    <div class="flex justify-between items-center pt-2">
+                        <span class="text-[9px] uppercase tracking-wider font-extrabold opacity-60 text-primary">{{ proj.tech }}</span>
+                        {% if proj.url %}
+                        <a href="{{ proj.url }}" target="_blank" class="text-[10px] font-black uppercase text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1" style="text-decoration:none">
+                            View <span class="material-symbols-outlined text-xs">open_in_new</span>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Education Credentials -->
+        {% if profile.education %}
+        <div class="glass-card p-8 md:p-10 rounded-[2.5rem] space-y-6">
+            <h3 class="text-lg font-extrabold uppercase tracking-wider flex items-center gap-2" style="color: var(--accent-color)">
+                <span class="material-symbols-outlined text-md">school</span> Academic Credentials
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for edu in profile.education %}
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 border border-outline flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-md">school</span>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-on-surface">{{ edu.degree }}</h4>
+                        <span class="block text-[10px] text-opacity-70 opacity-80" style="color: var(--text-secondary)">{{ edu.institution }}</span>
+                        <span class="text-[9px] font-black uppercase text-opacity-65" style="color: var(--text-secondary)">Class of {{ edu.year }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Quick Reach Out Card -->
+        <div class="glass-card p-8 md:p-10 rounded-[2.5rem] space-y-6 text-center relative overflow-hidden">
+            <div class="space-y-2">
+                <h3 class="text-lg font-extrabold uppercase tracking-wider text-on-surface">Let's Connect</h3>
+                <p class="text-xs opacity-75" style="color: var(--text-secondary)">
+                    Interested in discussing technical opportunities, collaborations, or career initiatives? Get in touch!
+                </p>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-4 pt-2">
+                {% if socials.linkedin %}
+                <a href="{{ socials.linkedin }}" target="_blank"
+                   class="px-5 py-2.5 rounded-xl border border-outline bg-surface hover:bg-white/5 transition-all text-xs font-bold flex items-center gap-2" style="text-decoration:none">
+                    <span class="material-symbols-outlined text-xs">share</span> LinkedIn
+                </a>
+                {% endif %}
+                
+                {% if socials.github %}
+                <a href="{{ socials.github }}" target="_blank"
+                   class="px-5 py-2.5 rounded-xl border border-outline bg-surface hover:bg-white/5 transition-all text-xs font-bold flex items-center gap-2" style="text-decoration:none">
+                    <span class="material-symbols-outlined text-xs">code</span> GitHub
+                </a>
+                {% endif %}
+                
+                <a href="mailto:{{ user.email }}"
+                   class="px-6 py-2.5 rounded-xl indigo-gradient text-white text-xs font-bold flex items-center gap-2" style="text-decoration:none">
+                    <span class="material-symbols-outlined text-xs">mail</span> Send Email
+                </a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-md mx-auto px-6 py-24 relative text-center">
+    
+    <!-- Glow Background Circle -->
+    <div class="glow-circle w-[300px] h-[300px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+    
+    <div class="glass-card p-10 rounded-[3rem] space-y-8 relative overflow-hidden border border-outline/35 shadow-2xl">
+        <div class="w-20 h-20 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-500 shadow-xl">
+            <span class="material-symbols-outlined text-4xl">visibility_off</span>
+        </div>
+        
+        <div class="space-y-3">
+            <h2 class="text-2xl font-heading font-black text-on-surface">Profile is Private</h2>
+            <p class="text-sm text-on-surface-variant leading-relaxed">
+                The career portfolio for <strong class="text-on-surface">{{ user.name }}</strong> is currently set to private by the owner.
+            </p>
+        </div>
+        
+        <div class="h-px w-full bg-outline/50"></div>
+        
+        <p class="text-[11px] text-on-surface/40 uppercase tracking-widest font-extrabold leading-normal">
+            Are you the owner? Log in to your control dashboard to make your portfolio public and share it with hiring managers.
+        </p>
+        
+        <div class="flex flex-col gap-3 pt-2">
+            <a href="{{ url_for('auth.login') }}" class="w-full py-4 rounded-2xl indigo-gradient text-white text-xs font-bold uppercase tracking-widest shadow-xl shadow-indigo-500/10 hover:scale-[1.02] active:scale-95 transition-all text-center">
+                Log In as Owner
+            </a>
+            <a href="{{ url_for('jobs.list_jobs') }}" class="w-full py-4 rounded-2xl border border-outline text-xs font-bold uppercase tracking-widest hover:bg-surface transition-all text-center text-on-surface/70">
+                Explore Find Jobs Page
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

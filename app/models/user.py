@@ -70,3 +70,8 @@ class Profile(db.Model):
     resume_score = db.Column(db.Float)
     badges = db.Column(CompatibleJSON, default=[]) # [{"name": "Python Expert", "level": "Gold", "earned_at": "..."}]
     visibility = db.Column(db.Boolean, default=True)
+    
+    # Portfolio Customization
+    portfolio_theme = db.Column(db.String(50), default='zinc_indigo')
+    portfolio_projects = db.Column(CompatibleJSON, default=[])
+    portfolio_socials = db.Column(CompatibleJSON, default={})

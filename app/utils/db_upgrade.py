@@ -74,4 +74,27 @@ def upgrade_database(app):
         else:
             print("[DB-UPGRADE] Table 'user_sprint_submissions' already exists.")
             
+        # 3. Idempotently add portfolio columns to 'profiles' table
+        profile_columns = {
+            "portfolio_theme": "VARCHAR(50) DEFAULT 'zinc_indigo'",
+            "portfolio_projects": "JSONB" if engine_name == "postgresql" else "TEXT",
+            "portfolio_socials": "JSONB" if engine_name == "postgresql" else "TEXT"
+        }
+        
+        for column_name, column_def in profile_columns.items():
+            try:
+                db.session.execute(text(f"SELECT {column_name} FROM profiles LIMIT 1"))
+            except Exception:
+                db.session.rollback()
+                print(f"[DB-UPGRADE] Adding column 'profiles.{column_name}'...")
+                try:
+                    db.session.execute(text(f"ALTER TABLE profiles ADD COLUMN {column_name} {column_def}"))
+                    db.session.commit()
+                    print(f"[DB-UPGRADE] Column 'profiles.{column_name}' added successfully!")
+                except Exception as e:
+                    db.session.rollback()
+                    print(f"[DB-UPGRADE] Warning: Could not add column 'profiles.{column_name}': {e}")
+            else:
+                print(f"[DB-UPGRADE] Column 'profiles.{column_name}' already exists.")
+            
         print("[DB-UPGRADE] Database upgrade checks completed.")
