@@ -7,4 +7,7 @@ from .notification import Notification
 from .admin_log import AdminLog
 from .saved_job import SavedJob
 from .sprint import UserSprintSubmission
+from .code_challenge import CodeChallenge
+from .roadmap import Roadmap
+
 

@@ -19,14 +19,14 @@
                 <div class="space-y-2">
                     <label for="title" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Job Title</label>
                     <input type="text" id="title" name="title" required value="{{ job.title if job else '' }}"
-                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-white/10"
+                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-on-surface-variant/40"
                         placeholder="e.g. Senior Software Engineer">
                 </div>
 
                 <div class="space-y-2">
                     <label for="location" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Location</label>
                     <input type="text" id="location" name="location" required value="{{ job.location if job else '' }}"
-                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-white/10"
+                        class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-on-surface-variant/40"
                         placeholder="e.g. Remote, New York, NY">
                 </div>
 
@@ -65,14 +65,14 @@
             <div class="space-y-2">
                 <label for="skills_required" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Skills Required (Comma separated)</label>
                 <input type="text" id="skills_required" name="skills_required" required value="{{ job.skills_required|join(', ') if job else '' }}"
-                    class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-white/10"
+                    class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-on-surface-variant/40"
                     placeholder="e.g. Python, Flask, React, PostgreSQL">
             </div>
 
             <div class="space-y-2">
                 <label for="description" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Job Description</label>
                 <textarea id="description" name="description" rows="8" required
-                    class="w-full bg-input border border-outline rounded-[2rem] p-8 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-white/10 leading-relaxed"
+                    class="w-full bg-input border border-outline rounded-[2rem] p-8 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-on-surface-variant/40 leading-relaxed"
                     placeholder="Describe the role, responsibilities, and qualifications...">{{ job.description if job else '' }}</textarea>
             </div>
 

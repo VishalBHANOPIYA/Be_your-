@@ -1,0 +1,13 @@
+{
+  "name": "be-your",
+  "version": "1.0.0",
+  "description": "AI-Powered Career Platform",
+  "main": "run.py",
+  "scripts": {
+    "dev": "venv_clean/bin/python run.py",
+    "tunnel": "node tunnel.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

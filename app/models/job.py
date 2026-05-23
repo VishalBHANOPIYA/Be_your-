@@ -36,3 +36,6 @@ class Job(db.Model):
                 deadline_dt = datetime.combine(deadline_dt, datetime.min.time())
         delta = deadline_dt - datetime.utcnow()
         return max(0, delta.days)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

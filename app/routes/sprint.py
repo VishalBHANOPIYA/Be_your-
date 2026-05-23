@@ -49,13 +49,29 @@ def dashboard():
     xp_in_level = current_user.xp % 500
     level_progress = int((xp_in_level / 500) * 100)
     
+    # Get today's submission if completed
+    today_submission = UserSprintSubmission.query.filter_by(
+        user_id=current_user.id, sprint_date=today).first()
+    
     return render_template(
         'user/sprint.html',
         challenge=challenge,
         leaderboard=leaderboard,
         calendar_grid=calendar_grid,
         level_progress=level_progress,
-        xp_in_level=xp_in_level
+        xp_in_level=xp_in_level,
+        today_submission=today_submission
+    )
+
+@sprint_bp.route('/share/<int:submission_id>')
+def public_share(submission_id):
+    submission = UserSprintSubmission.query.get_or_404(submission_id)
+    from app.models.user import User
+    user = User.query.get(submission.user_id)
+    return render_template(
+        'user/sprint_share.html',
+        submission=submission,
+        user=user
     )
 
 @sprint_bp.route('/submit', methods=['POST'])
@@ -75,7 +91,8 @@ def submit():
             "total_xp": result.get("new_xp"),
             "xp_earned": result.get("xp_earned"),
             "new_level": result.get("new_level"),
-            "level_up": result.get("level_up")
+            "level_up": result.get("level_up"),
+            "submission_id": result.get("submission_id")
         })
     return jsonify(result)
 

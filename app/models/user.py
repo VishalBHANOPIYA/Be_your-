@@ -12,7 +12,10 @@ CompatibleJSON = JSON().with_variant(JSONB(), 'postgresql')
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    try:
+        return User.query.get(uuid.UUID(user_id))
+    except (ValueError, TypeError):
+        return None
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -52,6 +55,9 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
 class Profile(db.Model):
     __tablename__ = 'profiles'
     
@@ -75,3 +81,6 @@ class Profile(db.Model):
     portfolio_theme = db.Column(db.String(50), default='zinc_indigo')
     portfolio_projects = db.Column(CompatibleJSON, default=[])
     portfolio_socials = db.Column(CompatibleJSON, default={})
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

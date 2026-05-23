@@ -127,7 +127,7 @@
     </style>
     {% block extra_css %}{% endblock %}
 </head>
-<body class="font-sans overflow-x-hidden parallax-bg">
+<body class="font-sans overflow-x-hidden parallax-bg" data-authenticated="{{ 'true' if current_user.is_authenticated else 'false' }}">
     <div class="glow-circle w-[500px] h-[500px] -top-48 -left-48"></div>
     <div class="glow-circle w-[600px] h-[600px] -bottom-48 -right-48"></div>
 
@@ -157,20 +157,20 @@
                         <span class="text-xs font-extrabold text-on-surface">{{ current_user.streak_count or 0 }}</span>
                     </a>
 
-                    <!-- Notification Bell -->
-                    <div style="position:relative;display:inline-block" id="notif-wrapper">
-                        <button onclick="toggleNotifPanel()" style="background:none;border:none;cursor:pointer;color:var(--tw-color, #fafafa);position:relative;padding:8px">
-                            <span class="material-symbols-outlined" style="font-size:24px">notifications</span>
-                            <span id="notif-badge" style="display:none;position:absolute;top:4px;right:4px;background:#E24B4A;color:white;font-size:10px;font-weight:700;border-radius:50%;width:16px;height:16px;text-align:center;line-height:16px">0</span>
-                        </button>
-                        <!-- Notification dropdown panel -->
-                        <div id="notif-panel" style="display:none;position:absolute;right:0;top:44px;width:320px;background:#1c1c1f;border:1px solid rgba(255,255,255,0.1);border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,0.5);z-index:9999;max-height:400px;overflow-y:auto">
-                            <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);font-size:13px;font-weight:600;color:#fafafa">Notifications</div>
-                            <div id="notif-list" style="padding:8px">
-                                <div style="padding:12px;text-align:center;color:rgba(255,255,255,0.4);font-size:12px">Loading...</div>
-                            </div>
-                        </div>
-                    </div>
+                     <!-- Notification Bell -->
+                     <div style="position:relative;display:inline-block" id="notif-wrapper">
+                         <button onclick="toggleNotifPanel()" class="text-on-surface hover:opacity-80 transition-opacity" style="background:none;border:none;cursor:pointer;position:relative;padding:8px">
+                             <span class="material-symbols-outlined" style="font-size:24px">notifications</span>
+                             <span id="notif-badge" style="display:none;position:absolute;top:4px;right:4px;background:#E24B4A;color:white;font-size:10px;font-weight:700;border-radius:50%;width:16px;height:16px;text-align:center;line-height:16px">0</span>
+                         </button>
+                         <!-- Notification dropdown panel -->
+                         <div id="notif-panel" class="glass-card" style="display:none;position:absolute;right:0;top:44px;width:320px;z-index:9999;max-height:400px;overflow-y:auto;border-radius:16px">
+                             <div style="padding:12px 16px;border-bottom:1px solid var(--outline);font-size:13px;font-weight:600;color:var(--on-surface)">Notifications</div>
+                             <div id="notif-list" style="padding:8px">
+                                 <div style="padding:12px;text-align:center;color:var(--on-surface-variant);font-size:12px">Loading...</div>
+                             </div>
+                         </div>
+                     </div>
                     <a href="{{ url_for('user.dashboard') }}" class="text-sm font-bold uppercase tracking-widest text-on-surface/80 hover:text-primary transition-colors">Dashboard</a>
                     <a href="{{ url_for('auth.logout') }}" class="px-6 py-2.5 rounded-xl border border-outline text-xs font-bold uppercase tracking-widest hover:bg-surface transition-all">Logout</a>
                 {% else %}
@@ -286,15 +286,15 @@
                 .then(data => {
                     const list = document.getElementById('notif-list');
                     if (!data.length) {
-                        list.innerHTML = '<div style="padding:12px;text-align:center;color:rgba(255,255,255,0.4);font-size:12px">No notifications yet</div>';
+                        list.innerHTML = '<div style="padding:12px;text-align:center;color:var(--on-surface-variant);opacity:0.6;font-size:12px">No notifications yet</div>';
                         return;
                     }
                     list.innerHTML = data.map(n => `
                         <div style="padding:10px 12px;border-radius:10px;margin-bottom:4px;
-                            background:${n.is_read ? 'transparent' : 'rgba(99,102,241,0.1)'};
+                            background:${n.is_read ? 'transparent' : 'rgba(99,102,241,0.08)'};
                             border:1px solid ${n.is_read ? 'transparent' : 'rgba(99,102,241,0.2)'}">
-                            <div style="font-size:12px;color:#fafafa;margin-bottom:4px">${n.message}</div>
-                            <div style="font-size:10px;color:rgba(255,255,255,0.35)">${new Date(n.created_at).toLocaleDateString()}</div>
+                            <div style="font-size:12px;color:var(--on-surface);margin-bottom:4px">${n.message}</div>
+                            <div style="font-size:10px;color:var(--on-surface-variant);opacity:0.7">${new Date(n.created_at).toLocaleDateString()}</div>
                         </div>
                     `).join('');
                     document.getElementById('notif-badge').style.display = 'none';
@@ -302,17 +302,17 @@
         }
 
         // Check unread count on page load
-        {% if current_user.is_authenticated %}
-        fetch('/user/notifications/count')
-            .then(r => r.json())
-            .then(d => {
-                if (d.count > 0) {
-                    const badge = document.getElementById('notif-badge');
-                    badge.textContent = d.count > 9 ? '9+' : d.count;
-                    badge.style.display = 'block';
-                }
-            }).catch(() => {});
-        {% endif %}
+        if (document.body.getAttribute('data-authenticated') === 'true') {
+            fetch('/user/notifications/count')
+                .then(r => r.json())
+                .then(d => {
+                    if (d.count > 0) {
+                        const badge = document.getElementById('notif-badge');
+                        badge.textContent = d.count > 9 ? '9+' : d.count;
+                        badge.style.display = 'block';
+                    }
+                }).catch(() => {});
+        }
 
         // Close panel on outside click
         document.addEventListener('click', function(e) {

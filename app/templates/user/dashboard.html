@@ -94,7 +94,7 @@
                 <p class="text-[10px] font-bold text-violet-400 uppercase tracking-[0.2em]">Top AI-Identified Skills</p>
                 <div class="flex flex-wrap gap-2">
                     {% for skill in current_user.profile.skills[:10] %}
-                        <span class="px-3 py-1.5 rounded-lg bg-white/5 border border-outline text-[10px] font-bold text-on-surface/70">{{ skill }}</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-on-surface/5 border border-outline text-[10px] font-bold text-on-surface/70">{{ skill }}</span>
                     {% endfor %}
                 </div>
             </div>
@@ -150,7 +150,7 @@
                         <span class="material-symbols-outlined text-primary">auto_awesome</span>
                         Top AI Matches for You
                     </h3>
-                    <a href="{{ url_for('jobs.list_jobs') }}" class="text-xs font-bold text-primary uppercase tracking-widest hover:text-white transition-colors">Explore All</a>
+                    <a href="{{ url_for('jobs.list_jobs') }}" class="text-xs font-bold text-primary uppercase tracking-widest hover:text-on-surface transition-colors">Explore All</a>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="ai-recommendations">
@@ -196,21 +196,21 @@
             <div class="glass-card rounded-[3rem] overflow-hidden">
                 <div class="px-10 py-8 border-b border-outline flex justify-between items-center">
                     <h3 class="text-xl font-heading font-bold text-on-surface">Job Applications</h3>
-                    <button class="text-xs font-bold text-primary uppercase tracking-widest hover:text-white transition-colors">View All</button>
+                    <button class="text-xs font-bold text-primary uppercase tracking-widest hover:text-on-surface transition-colors">View All</button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
-                            <tr class="text-[10px] font-bold text-on-surface/40 tracking-[0.2em] uppercase bg-white/[0.02]">
+                            <tr class="text-[10px] font-bold text-on-surface/40 tracking-[0.2em] uppercase bg-on-surface/[0.02]">
                                 <th class="px-10 py-5">Job Title</th>
                                 <th class="px-10 py-5">Applied On</th>
                                 <th class="px-10 py-5">Match %</th>
                                 <th class="px-10 py-5 text-right">Status</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-white/5">
+                        <tbody class="divide-y divide-outline">
                             {% for app in applications %}
-                            <tr class="group hover:bg-white/[0.03] transition-colors">
+                            <tr class="group hover:bg-on-surface/[0.03] transition-colors">
                                 <td class="px-10 py-8">
                                     <div class="flex items-center gap-4">
                                         <div class="w-12 h-12 rounded-2xl bg-surface border border-outline flex items-center justify-center text-primary font-bold">

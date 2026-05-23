@@ -9,38 +9,38 @@
         <aside class="col-span-1 space-y-6">
             <div class="glass-card p-6 rounded-3xl text-center space-y-4">
                 <div class="w-20 h-20 bg-indigo-500/20 rounded-2xl mx-auto flex items-center justify-center text-indigo-400 text-3xl font-bold border border-indigo-500/30">
-                    {{ company.name[0] }}
+                    {{ current_user.company.name[0] if current_user.company else 'C' }}
                 </div>
                 <div class="space-y-6">
-                <div>
-                    <h2 class="text-xl font-bold text-on-surface">{{ current_user.name }}</h2>
-                    <p class="text-on-surface-variant text-sm">{{ company.name }}</p>
-                </div>
-                
-                <a href="{{ url_for('recruiter.post_job') }}" class="block w-full py-3 rounded-xl indigo-gradient text-white text-sm font-bold text-center hover:scale-[1.02] transition-all">
-                    Post New Job
-                </a>
+                    <div>
+                        <h2 class="text-xl font-bold text-on-surface">{{ current_user.name }}</h2>
+                        <p class="text-on-surface-variant text-sm">{{ current_user.company.name if current_user.company else 'No Company' }}</p>
+                    </div>
+                    
+                    <a href="{{ url_for('recruiter.post_job') }}" class="block w-full py-3 rounded-xl indigo-gradient text-white text-sm font-bold text-center hover:scale-[1.02] transition-all">
+                        Post New Job
+                    </a>
 
-                <button class="w-full py-3 rounded-xl border border-outline text-sm font-bold hover:bg-surface transition-all text-on-surface-variant">
-                    Company Profile
-                </button>
+                    <button class="w-full py-3 rounded-xl border border-outline text-sm font-bold hover:bg-surface transition-all text-on-surface-variant">
+                        Company Profile
+                    </button>
+                </div>
             </div>
 
             <nav class="glass-card p-4 rounded-3xl space-y-1">
-                <a href="{{ url_for('recruiter.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-container/20 text-primary font-bold text-sm">
+                <a href="{{ url_for('recruiter.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl {% if request.endpoint == 'recruiter.dashboard' %}bg-primary-container/20 text-primary font-bold{% else %}text-on-surface-variant hover:bg-surface font-medium{% endif %} text-sm transition-all">
                     <span class="material-symbols-outlined">dashboard</span>
                     Dashboard
                 </a>
-                <a href="{{ url_for('recruiter.post_job') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                <a href="{{ url_for('recruiter.post_job') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl {% if request.endpoint == 'recruiter.post_job' %}bg-primary-container/20 text-primary font-bold{% else %}text-on-surface-variant hover:bg-surface font-medium{% endif %} text-sm transition-all">
                     <span class="material-symbols-outlined">post_add</span>
-                    Manage Jobs
+                    Post New Job
                 </a>
-                <!-- Applicants can stay as # with a comment or go to dashboard, since applicants are viewed per job -->
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                <a href="{{ url_for('recruiter.all_applicants') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl {% if request.endpoint == 'recruiter.all_applicants' %}bg-primary-container/20 text-primary font-bold{% else %}text-on-surface-variant hover:bg-surface font-medium{% endif %} text-sm transition-all">
                     <span class="material-symbols-outlined">group</span>
                     Applicants
                 </a>
-                <a href="{{ url_for('recruiter.analytics') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                <a href="{{ url_for('recruiter.analytics') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl {% if request.endpoint == 'recruiter.analytics' %}bg-primary-container/20 text-primary font-bold{% else %}text-on-surface-variant hover:bg-surface font-medium{% endif %} text-sm transition-all">
                     <span class="material-symbols-outlined">analytics</span>
                     Analytics
                 </a>
@@ -68,11 +68,11 @@
                 </div>
                 <div class="glass-card p-6 rounded-3xl space-y-2">
                     <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Total Applicants</p>
-                    <p class="text-3xl font-bold text-secondary">124</p>
+                    <p class="text-3xl font-bold text-secondary">{{ total_applicants }}</p>
                 </div>
                 <div class="glass-card p-6 rounded-3xl space-y-2">
                     <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Avg. Match Score</p>
-                    <p class="text-3xl font-bold text-white">78%</p>
+                    <p class="text-3xl font-bold text-on-surface">{{ avg_score }}%</p>
                 </div>
             </div>
 
@@ -90,29 +90,50 @@
                                 <th class="px-8 py-5 text-xs font-bold text-primary uppercase tracking-widest text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-white/5">
+                        <tbody class="divide-y divide-outline">
                             {% if jobs %}
                                 {% for job in jobs %}
-                                    <tr class="group hover:bg-white/[0.02] transition-colors">
+                                    <tr class="group hover:bg-on-surface/[0.02] transition-colors">
                                         <td class="px-8 py-6">
                                             <p class="font-bold text-on-surface">{{ job.title }}</p>
                                             <p class="text-on-surface-variant text-xs">{{ job.location }} • {{ job.job_type | capitalize }}</p>
                                         </td>
                                         <td class="px-8 py-6">
-                                            <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-[10px] font-bold border border-green-500/30 uppercase tracking-tighter">
-                                                Active
+                                            <span class="px-3 py-1 rounded-full {% if job.is_active %}bg-green-500/20 text-green-400 border border-green-500/30{% else %}bg-zinc-700/30 text-zinc-400 border border-zinc-600/30{% endif %} text-[10px] font-bold uppercase tracking-tighter">
+                                                {{ 'Active' if job.is_active else 'Inactive' }}
                                             </span>
                                         </td>
                                         <td class="px-8 py-6">
                                             <div class="flex items-center gap-2">
-                                                <p class="font-bold text-on-surface">12</p>
-                                                <span class="text-on-surface-variant text-xs">New</span>
+                                                <p class="font-bold text-on-surface">
+                                                    {{ job_app_counts.get(job.id|string, 0) }}
+                                                </p>
+                                                <span class="text-on-surface-variant text-xs">Applicants</span>
                                             </div>
                                         </td>
                                         <td class="px-8 py-6 text-right">
-                                            <button class="text-on-surface-variant hover:text-white transition-colors">
-                                                <span class="material-symbols-outlined">edit</span>
-                                            </button>
+                                            <div class="flex items-center gap-2 justify-end">
+                                                <a href="{{ url_for('recruiter.view_applicants', job_id=job.id) }}"
+                                                   class="px-3 py-2 rounded-lg text-xs font-bold text-indigo-400
+                                                   border border-indigo-500/30 hover:bg-indigo-500/10 transition-all">
+                                                    View Applicants
+                                                </a>
+                                                <a href="{{ url_for('recruiter.edit_job', job_id=job.id) }}"
+                                                   class="text-on-surface-variant hover:text-on-surface transition-colors"
+                                                   title="Edit job">
+                                                    <span class="material-symbols-outlined">edit</span>
+                                                </a>
+                                                <form method="POST"
+                                                      action="{{ url_for('recruiter.delete_job', job_id=job.id) }}"
+                                                      onsubmit="return confirm('Delete this job listing?');"
+                                                      class="inline">
+                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                    <button type="submit" class="text-on-surface-variant hover:text-red-400
+                                                            transition-colors" title="Delete job">
+                                                        <span class="material-symbols-outlined">delete</span>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -120,7 +141,7 @@
                                 <tr>
                                     <td colspan="4" class="px-8 py-20 text-center space-y-4">
                                         <p class="text-on-surface-variant">No jobs posted yet.</p>
-                                        <a href="#" class="text-primary font-bold hover:underline">Create your first listing</a>
+                                        <a href="{{ url_for('recruiter.post_job') }}" class="text-primary font-bold hover:underline">Create your first listing</a>
                                     </td>
                                 </tr>
                             {% endif %}

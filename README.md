@@ -9,9 +9,12 @@
 
 > "Discover Yourself. Land Your Dream Job."
 
-## 🔴 Live Demo
-[Be Your Live Demo](https://trailer-examine-sim-orbit.trycloudflare.com)
-*(Note: Replace with your final Render or production URL)*
+## 🔴 Live Demo / Development Tunnel
+For development, you can expose the local application using Cloudflare tunnels:
+```bash
+npm run tunnel
+```
+This runs a local tunnel pointing to your active port, exposing the site via a dynamically generated Cloudflare URL. You should configure this generated URL as `SITE_URL` in your `.env` configuration file so that LinkedIn share links, verification emails, and other absolute URLs redirect correctly.
 
 ## What is Be Your?
 Be Your is a next-generation AI-powered career platform designed to bridge the gap between human potential and industry expectations. It intelligently analyzes user profiles against market demands to generate personalized roadmaps, dynamic cover letters, and actionable feedback. By integrating advanced natural language processing with a sleek, distraction-free interface, it serves as the ultimate ecosystem for job seekers and recruiters alike.

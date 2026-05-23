@@ -803,7 +803,8 @@ class SprintService:
             "new_level": user.level,
             "level_up": level_up,
             "new_streak": user.streak_count,
-            "badges_earned": badges_earned
+            "badges_earned": badges_earned,
+            "submission_id": sub.id
         }
 
     @staticmethod

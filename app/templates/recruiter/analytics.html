@@ -1,4 +1,3 @@
-# ── FILE: app/templates/recruiter/analytics.html ──
 {% extends "base.html" %}
 
 {% block title %}Recruiter Analytics | Be Your{% endblock %}
@@ -10,12 +9,12 @@
         <aside class="col-span-1 space-y-6">
             <div class="glass-card p-6 rounded-3xl text-center space-y-4">
                 <div class="w-20 h-20 bg-indigo-500/20 rounded-2xl mx-auto flex items-center justify-center text-indigo-400 text-3xl font-bold border border-indigo-500/30">
-                    {{ company.name[0] }}
+                    {{ current_user.company.name[0] if current_user.company else 'C' }}
                 </div>
                 <div class="space-y-6">
                     <div>
                         <h2 class="text-xl font-bold text-on-surface">{{ current_user.name }}</h2>
-                        <p class="text-on-surface-variant text-sm">{{ company.name }}</p>
+                        <p class="text-on-surface-variant text-sm">{{ current_user.company.name if current_user.company else 'No Company' }}</p>
                     </div>
                     
                     <a href="{{ url_for('recruiter.post_job') }}" class="block w-full py-3 rounded-xl indigo-gradient text-white text-sm font-bold text-center hover:scale-[1.02] transition-all">
@@ -29,20 +28,19 @@
             </div>
 
             <nav class="glass-card p-4 rounded-3xl space-y-1">
-                <a href="{{ url_for('recruiter.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                <a href="{{ url_for('recruiter.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl {% if request.endpoint == 'recruiter.dashboard' %}bg-primary-container/20 text-primary font-bold{% else %}text-on-surface-variant hover:bg-surface font-medium{% endif %} text-sm transition-all">
                     <span class="material-symbols-outlined">dashboard</span>
                     Dashboard
                 </a>
-                <a href="{{ url_for('recruiter.post_job') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                <a href="{{ url_for('recruiter.post_job') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl {% if request.endpoint == 'recruiter.post_job' %}bg-primary-container/20 text-primary font-bold{% else %}text-on-surface-variant hover:bg-surface font-medium{% endif %} text-sm transition-all">
                     <span class="material-symbols-outlined">post_add</span>
-                    Manage Jobs
+                    Post New Job
                 </a>
-                <!-- Applicants -->
-                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface font-medium text-sm transition-all">
+                <a href="{{ url_for('recruiter.all_applicants') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl {% if request.endpoint == 'recruiter.all_applicants' %}bg-primary-container/20 text-primary font-bold{% else %}text-on-surface-variant hover:bg-surface font-medium{% endif %} text-sm transition-all">
                     <span class="material-symbols-outlined">group</span>
                     Applicants
                 </a>
-                <a href="{{ url_for('recruiter.analytics') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-container/20 text-primary font-bold text-sm">
+                <a href="{{ url_for('recruiter.analytics') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl {% if request.endpoint == 'recruiter.analytics' %}bg-primary-container/20 text-primary font-bold{% else %}text-on-surface-variant hover:bg-surface font-medium{% endif %} text-sm transition-all">
                     <span class="material-symbols-outlined">analytics</span>
                     Analytics
                 </a>
@@ -52,71 +50,179 @@
         <!-- Main Workspace -->
         <main class="col-span-1 lg:col-span-3 space-y-8">
             <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                    <h1 class="text-3xl font-bold text-on-surface">Recruiter Analytics</h1>
-                    <p class="text-on-surface-variant">Performance metrics and job engagement statistics.</p>
+            <div class="space-y-4">
+                <a href="{{ url_for('recruiter.dashboard') }}" class="inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors uppercase tracking-widest">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Back to Dashboard
+                </a>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-on-surface">Recruiter Analytics</h1>
+                        <p class="text-on-surface-variant">Performance metrics and job engagement statistics.</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Stats Grid (3 Premium Key Metric Cards) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass-card p-6 rounded-3xl space-y-2 relative overflow-hidden">
+            <!-- Stats Grid (5 Premium Key Metric Cards) -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="glass-card p-5 rounded-3xl space-y-1 relative overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent"></div>
-                    <div class="relative space-y-2">
-                        <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Active Listings</p>
-                        <p class="text-4xl font-black text-primary">{{ total_jobs }}</p>
-                        <p class="text-[10px] text-green-400 font-semibold flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[12px]">trending_up</span> Live on Platform
+                    <div class="relative space-y-1">
+                        <p class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">Active Jobs</p>
+                        <p class="text-2xl font-black text-primary">{{ active_jobs }}</p>
+                        <p class="text-[9px] text-green-400 font-semibold flex items-center gap-1">
+                            Total: {{ total_jobs }}
                         </p>
                     </div>
                 </div>
                 
-                <div class="glass-card p-6 rounded-3xl space-y-2 relative overflow-hidden">
+                <div class="glass-card p-5 rounded-3xl space-y-1 relative overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent"></div>
-                    <div class="relative space-y-2">
-                        <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Total Applications</p>
-                        <p class="text-4xl font-black text-secondary">{{ total_applications }}</p>
-                        <p class="text-[10px] text-green-400 font-semibold flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[12px]">trending_up</span> Candidates Applied
+                    <div class="relative space-y-1">
+                        <p class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">Total Apps</p>
+                        <p class="text-2xl font-black text-secondary">{{ total_applications }}</p>
+                        <p class="text-[9px] text-indigo-400 font-semibold flex items-center gap-1">
+                            Across all jobs
                         </p>
                     </div>
                 </div>
 
-                <div class="glass-card p-6 rounded-3xl space-y-2 relative overflow-hidden">
+                <div class="glass-card p-5 rounded-3xl space-y-1 relative overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent"></div>
-                    <div class="relative space-y-2">
-                        <p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest">Conversion Rate</p>
-                        <p class="text-4xl font-black text-white">{{ conversion_rate }}%</p>
-                        <p class="text-[10px] text-purple-400 font-semibold flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[12px]">psychology</span> Shortlisted or Hired
+                    <div class="relative space-y-1">
+                        <p class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">Avg Match</p>
+                        <p class="text-2xl font-black text-on-surface">{{ avg_score }}%</p>
+                        <p class="text-[9px] text-purple-400 font-semibold flex items-center gap-1">
+                            Resume scores
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 rounded-3xl space-y-1 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent"></div>
+                    <div class="relative space-y-1">
+                        <p class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">Shortlisted</p>
+                        <p class="text-2xl font-black text-green-400">{{ shortlisted }}</p>
+                        <p class="text-[9px] text-green-500 font-semibold flex items-center gap-1">
+                            For interview
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 rounded-3xl space-y-1 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent"></div>
+                    <div class="relative space-y-1">
+                        <p class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">Hired</p>
+                        <p class="text-2xl font-black text-yellow-400">{{ hired }}</p>
+                        <p class="text-[9px] text-yellow-500 font-semibold flex items-center gap-1">
+                            Offers accepted
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Chart Card -->
-            <div class="glass-card p-8 rounded-3xl space-y-6">
-                <div class="flex items-center justify-between border-b border-white/5 pb-4">
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary">bar_chart</span>
-                        <h3 class="text-lg font-bold text-on-surface">Application Breakdown</h3>
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Bar Chart -->
+                <div class="glass-card p-8 rounded-3xl space-y-6">
+                    <div class="flex items-center justify-between border-b border-outline pb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">bar_chart</span>
+                            <h3 class="text-lg font-bold text-on-surface">Applications per Job</h3>
+                        </div>
                     </div>
-                    <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold bg-white/5 px-3 py-1.5 rounded-xl border border-outline">
-                        Interactive Metrics
+                    {% if total_jobs > 0 %}
+                    <div class="relative h-[280px] w-full">
+                        <canvas id="applicationsChart"></canvas>
+                    </div>
+                    {% else %}
+                    <div class="py-20 text-center space-y-4">
+                        <span class="material-symbols-outlined text-4xl text-on-surface-variant">post_add</span>
+                        <p class="text-on-surface-variant">Post job listings to begin collecting performance analytics.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Doughnut Chart -->
+                <div class="glass-card p-8 rounded-3xl space-y-6">
+                    <div class="flex items-center justify-between border-b border-outline pb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-secondary">donut_large</span>
+                            <h3 class="text-lg font-bold text-on-surface">Application Status</h3>
+                        </div>
+                    </div>
+                    {% if total_applications > 0 %}
+                    <div class="relative h-[280px] w-full flex items-center justify-center">
+                        <canvas id="statusChart" class="max-w-[280px] max-h-[280px]"></canvas>
+                    </div>
+                    {% else %}
+                    <div class="py-20 text-center space-y-4">
+                        <span class="material-symbols-outlined text-4xl text-on-surface-variant">group</span>
+                        <p class="text-on-surface-variant">No applications received yet to show breakdown.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Top Applicants Table -->
+            <div class="space-y-6">
+                <div class="flex items-center justify-between border-b border-outline pb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-indigo-400">workspace_premium</span>
+                        <h3 class="text-lg font-bold text-on-surface">Top 5 Applicants</h3>
+                    </div>
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold bg-on-surface/5 px-3 py-1.5 rounded-xl border border-outline">
+                        By Match Score
                     </span>
                 </div>
-                
-                {% if total_jobs > 0 %}
-                <div class="relative h-[320px] w-full">
-                    <canvas id="applicationsChart"></canvas>
+
+                <div class="glass-card rounded-[2rem] overflow-hidden">
+                    {% if top_applicants %}
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-surface border-b border-outline">
+                                <th class="px-8 py-5 text-xs font-bold text-primary uppercase tracking-widest">Rank</th>
+                                <th class="px-8 py-5 text-xs font-bold text-primary uppercase tracking-widest">Name</th>
+                                <th class="px-8 py-5 text-xs font-bold text-primary uppercase tracking-widest">Job Applied</th>
+                                <th class="px-8 py-5 text-xs font-bold text-primary uppercase tracking-widest">Match Score</th>
+                                <th class="px-8 py-5 text-xs font-bold text-primary uppercase tracking-widest">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline">
+                            {% for app, user, job in top_applicants %}
+                            <tr class="group hover:bg-on-surface/[0.02] transition-colors">
+                                <td class="px-8 py-6 font-bold text-on-surface-variant">#{{ loop.index }}</td>
+                                <td class="px-8 py-6 font-bold text-on-surface">{{ user.name }}</td>
+                                <td class="px-8 py-6 text-on-surface-variant text-sm">{{ job.title }}</td>
+                                <td class="px-8 py-6">
+                                    {% set s = app.resume_score or 0 %}
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-bold
+                                      {% if s >= 70 %}bg-green-500/20 text-green-400 border border-green-500/30
+                                      {% elif s >= 40 %}bg-amber-500/20 text-amber-400 border border-amber-500/30
+                                      {% else %}bg-red-500/20 text-red-400 border border-red-500/30{% endif %}">
+                                      {{ "%.0f"|format(s) }}%
+                                    </span>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-semibold uppercase tracking-wider
+                                      {% if app.status == 'hired' %}bg-yellow-500/20 text-yellow-400
+                                      {% elif app.status == 'shortlisted' %}bg-green-500/20 text-green-400
+                                      {% elif app.status == 'rejected' %}bg-red-500/20 text-red-400
+                                      {% else %}bg-zinc-700/30 text-zinc-400{% endif %}">
+                                        {{ app.status | capitalize }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="py-20 text-center space-y-4">
+                        <span class="material-symbols-outlined text-4xl text-on-surface-variant">person_search</span>
+                        <p class="text-on-surface-variant">No applications yet — once candidates apply, your top matches will appear here.</p>
+                    </div>
+                    {% endif %}
                 </div>
-                {% else %}
-                <div class="py-20 text-center space-y-4">
-                    <span class="material-symbols-outlined text-4xl text-on-surface-variant">post_add</span>
-                    <p class="text-on-surface-variant">Post job listings to begin collecting real performance analytics.</p>
-                </div>
-                {% endif %}
             </div>
         </main>
     </div>
@@ -127,76 +233,125 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const chartElement = document.getElementById('applicationsChart');
-        if (!chartElement) return;
+        // Theme helper for Chart colors
+        const isDark = document.documentElement.classList.contains('dark');
+        const chartTextColor = isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(9, 9, 11, 0.6)';
+        const chartGridColor = isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(9, 9, 11, 0.04)';
+        const tooltipBg = isDark ? 'rgba(24, 24, 27, 0.9)' : 'rgba(255, 255, 255, 0.95)';
+        const tooltipTextColor = isDark ? '#fafafa' : '#09090b';
+        const tooltipBorderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(9, 9, 11, 0.1)';
 
-        const ctx = chartElement.getContext('2d');
-        const labels = {{ job_titles | tojson }};
-        const data = {{ job_app_counts | tojson }};
+        // Bar Chart
+        const barElement = document.getElementById('applicationsChart');
+        if (barElement) {
+            const ctxBar = barElement.getContext('2d');
+            const barLabels = {{ job_titles | tojson }};
+            const barData = {{ job_app_counts | tojson }};
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Applications per Job',
-                    data: data,
-                    backgroundColor: 'rgba(99, 102, 241, 0.25)',
-                    borderColor: 'rgba(99, 102, 241, 1)',
-                    borderWidth: 2,
-                    borderRadius: 12,
-                    hoverBackgroundColor: 'rgba(168, 85, 247, 0.45)',
-                    hoverBorderColor: 'rgba(168, 85, 247, 1)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(24, 24, 27, 0.9)',
-                        titleColor: '#fafafa',
-                        bodyColor: '#fafafa',
-                        borderColor: 'rgba(255, 255, 255, 0.1)',
-                        borderWidth: 1,
-                        padding: 12,
-                        cornerRadius: 12,
-                        displayColors: false
-                    }
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: barLabels,
+                    datasets: [{
+                        label: 'Applications per Job',
+                        data: barData,
+                        backgroundColor: 'rgba(99, 102, 241, 0.25)',
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        borderWidth: 2,
+                        borderRadius: 12,
+                        hoverBackgroundColor: 'rgba(168, 85, 247, 0.45)',
+                        hoverBorderColor: 'rgba(168, 85, 247, 1)'
+                    }]
                 },
-                scales: {
-                    x: {
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.04)'
-                        },
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.5)',
-                            font: {
-                                size: 11,
-                                weight: '600'
-                            }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: tooltipBg,
+                            titleColor: tooltipTextColor,
+                            bodyColor: tooltipTextColor,
+                            borderColor: tooltipBorderColor,
+                            borderWidth: 1,
+                            padding: 12,
+                            cornerRadius: 12,
+                            displayColors: false
                         }
                     },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.04)'
+                    scales: {
+                        x: {
+                            grid: { color: chartGridColor },
+                            ticks: {
+                                color: chartTextColor,
+                                font: { size: 11, weight: '600' }
+                            }
                         },
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.5)',
-                            font: {
-                                size: 11,
-                                weight: '600'
-                            },
-                            stepSize: 1
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: chartGridColor },
+                            ticks: {
+                                color: chartTextColor,
+                                font: { size: 11, weight: '600' },
+                                stepSize: 1
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
+
+        // Doughnut Chart
+        const doughnutElement = document.getElementById('statusChart');
+        if (doughnutElement) {
+            const ctxDoughnut = doughnutElement.getContext('2d');
+            const statusLabels = ['Applied', 'Viewed', 'Shortlisted', 'Rejected', 'Hired'];
+            const statusData = [
+                {{ status_dict.get('applied', 0) }},
+                {{ status_dict.get('viewed', 0) }},
+                {{ status_dict.get('shortlisted', 0) }},
+                {{ status_dict.get('rejected', 0) }},
+                {{ status_dict.get('hired', 0) }}
+            ];
+            const statusColors = ['#6366f1', '#a78bfa', '#34d399', '#f87171', '#fbbf24'];
+
+            new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: statusLabels,
+                    datasets: [{
+                        data: statusData,
+                        backgroundColor: statusColors,
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: chartTextColor,
+                                font: { size: 10, weight: '600' },
+                                padding: 12
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: tooltipBg,
+                            titleColor: tooltipTextColor,
+                            bodyColor: tooltipTextColor,
+                            borderColor: tooltipBorderColor,
+                            borderWidth: 1,
+                            padding: 12,
+                            cornerRadius: 12
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
     });
 </script>
 {% endblock %}

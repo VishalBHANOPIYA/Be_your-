@@ -6,8 +6,32 @@ from app.models.job import Job
 from app.models.application import Application
 from app.extensions import db
 from datetime import datetime
+import re
 
 recruiter_bp = Blueprint('recruiter', __name__)
+
+def safe_parse_date(date_str):
+    if not date_str:
+        return None
+    date_str = date_str.strip()
+    for fmt in ('%Y-%m-%d', '%Y-%m-%dT%H:%M', '%Y-%m-%dT%H:%M:%S'):
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            continue
+            
+    # Handle custom case where year might have more than 4 digits (e.g. '62026-02-20')
+    match = re.match(r'^(\d{4,5})-(\d{2})-(\d{2})', date_str)
+    if match:
+        year_str, month_str, day_str = match.groups()
+        if len(year_str) > 4:
+            year_str = year_str[-4:]
+        try:
+            return datetime(int(year_str), int(month_str), int(day_str))
+        except ValueError:
+            pass
+            
+    return None
 
 @recruiter_bp.route('/dashboard')
 @login_required
@@ -24,7 +48,34 @@ def dashboard():
         .order_by(Application.applied_at.desc())\
         .limit(5).all()
         
-    return render_template('recruiter/dashboard.html', jobs=jobs, recent_applications=recent_apps)
+    from sqlalchemy import func
+    
+    job_ids = [j.id for j in jobs]
+    total_applicants = 0
+    avg_score = 0
+    job_app_counts = {}   # {job_id: count}
+    
+    if job_ids:
+        total_applicants = Application.query.filter(
+            Application.job_id.in_(job_ids)).count()
+        
+        avg = db.session.query(func.avg(Application.resume_score))\
+            .filter(Application.job_id.in_(job_ids)).scalar()
+        avg_score = round(avg, 1) if avg else 0
+        
+        # Per-job applicant count
+        counts = db.session.query(
+            Application.job_id, func.count(Application.id)
+        ).filter(Application.job_id.in_(job_ids))\
+         .group_by(Application.job_id).all()
+        job_app_counts = {str(jid): c for jid, c in counts}
+    
+    return render_template('recruiter/dashboard.html',
+        jobs=jobs, recent_applications=recent_apps,
+        company=current_user.company,
+        total_applicants=total_applicants,
+        avg_score=avg_score,
+        job_app_counts=job_app_counts)
 
 @recruiter_bp.route('/jobs/post', methods=['GET', 'POST'])
 @login_required
@@ -32,7 +83,7 @@ def dashboard():
 def post_job():
     if request.method == 'POST':
         data = request.form
-        deadline = datetime.strptime(data.get('deadline'), '%Y-%m-%d') if data.get('deadline') else None
+        deadline = safe_parse_date(data.get('deadline'))
         
         JobService.create_job(
             company_id=current_user.company.id,
@@ -61,7 +112,7 @@ def edit_job(job_id):
         
     if request.method == 'POST':
         data = request.form
-        deadline = datetime.strptime(data.get('deadline'), '%Y-%m-%d') if data.get('deadline') else None
+        deadline = safe_parse_date(data.get('deadline'))
         
         JobService.update_job(
             job_id,
@@ -148,7 +199,7 @@ def update_app_status(app_id):
 @login_required
 @role_required('recruiter')
 def setup_company():
-    from app.models.job import Company
+    from app.models.company import Company
     if current_user.company:
         return redirect(url_for('recruiter.dashboard'))
         
@@ -180,43 +231,73 @@ def analytics():
         flash('Please set up your company profile first.', 'info')
         return redirect(url_for('recruiter.setup_company'))
     
-    # 1. Fetch all jobs belonging to the recruiter's company
-    jobs = Job.query.filter_by(company_id=current_user.company.id).all()
-    job_ids = [j.id for j in jobs]
+    company_id = current_user.company.id
     
-    # 2. Get total applications count across all their jobs
-    total_apps = 0
-    shortlisted_hired = 0
-    job_app_counts = []
-    job_titles = []
+    from sqlalchemy import func
+    from app.models.user import User
     
-    if job_ids:
-        # Get count per job
-        apps = Application.query.filter(Application.job_id.in_(job_ids)).all()
-        total_apps = len(apps)
-        
-        # Calculate conversion metrics
-        shortlisted_hired = sum(1 for a in apps if a.status in ['shortlisted', 'hired'])
-        
-        for job in jobs:
-            count = sum(1 for a in apps if a.job_id == job.id)
-            job_app_counts.append(count)
-            job_titles.append(job.title)
-            
-    # 3. Calculate conversion rate: (shortlisted + hired) / total applications * 100
-    conversion_rate = 0.0
-    if total_apps > 0:
-        conversion_rate = round((shortlisted_hired / total_apps) * 100, 1)
-        
-    return render_template(
-        'recruiter/analytics.html',
+    total_jobs = Job.query.filter_by(company_id=company_id).count()
+    active_jobs = Job.query.filter_by(company_id=company_id, is_active=True).count()
+    
+    total_apps = db.session.query(func.count(Application.id))\
+        .join(Job).filter(Job.company_id == company_id).scalar() or 0
+    
+    avg = db.session.query(func.avg(Application.resume_score))\
+        .join(Job).filter(Job.company_id == company_id).scalar()
+    avg_score = round(avg, 1) if avg else 0
+    
+    shortlisted = db.session.query(func.count(Application.id))\
+        .join(Job).filter(Job.company_id == company_id,
+                          Application.status == 'shortlisted').scalar() or 0
+    
+    hired = db.session.query(func.count(Application.id))\
+        .join(Job).filter(Job.company_id == company_id,
+                          Application.status == 'hired').scalar() or 0
+    
+    # Bar chart data — applications per job
+    jobs_with_apps = db.session.query(
+        Job.title, func.count(Application.id).label('app_count')
+    ).outerjoin(Application)\
+     .filter(Job.company_id == company_id)\
+     .group_by(Job.id, Job.title)\
+     .order_by(func.count(Application.id).desc())\
+     .limit(8).all()
+    job_titles = [t[:25] + '...' if len(t) > 25 else t for t, _ in jobs_with_apps]
+    job_app_counts = [c for _, c in jobs_with_apps]
+    
+    # Doughnut chart data — status breakdown
+    status_counts = db.session.query(
+        Application.status, func.count(Application.id)
+    ).join(Job).filter(Job.company_id == company_id)\
+     .group_by(Application.status).all()
+    status_dict = {s: c for s, c in status_counts}
+    
+    # Top 5 applicants
+    top_applicants = db.session.query(Application, User, Job)\
+        .join(User, Application.user_id == User.id)\
+        .join(Job, Application.job_id == Job.id)\
+        .filter(Job.company_id == company_id)\
+        .order_by(Application.resume_score.desc())\
+        .limit(5).all()
+    
+    return render_template('recruiter/analytics.html',
         company=current_user.company,
-        total_jobs=len(jobs),
-        total_applications=total_apps,
-        conversion_rate=conversion_rate,
-        job_titles=job_titles,
-        job_app_counts=job_app_counts
-    )
+        total_jobs=total_jobs, active_jobs=active_jobs,
+        total_applications=total_apps, avg_score=avg_score,
+        shortlisted=shortlisted, hired=hired,
+        job_titles=job_titles, job_app_counts=job_app_counts,
+        status_dict=status_dict, top_applicants=top_applicants)
+
+@recruiter_bp.route('/applicants')
+@login_required
+@role_required('recruiter')
+def all_applicants():
+    if not current_user.company:
+        flash('Please set up your company profile first.', 'info')
+        return redirect(url_for('recruiter.setup_company'))
+    
+    applicants = JobService.get_applicants_for_company(current_user.company.id)
+    return render_template('recruiter/all_applicants.html', applicants=applicants, company=current_user.company)
 
 @recruiter_bp.route('/download_cv/<uuid:application_id>')
 @login_required

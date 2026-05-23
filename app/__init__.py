@@ -12,6 +12,12 @@ def create_app(config_name='development'):
     
     # Initialize extensions
     db.init_app(app)
+    
+    # Import all models to ensure they are registered with SQLAlchemy
+    from app import models
+    with app.app_context():
+        db.create_all()
+        
     migrate.init_app(app, db)
     login_manager.init_app(app)
     jwt.init_app(app)
@@ -123,5 +129,9 @@ def create_app(config_name='development'):
         app.logger.addHandler(file_handler)
         app.logger.setLevel(logging.INFO)
         app.logger.info('Be Your startup')
+
+    @app.context_processor
+    def inject_site_url():
+        return dict(SITE_URL=app.config.get('SITE_URL', 'http://127.0.0.1:5000'))
 
     return app

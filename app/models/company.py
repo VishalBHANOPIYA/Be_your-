@@ -16,3 +16,6 @@ class Company(db.Model):
     is_verified = db.Column(db.Boolean, default=False)
     
     jobs = db.relationship('Job', backref='company', lazy=True)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

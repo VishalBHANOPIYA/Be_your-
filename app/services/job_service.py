@@ -68,6 +68,18 @@ class JobService:
         return applicants
 
     @staticmethod
+    def get_applicants_for_company(company_id):
+        # Join with Job, User, and Profile to get candidate details across all company jobs
+        applicants = db.session.query(Application, User, Profile, Job)\
+            .join(User, Application.user_id == User.id)\
+            .join(Profile, User.id == Profile.user_id)\
+            .join(Job, Application.job_id == Job.id)\
+            .filter(Job.company_id == company_id)\
+            .order_by(Application.applied_at.desc())\
+            .all()
+        return applicants
+
+    @staticmethod
     def update_application_status(application_id, status):
         app = Application.query.get(application_id)
         if app:
