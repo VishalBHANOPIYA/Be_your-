@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="relative pt-20 pb-32 space-y-40">
+<div class="relative pt-20 pb-0 space-y-40">
     <!-- Hero Section -->
     <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center z-10">
         <div class="space-y-10 hero-text">
@@ -137,11 +137,11 @@
     </div>
 
     <!-- For Recruiters Section -->
-    <section id="for-recruiters" style="max-width:1200px;margin:6rem auto;padding:0 2rem">
+    <section id="for-recruiters" style="max-width:1200px;margin:6rem auto 0 auto;padding:0 2rem">
         <div style="text-align:center;margin-bottom:3rem">
             <div style="font-size:12px;font-weight:600;color:#6366f1;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px">For Hiring Teams</div>
-            <h2 style="font-size:2.5rem;font-weight:700;color:#fafafa;margin-bottom:16px">Hire Smarter. Not Harder.</h2>
-            <p style="font-size:16px;color:rgba(255,255,255,0.5);max-width:560px;margin:0 auto;line-height:1.7">
+            <h2 style="font-size:2.5rem;font-weight:700;color:var(--on-surface);margin-bottom:16px">Hire Smarter. Not Harder.</h2>
+            <p style="font-size:16px;color:var(--on-surface-variant);max-width:560px;margin:0 auto;line-height:1.7">
                 Post a job in 2 minutes. Our AI automatically scores every applicant against your requirements — so you only review the best matches.
             </p>
         </div>
@@ -150,24 +150,24 @@
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:3rem">
             <div class="glass-card" style="padding:2rem;text-align:center">
                 <span class="material-symbols-outlined" style="font-size:40px;color:#6366f1;margin-bottom:1rem">psychology</span>
-                <h3 style="font-size:18px;font-weight:600;color:#fafafa;margin-bottom:8px">AI-Ranked Applicants</h3>
-                <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6">
+                <h3 style="font-size:18px;font-weight:600;color:var(--on-surface);margin-bottom:8px">AI-Ranked Applicants</h3>
+                <p style="font-size:13px;color:var(--on-surface-variant);line-height:1.6">
                     Every candidate gets an automatic fit score (0–100%) against your job requirements. Stop reading 200 resumes manually.
                 </p>
             </div>
 
             <div class="glass-card" style="padding:2rem;text-align:center">
                 <span class="material-symbols-outlined" style="font-size:40px;color:#6366f1;margin-bottom:1rem">verified</span>
-                <h3 style="font-size:18px;font-weight:600;color:#fafafa;margin-bottom:8px">Pre-Verified Skills</h3>
-                <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6">
+                <h3 style="font-size:18px;font-weight:600;color:var(--on-surface);margin-bottom:8px">Pre-Verified Skills</h3>
+                <p style="font-size:13px;color:var(--on-surface-variant);line-height:1.6">
                     Candidates complete real coding challenges, mock interviews, and daily sprints. Their skills are proven — not just listed on a resume.
                 </p>
             </div>
 
             <div class="glass-card" style="padding:2rem;text-align:center">
                 <span class="material-symbols-outlined" style="font-size:40px;color:#6366f1;margin-bottom:1rem">free_cancellation</span>
-                <h3 style="font-size:18px;font-weight:600;color:#fafafa;margin-bottom:8px">100% Free to Post</h3>
-                <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6">
+                <h3 style="font-size:18px;font-weight:600;color:var(--on-surface);margin-bottom:8px">100% Free to Post</h3>
+                <p style="font-size:13px;color:var(--on-surface-variant);line-height:1.6">
                     No subscription. No setup fee. Post a job now and start receiving AI-scored applications from verified student candidates.
                 </p>
             </div>
@@ -178,7 +178,7 @@
             <a href="{{ url_for('auth.register') }}" style="display:inline-block;padding:1rem 3rem;background:linear-gradient(135deg,#6366f1,#a855f7);color:white;font-weight:700;font-size:16px;border-radius:16px;text-decoration:none;box-shadow:0 8px 32px rgba(99,102,241,0.3)">
                 Post a Job Free →
             </a>
-            <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.35)">
+            <div style="margin-top:12px;font-size:12px;color:var(--on-surface-variant);opacity:0.7">
                 No credit card required · Set up in 2 minutes · Cancel anytime
             </div>
         </div>

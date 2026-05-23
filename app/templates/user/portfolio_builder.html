@@ -3,21 +3,30 @@
 {% block extra_css %}
 <style>
     .builder-glass-panel {
-        background: rgba(24, 24, 27, 0.55);
+        background: rgba(255, 255, 255, 0.75);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(99, 102, 241, 0.12);
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dark .builder-glass-panel {
+        background: rgba(24, 24, 27, 0.55);
         border: 1px solid rgba(255, 255, 255, 0.08);
         box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .builder-glass-panel:hover {
         border-color: rgba(99, 102, 241, 0.25);
     }
     .theme-select-card {
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        background: rgba(0, 0, 0, 0.02);
         cursor: pointer;
         transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dark .theme-select-card {
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(255, 255, 255, 0.02);
     }
     .theme-select-card:hover {
         background: rgba(99, 102, 241, 0.05);
@@ -30,11 +39,18 @@
         box-shadow: 0 0 20px rgba(99, 102, 241, 0.18);
     }
     .project-card-row {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(0, 0, 0, 0.05);
         transition: all 0.2s ease;
     }
+    .dark .project-card-row {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
     .project-card-row:hover {
+        border-color: rgba(0, 0, 0, 0.10);
+    }
+    .dark .project-card-row:hover {
         border-color: rgba(255, 255, 255, 0.1);
     }
 </style>
@@ -55,11 +71,11 @@
         </div>
         
         <!-- Navigation Pills -->
-        <div class="flex justify-center gap-3 max-w-md mx-auto p-1.5 bg-zinc-900/50 backdrop-blur border border-outline rounded-2xl shadow-inner">
-            <a href="{{ url_for('portfolio.portfolio_dashboard') }}" class="flex-1 py-3 text-center text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-white/5 text-on-surface/80" style="text-decoration:none">
+        <div class="flex justify-center gap-3 max-w-md mx-auto p-1.5 bg-zinc-100 dark:bg-zinc-900/50 border border-zinc-200 dark:border-outline rounded-2xl shadow-sm">
+            <a href="{{ url_for('portfolio.portfolio_dashboard') }}" class="flex-1 py-3 text-center text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-zinc-200/50 dark:hover:bg-white/5 text-on-surface/80" style="text-decoration:none">
                 📊 Code Analyzer
             </a>
-            <a href="{{ url_for('portfolio.builder') }}" class="flex-1 py-3 text-center text-xs font-bold uppercase tracking-wider rounded-xl bg-white/5 border border-outline text-primary" style="text-decoration:none">
+            <a href="{{ url_for('portfolio.builder') }}" class="flex-1 py-3 text-center text-xs font-bold uppercase tracking-wider rounded-xl bg-white dark:bg-white/10 border border-zinc-200/50 dark:border-outline shadow-sm text-primary" style="text-decoration:none">
                 ⚡ Site Builder
             </a>
         </div>
