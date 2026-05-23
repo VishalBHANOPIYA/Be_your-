@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash
 from flask_login import login_required, current_user
+from app.utils.decorators import role_required
 from app.services.ai_service import AIService
 from app.models.code_challenge import CodeChallenge
 from app.extensions import db
@@ -9,12 +10,14 @@ playground_bp = Blueprint('playground', __name__)
 
 @playground_bp.route('/playground')
 @login_required
+@role_required('seeker')
 def dashboard():
     challenges = CodeChallenge.query.filter_by(user_id=current_user.id).order_by(CodeChallenge.created_at.desc()).all()
     return render_template('user/playground_dashboard.html', challenges=challenges)
 
 @playground_bp.route('/playground/new')
 @login_required
+@role_required('seeker')
 def new_challenge():
     user_skills = current_user.profile.skills if current_user.profile else []
     challenge_data = AIService.generate_code_challenge(user_skills)
@@ -33,6 +36,7 @@ def new_challenge():
 
 @playground_bp.route('/playground/solve/<uuid:challenge_id>')
 @login_required
+@role_required('seeker')
 def solve(challenge_id):
     challenge = CodeChallenge.query.get_or_404(challenge_id)
     if challenge.user_id != current_user.id:
@@ -43,6 +47,7 @@ def solve(challenge_id):
 
 @playground_bp.route('/playground/submit/<uuid:challenge_id>', methods=['POST'])
 @login_required
+@role_required('seeker')
 def submit(challenge_id):
     challenge = CodeChallenge.query.get_or_404(challenge_id)
     code = request.json.get('code')

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_required, current_user
+from app.utils.decorators import role_required
 from app.services.resume_service import ResumeService
 import os
 import uuid
@@ -9,6 +10,7 @@ resume_bp = Blueprint('resume', __name__)
 
 @resume_bp.route('/resume/optimize', methods=['GET', 'POST'])
 @login_required
+@role_required('seeker')
 def optimize():
     if request.method == 'POST':
         if 'resume' not in request.files:

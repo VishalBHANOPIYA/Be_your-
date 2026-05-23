@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, current_app
 from flask_login import login_required, current_user
+from app.utils.decorators import role_required
 from app.models.application import Application
 from app.models.job import Job
 from app.models.saved_job import SavedJob
@@ -16,6 +17,7 @@ user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/dashboard')
 @login_required
+@role_required('seeker')
 def dashboard():
     applications = Application.query.filter_by(user_id=current_user.id).order_by(Application.applied_at.desc()).all()
     saved_jobs = JobService.get_saved_jobs(current_user.id)
@@ -43,17 +45,20 @@ def dashboard():
 
 @user_bp.route('/saved-jobs')
 @login_required
+@role_required('seeker')
 def saved_jobs():
     jobs = JobService.get_saved_jobs(current_user.id)
     return render_template('user/saved_jobs.html', jobs=jobs)
 
 @user_bp.route('/roadmap')
 @login_required
+@role_required('seeker')
 def roadmap():
     return render_template('user/roadmap.html', roadmap=None)
 
 @user_bp.route('/upload-resume', methods=['POST'])
 @login_required
+@role_required('seeker')
 @limiter.limit("10 per day", methods=["POST"])
 def upload_resume():
     if 'resume' not in request.files:
@@ -108,6 +113,7 @@ def upload_resume():
 
 @user_bp.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
+@role_required('seeker')
 def edit_profile():
     if not current_user.profile:
         current_user.profile = Profile(user_id=current_user.id)
@@ -155,6 +161,7 @@ def edit_profile():
 
 @user_bp.route('/resume-analysis')
 @login_required
+@role_required('seeker')
 def resume_analysis():
     if not current_user.profile or not current_user.profile.resume_text:
         flash('Please upload your resume first to see the analysis.', 'info')
@@ -165,6 +172,7 @@ def resume_analysis():
 
 @user_bp.route('/notifications')
 @login_required
+@role_required('seeker')
 def get_notifications():
     from app.models.notification import Notification
     from flask import jsonify
@@ -183,6 +191,7 @@ def get_notifications():
 
 @user_bp.route('/notifications/count')
 @login_required
+@role_required('seeker')
 def get_notifications_count():
     from app.models.notification import Notification
     from flask import jsonify

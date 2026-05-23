@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, jsonify, request, redirect, url_for, flash
 from flask_login import login_required, current_user
+from app.utils.decorators import role_required
 from app.services.github_service import GitHubService
 from app.services.ai_service import AIService
 from app.services.portfolio_service import PortfolioService
@@ -10,6 +11,7 @@ portfolio_bp = Blueprint('portfolio', __name__, url_prefix='/portfolio')
 
 @portfolio_bp.route('/analyze', methods=['POST'])
 @login_required
+@role_required('seeker')
 def analyze():
     if not current_user.profile or not current_user.profile.github_url:
         return jsonify({
@@ -42,6 +44,7 @@ def analyze():
 
 @portfolio_bp.route('/dashboard')
 @login_required
+@role_required('seeker')
 def portfolio_dashboard():
     return render_template('user/portfolio_analysis.html')
 
@@ -49,6 +52,7 @@ def portfolio_dashboard():
 
 @portfolio_bp.route('/builder', methods=['GET', 'POST'])
 @login_required
+@role_required('seeker')
 def builder():
     # Ensure profile exists
     if not current_user.profile:
@@ -114,6 +118,7 @@ def builder():
 
 @portfolio_bp.route('/generate', methods=['POST'])
 @login_required
+@role_required('seeker')
 def generate():
     if not current_user.profile or not current_user.profile.resume_text:
         return jsonify({

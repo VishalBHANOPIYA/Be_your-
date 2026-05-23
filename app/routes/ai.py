@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_required, current_user
+from app.utils.decorators import role_required
 from app.services.interview_service import InterviewService
 from app.services.ai_service import AIService
 from app.models.interview import Interview
@@ -10,6 +11,7 @@ ai_bp = Blueprint('ai', __name__)
 
 @ai_bp.route('/interview/start', methods=['GET', 'POST'])
 @login_required
+@role_required('seeker')
 def start_interview():
     if request.method == 'POST':
         category = request.form.get('category', 'technical')
@@ -26,6 +28,7 @@ def start_interview():
 
 @ai_bp.route('/interview/<uuid:interview_id>')
 @login_required
+@role_required('seeker')
 def interview_session(interview_id):
     interview = Interview.query.get_or_404(interview_id)
     if interview.user_id != current_user.id:
@@ -35,6 +38,7 @@ def interview_session(interview_id):
 
 @ai_bp.route('/interview/<uuid:interview_id>/submit', methods=['POST'])
 @login_required
+@role_required('seeker')
 def submit_answer(interview_id):
     data = request.json
     question_index = data.get('index')
@@ -46,12 +50,14 @@ def submit_answer(interview_id):
 
 @ai_bp.route('/interview/<uuid:interview_id>/finish', methods=['POST'])
 @login_required
+@role_required('seeker')
 def finish_interview(interview_id):
     InterviewService.finish_session(interview_id)
     return jsonify({"success": True, "redirect": url_for('ai.interview_analysis', interview_id=interview_id)})
 
 @ai_bp.route('/interview/<uuid:interview_id>/analysis')
 @login_required
+@role_required('seeker')
 def interview_analysis(interview_id):
     interview = Interview.query.get_or_404(interview_id)
     if interview.user_id != current_user.id:
@@ -62,6 +68,7 @@ def interview_analysis(interview_id):
 
 @ai_bp.route('/roadmap/generate', methods=['POST'])
 @login_required
+@role_required('seeker')
 def generate_roadmap():
     target_role = request.form.get('target_role')
     current_skills = current_user.profile.skills or []
@@ -71,6 +78,7 @@ def generate_roadmap():
 
 @ai_bp.route('/recommendations')
 @login_required
+@role_required('seeker')
 def recommendations():
     recs = AIService.get_job_recommendations(current_user.profile)
     return jsonify({
@@ -88,6 +96,7 @@ def recommendations():
 
 @ai_bp.route('/cover-letter/generate', methods=['POST'])
 @login_required
+@role_required('seeker')
 def generate_cover_letter():
     data = request.json or {}
     job_id_str = data.get('job_id')
@@ -110,6 +119,7 @@ def generate_cover_letter():
 
 @ai_bp.route('/outreach', methods=['GET'])
 @login_required
+@role_required('seeker')
 def outreach_workspace():
     # Pre-fill options from URL query params (e.g. from Job Detail page)
     job_id_str = request.args.get('job_id')
@@ -125,6 +135,7 @@ def outreach_workspace():
 
 @ai_bp.route('/outreach/generate', methods=['POST'])
 @login_required
+@role_required('seeker')
 def generate_outreach():
     data = request.json or {}
     job_title = data.get('job_title', '').strip()

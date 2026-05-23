@@ -139,10 +139,21 @@
             </a>
 
             <nav class="hidden lg:flex items-center gap-10 text-sm font-semibold tracking-wide uppercase text-on-surface/60">
-                <a href="{{ url_for('jobs.list_jobs') }}" class="nav-link hover:text-primary transition-colors">Find Jobs</a>
-                <a href="{{ url_for('playground.dashboard') }}" class="nav-link hover:text-primary transition-colors">Playground</a>
-                <a href="{{ url_for('portfolio.portfolio_dashboard') }}" class="nav-link hover:text-primary transition-colors">Portfolio</a>
-                <a href="{{ url_for('sprint.dashboard') }}" class="nav-link hover:text-primary transition-colors">Daily Sprint</a>
+                {% if not current_user.is_authenticated or current_user.role == 'seeker' %}
+                    <a href="{{ url_for('jobs.list_jobs') }}" class="nav-link hover:text-primary transition-colors">Find Jobs</a>
+                    <a href="{{ url_for('playground.dashboard') }}" class="nav-link hover:text-primary transition-colors">Playground</a>
+                    <a href="{{ url_for('portfolio.portfolio_dashboard') }}" class="nav-link hover:text-primary transition-colors">Portfolio</a>
+                    <a href="{{ url_for('sprint.dashboard') }}" class="nav-link hover:text-primary transition-colors">Daily Sprint</a>
+                {% elif current_user.role == 'recruiter' %}
+                    <a href="{{ url_for('recruiter.post_job') }}" class="nav-link hover:text-primary transition-colors">Post Job</a>
+                    <a href="{{ url_for('recruiter.all_applicants') }}" class="nav-link hover:text-primary transition-colors">Applicants</a>
+                    <a href="{{ url_for('recruiter.analytics') }}" class="nav-link hover:text-primary transition-colors">Analytics</a>
+                {% elif current_user.role == 'admin' %}
+                    <a href="{{ url_for('admin.users') }}" class="nav-link hover:text-primary transition-colors">Users</a>
+                    <a href="{{ url_for('admin.recruiters') }}" class="nav-link hover:text-primary transition-colors">Recruiters</a>
+                    <a href="{{ url_for('admin.jobs') }}" class="nav-link hover:text-primary transition-colors">Jobs</a>
+                    <a href="{{ url_for('admin.logs') }}" class="nav-link hover:text-primary transition-colors">Logs</a>
+                {% endif %}
             </nav>
 
             <div class="flex items-center gap-6">
@@ -152,10 +163,12 @@
 
                 {% if current_user.is_authenticated %}
                     <!-- Streak Flame System -->
+                    {% if current_user.role == 'seeker' %}
                     <a href="{{ url_for('sprint.dashboard') }}" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-outline bg-surface hover:scale-105 transition-all group" title="{{ current_user.streak_count or 0 }} Day Streak! Keep the fire burning!" style="text-decoration:none">
                         <span class="material-symbols-outlined text-2xl {% if current_user.streak_count > 0 %}active-flame-icon{% else %}dimmed-flame-icon{% endif %}">local_fire_department</span>
                         <span class="text-xs font-extrabold text-on-surface">{{ current_user.streak_count or 0 }}</span>
                     </a>
+                    {% endif %}
 
                      <!-- Notification Bell -->
                      <div style="position:relative;display:inline-block" id="notif-wrapper">
@@ -171,7 +184,13 @@
                              </div>
                          </div>
                      </div>
-                    <a href="{{ url_for('user.dashboard') }}" class="text-sm font-bold uppercase tracking-widest text-on-surface/80 hover:text-primary transition-colors">Dashboard</a>
+                    {% if current_user.role == 'admin' %}
+                        <a href="{{ url_for('admin.dashboard') }}" class="text-sm font-bold uppercase tracking-widest text-on-surface/80 hover:text-primary transition-colors">Dashboard</a>
+                    {% elif current_user.role == 'recruiter' %}
+                        <a href="{{ url_for('recruiter.dashboard') }}" class="text-sm font-bold uppercase tracking-widest text-on-surface/80 hover:text-primary transition-colors">Dashboard</a>
+                    {% else %}
+                        <a href="{{ url_for('user.dashboard') }}" class="text-sm font-bold uppercase tracking-widest text-on-surface/80 hover:text-primary transition-colors">Dashboard</a>
+                    {% endif %}
                     <a href="{{ url_for('auth.logout') }}" class="px-6 py-2.5 rounded-xl border border-outline text-xs font-bold uppercase tracking-widest hover:bg-surface transition-all">Logout</a>
                 {% else %}
                     <a href="{{ url_for('auth.login') }}" class="text-sm font-bold uppercase tracking-widest text-on-surface/80 hover:text-primary transition-colors">Login</a>
@@ -227,7 +246,6 @@
             <div class="flex flex-col gap-2">
                 <a href="{{ url_for('auth.register') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Post a Job Free</a>
                 <a href="{{ url_for('auth.login') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Recruiter Login</a>
-                <a href="{{ url_for('jobs.list_jobs') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">Browse Candidates</a>
             </div>
         </div>
     </footer>

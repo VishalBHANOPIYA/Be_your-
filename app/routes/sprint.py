@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for
 from flask_login import login_required, current_user
+from app.utils.decorators import role_required
 from app.services.sprint_service import SprintService
 from app.models.sprint import UserSprintSubmission
 from datetime import date, timedelta
@@ -8,6 +9,7 @@ sprint_bp = Blueprint('sprint', __name__)
 
 @sprint_bp.route('/')
 @login_required
+@role_required('seeker')
 def dashboard():
     # 1. Reset streak if the user missed a day
     SprintService.check_and_reset_streaks(current_user)
@@ -64,6 +66,8 @@ def dashboard():
     )
 
 @sprint_bp.route('/share/<int:submission_id>')
+@login_required
+@role_required('seeker')
 def public_share(submission_id):
     submission = UserSprintSubmission.query.get_or_404(submission_id)
     from app.models.user import User
@@ -76,6 +80,7 @@ def public_share(submission_id):
 
 @sprint_bp.route('/submit', methods=['POST'])
 @login_required
+@role_required('seeker')
 def submit():
     answer = request.form.get('answer', '')
     if not answer:
@@ -98,6 +103,7 @@ def submit():
 
 @sprint_bp.route('/history')
 @login_required
+@role_required('seeker')
 def history():
     submissions = UserSprintSubmission.query.filter_by(user_id=current_user.id)\
         .order_by(UserSprintSubmission.sprint_date.desc()).all()
