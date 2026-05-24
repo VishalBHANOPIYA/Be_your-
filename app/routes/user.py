@@ -57,7 +57,7 @@ def roadmap():
     from app.models.roadmap import Roadmap
     roadmap_record = Roadmap.query.filter_by(user_id=current_user.id).first()
     if roadmap_record:
-        return render_template('user/roadmap.html', roadmap=roadmap_record.steps, target_role=roadmap_record.target_role, roadmap_id=roadmap_record.id)
+        return render_template('user/roadmap.html', roadmap=roadmap_record, target_role=roadmap_record.target_role, roadmap_id=roadmap_record.id)
     return render_template('user/roadmap.html', roadmap=None)
 
 
