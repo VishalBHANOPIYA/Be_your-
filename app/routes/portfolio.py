@@ -162,7 +162,8 @@ def public_portfolio(username_slug):
     # 2. Try raw UUID query
     if not user:
         try:
-            user = User.query.get(username_slug)
+            import uuid
+            user = User.query.get(uuid.UUID(username_slug))
         except Exception:
             pass
             

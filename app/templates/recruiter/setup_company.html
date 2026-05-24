@@ -10,8 +10,8 @@
 
     <div class="w-full max-w-2xl glass-card p-12 rounded-[3rem] space-y-10 relative shadow-2xl border-outline">
         <div class="text-center space-y-2">
-            <h1 class="text-3xl font-bold text-on-surface tracking-tight">Create Company Profile</h1>
-            <p class="text-on-surface-variant text-sm">Tell us about your organization to start hiring.</p>
+            <h1 class="text-3xl font-bold text-on-surface tracking-tight">{% if company %}Edit Company Profile{% else %}Create Company Profile{% endif %}</h1>
+            <p class="text-on-surface-variant text-sm">{% if company %}Keep your company organization details up-to-date.{% else %}Tell us about your organization to start hiring.{% endif %}</p>
         </div>
 
         <form method="POST" class="space-y-6">
@@ -21,6 +21,7 @@
                 <div class="space-y-2">
                     <label for="name" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Company Name</label>
                     <input type="text" id="name" name="name" required
+                        value="{{ company.name if company else '' }}"
                         class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-on-surface-variant"
                         placeholder="e.g. Acme Inc.">
                 </div>
@@ -28,6 +29,7 @@
                 <div class="space-y-2">
                     <label for="location" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Headquarters</label>
                     <input type="text" id="location" name="location" required
+                        value="{{ company.location if company else '' }}"
                         class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-on-surface-variant"
                         placeholder="e.g. San Francisco, CA">
                 </div>
@@ -36,6 +38,7 @@
             <div class="space-y-2">
                 <label for="website" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Website URL</label>
                 <input type="url" id="website" name="website"
+                    value="{{ company.website if company else '' }}"
                     class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-on-surface-variant"
                     placeholder="https://acme.com">
             </div>
@@ -44,12 +47,12 @@
                 <label for="description" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Company Bio</label>
                 <textarea id="description" name="description" rows="5" required
                     class="w-full bg-input border border-outline rounded-[2rem] p-6 text-on-surface focus:outline-none focus:border-primary/50 transition-all placeholder:text-on-surface-variant resize-none leading-relaxed"
-                    placeholder="Briefly describe your company mission and culture..."></textarea>
+                    placeholder="Briefly describe your company mission and culture...">{{ company.description if company else '' }}</textarea>
             </div>
 
             <button type="submit" 
                 class="w-full py-5 rounded-2xl indigo-gradient text-white font-bold text-lg shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all mt-4">
-                Create Profile & Continue
+                {% if company %}Save Changes{% else %}Create Profile & Continue{% endif %}
             </button>
         </form>
     </div>

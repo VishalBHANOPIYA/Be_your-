@@ -26,7 +26,7 @@
             <div class="space-y-2">
                 <div class="flex justify-between items-center ml-1">
                     <label for="password" class="text-xs font-bold text-primary uppercase tracking-widest">Password</label>
-                    <a href="#" class="text-xs text-on-surface-variant hover:text-primary transition-colors font-medium">Forgot password?</a>
+                    <a href="{{ url_for('auth.forgot_password') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors font-medium">Forgot password?</a>
                 </div>
                 <div class="relative group">
                     <input type="password" id="password" name="password" required

@@ -19,3 +19,6 @@ class Application(db.Model):
     cover_note = db.Column(db.Text)
     applied_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    user = db.relationship('User', backref='applications', lazy=True)

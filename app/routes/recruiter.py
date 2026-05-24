@@ -200,8 +200,7 @@ def update_app_status(app_id):
 @role_required('recruiter')
 def setup_company():
     from app.models.company import Company
-    if current_user.company:
-        return redirect(url_for('recruiter.dashboard'))
+    company = current_user.company
         
     if request.method == 'POST':
         name = request.form.get('name')
@@ -209,19 +208,27 @@ def setup_company():
         website = request.form.get('website')
         location = request.form.get('location')
         
-        company = Company(
-            name=name,
-            description=description,
-            website=website,
-            location=location,
-            recruiter_id=current_user.id
-        )
-        db.session.add(company)
+        if company:
+            company.name = name
+            company.description = description
+            company.website = website
+            company.location = location
+            flash('Company profile updated successfully!', 'success')
+        else:
+            company = Company(
+                name=name,
+                description=description,
+                website=website,
+                location=location,
+                recruiter_id=current_user.id
+            )
+            db.session.add(company)
+            flash('Company profile created! You can now post jobs.', 'success')
+            
         db.session.commit()
-        flash('Company profile created! You can now post jobs.', 'success')
         return redirect(url_for('recruiter.dashboard'))
         
-    return render_template('recruiter/setup_company.html')
+    return render_template('recruiter/setup_company.html', company=company)
 
 @recruiter_bp.route('/analytics')
 @login_required

@@ -55,6 +55,11 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    @property
+    def username_slug(self):
+        id_suffix = str(self.id).replace('-', '')[:4]
+        return self.name.lower().replace(" ", "-") + "-" + id_suffix
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

@@ -35,7 +35,7 @@
             <div class="flex-shrink-0">
                 <div class="w-24 h-24 rounded-3xl bg-surface border border-outline flex items-center justify-center text-primary text-4xl font-bold overflow-hidden shadow-2xl">
                     {% if user.avatar_url %}
-                        <img src="{{ user.avatar_url }}" alt="{{ user.name }}" class="w-full h-full object-cover">
+                        <img src="{{ url_for('static', filename=user.avatar_url) }}" alt="{{ user.name }}" class="w-full h-full object-cover">
                     {% else %}
                         {{ user.name[0] }}
                     {% endif %}
@@ -98,7 +98,7 @@
                     No CV Uploaded
                 </span>
                 {% endif %}
-                <a href="#" class="w-full py-3 rounded-xl border border-outline text-center text-xs font-bold text-on-surface/60 hover:bg-surface transition-all">View Full Profile</a>
+                <a href="{{ url_for('portfolio.public_portfolio', username_slug=user.username_slug) }}" target="_blank" class="w-full py-3 rounded-xl border border-outline text-center text-xs font-bold text-on-surface/60 hover:bg-surface transition-all">View Full Profile</a>
             </div>
         </div>
         {% else %}
