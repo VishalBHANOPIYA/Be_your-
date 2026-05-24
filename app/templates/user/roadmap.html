@@ -6,12 +6,12 @@
 <div class="max-w-5xl mx-auto px-6 py-12 space-y-12">
     
     <!-- Active Roadmap Header -->
-    {% if roadmap %}
+    {% if roadmap and roadmap.steps %}
     {% set ns = namespace(total=0, completed=0) %}
-    {% for phase in roadmap.phases %}
-        {% for ms in phase.milestones %}
+    {% for step in roadmap.steps['steps'] %}
+        {% for st in step['sub_topics'] %}
             {% set ns.total = ns.total + 1 %}
-            {% if ms.completed %}
+            {% if st['completed'] %}
                 {% set ns.completed = ns.completed + 1 %}
             {% endif %}
         {% endfor %}
@@ -35,7 +35,7 @@
                     Your Path to <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">{{ target_role }}</span>
                 </h1>
                 <p class="text-on-surface/60 max-w-xl text-base leading-relaxed">
-                    Master this role by completing <span class="font-semibold text-primary">{{ ns.total }} milestones</span> across <span class="font-semibold text-primary">{{ roadmap.phases|length }} strategic phases</span>.
+                    Master this role by completing <span class="font-semibold text-primary">{{ ns.total }} milestones</span> across <span class="font-semibold text-primary">{{ roadmap.steps['steps']|length }} strategic steps</span>.
                 </p>
             </div>
             
@@ -51,49 +51,79 @@
                     </div>
                     <div class="flex justify-between items-center text-xs">
                         <span id="progress-pct" class="font-extrabold text-lg text-on-surface">{{ pct }}%</span>
-                        <span class="text-on-surface/40 font-semibold">{{ roadmap.timeline }} Est.</span>
+                        <span class="text-on-surface/40 font-semibold">{{ roadmap.steps.get('total_duration_weeks', '6') }} Weeks Est.</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Roadmap Steps -->
-    <div class="relative space-y-12">
+    <!-- View Switcher -->
+    <div class="flex justify-center">
+        <div class="inline-flex p-1 rounded-2xl bg-surface/50 border border-outline/50 backdrop-blur-md">
+            <button id="btn-visual-view" class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer bg-primary text-white shadow-md">
+                <span class="material-symbols-outlined text-sm">schema</span>
+                Visual View
+            </button>
+            <button id="btn-interactive-view" class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer text-on-surface/60 hover:text-on-surface">
+                <span class="material-symbols-outlined text-sm">checklist</span>
+                Interactive View
+            </button>
+        </div>
+    </div>
+
+    <!-- Visual View Container -->
+    <div id="visual-view-container" class="transition-all duration-300">
+        <div class="glass-card p-6 md:p-10 rounded-[2.5rem] border border-outline/50 bg-surface/30 backdrop-blur-lg overflow-hidden relative shadow-2xl">
+            <div class="overflow-x-auto w-full">
+                <pre id="visual-ascii-pre" style="font-family: 'Fira Code', 'Courier New', monospace; 
+                             font-size: 13px; 
+                             line-height: 1.4; 
+                             overflow-x: auto; 
+                             background: var(--bg-surface); 
+                             padding: 1.5rem; 
+                             border-radius: 8px;
+                             color: var(--on-surface);">{{ roadmap.visual_ascii }}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive View Container -->
+    <div id="interactive-view-container" class="hidden transition-all duration-300 relative space-y-12">
         <!-- Connecting Line -->
         <div class="absolute left-8 top-4 bottom-8 w-[3px] bg-gradient-to-b from-primary via-purple-600 to-emerald-500 rounded-full opacity-20"></div>
 
-        {% for phase in roadmap.phases %}
-        {% set phase_loop = loop %}
+        {% for step in roadmap.steps['steps'] %}
+        {% set step_loop = loop %}
         <div class="relative pl-16 md:pl-24 pb-4 group">
-            <!-- Phase Indicator node -->
+            <!-- Step Indicator node -->
             <div class="absolute left-4 md:left-6 top-1 w-9 h-9 rounded-full indigo-gradient border-4 border-background z-10 flex items-center justify-center text-xs text-white font-extrabold shadow-lg shadow-primary/20 transform group-hover:scale-110 transition-all duration-300">
-                {{ phase_loop.index0 }}
+                {{ step_loop.index }}
             </div>
 
             <div class="glass-card p-6 md:p-8 rounded-[2rem] border border-outline hover:border-primary/40 transition-all duration-300 space-y-6 bg-surface/30 backdrop-blur-lg hover:shadow-2xl">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-outline/20">
                     <div class="space-y-1">
                         <p class="text-[10px] font-extrabold text-primary uppercase tracking-[0.2em]">
-                            {{ phase.title.split(':')[0] if ':' in phase.title else 'Phase ' ~ phase_loop.index0 }}
+                            STEP {{ step_loop.index }} ({{ step.estimated_hours }}h)
                         </p>
                         <h2 class="text-xl md:text-2xl font-bold text-on-surface">
-                            {{ phase.title.split(':')[1] if ':' in phase.title else phase.title }}
+                            {{ step.title }}
                         </h2>
                     </div>
-                    {% if phase.phase_project %}
+                    {% if step.checkpoint %}
                     <div class="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-primary/10 border border-primary/20 text-xs text-primary font-medium max-w-full">
                         <span class="material-symbols-outlined text-sm shrink-0">architecture</span>
-                        <span class="truncate"><strong>Proj:</strong> {{ phase.phase_project }}</span>
+                        <span class="truncate"><strong>Checkpoint:</strong> {{ step.checkpoint }}</span>
                     </div>
                     {% endif %}
                 </div>
 
                 <div class="grid grid-cols-1 gap-4">
-                    {% for ms in phase.milestones %}
-                    <div data-milestone-id="{{ ms.id }}" 
+                    {% for st in step['sub_topics'] %}
+                    <div data-milestone-id="{{ st.id }}" 
                          class="milestone-card p-5 rounded-2xl border transition-all duration-300 flex items-start gap-4 cursor-pointer select-none
-                                {% if ms.completed %}
+                                {% if st.completed %}
                                 bg-primary/5 border-primary/30 shadow-md shadow-primary/5
                                 {% else %}
                                 bg-background/30 border-outline/30 hover:border-outline/80 hover:bg-background/50
@@ -101,7 +131,7 @@
                         
                         <!-- Interactive Toggle Checkbox -->
                         <div class="mt-0.5 toggle-checkbox w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition-all duration-300
-                                    {% if ms.completed %}
+                                    {% if st.completed %}
                                     bg-primary border-primary text-white scale-110
                                     {% else %}
                                     border-outline/60 text-transparent hover:border-primary
@@ -109,32 +139,14 @@
                             <span class="material-symbols-outlined text-sm font-extrabold pointer-events-none">check</span>
                         </div>
 
-                        <div class="space-y-3 flex-1">
-                            <div class="flex flex-wrap items-center justify-between gap-2">
-                                <p class="font-bold text-on-surface text-base transition-all duration-300 milestone-name {% if ms.completed %}line-through text-on-surface/50{% endif %}">
-                                    {{ ms.name }}
-                                </p>
-                                {% if ms.estimated_hours %}
-                                <span class="px-2.5 py-0.5 rounded-full bg-on-surface/5 border border-outline/30 text-[10px] font-bold text-on-surface/60 uppercase tracking-wider">
-                                    {{ ms.estimated_hours }}h
-                                </span>
-                                {% endif %}
-                            </div>
-                            
-                            <p class="text-sm text-on-surface/60 leading-relaxed milestone-desc {% if ms.completed %}text-on-surface/40{% endif %}">
-                                {{ ms.desc }}
+                        <div class="space-y-2 flex-1">
+                            <p class="font-bold text-on-surface text-base transition-all duration-300 milestone-name {% if st.completed %}line-through text-on-surface/50{% endif %}">
+                                {{ st.name }}
                             </p>
-
-                            {% if ms.checkpoint %}
-                            <div class="p-3.5 rounded-xl bg-background/50 border border-outline/20 text-xs space-y-1.5 {% if ms.completed %}opacity-60{% endif %}">
-                                <span class="text-[9px] uppercase font-extrabold tracking-widest text-primary/70 flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[12px]">verified</span> Checkpoint Criteria
-                                </span>
-                                <p class="text-on-surface/80 leading-relaxed italic font-medium">
-                                    {{ ms.checkpoint }}
-                                </p>
-                            </div>
-                            {% endif %}
+                            
+                            <p class="text-sm text-on-surface/60 leading-relaxed milestone-desc {% if st.completed %}text-on-surface/40{% endif %}">
+                                {{ st.description }}
+                            </p>
                         </div>
                     </div>
                     {% endfor %}
@@ -152,7 +164,7 @@
                 <div class="absolute -top-16 -left-16 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
                 <h3 class="text-2xl font-bold text-emerald-400">Goal Reached!</h3>
                 <p class="text-on-surface/70 max-w-md mx-auto">
-                    Once you complete all milestones, you will possess all critical theoretical and practical qualifications required to excel as a <strong class="text-on-surface font-semibold">{{ target_role }}</strong>.
+                    Once you complete all steps and milestones, you will possess all qualifications required to excel as a <strong class="text-on-surface font-semibold">{{ target_role }}</strong>.
                 </p>
             </div>
         </div>
@@ -198,6 +210,27 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    const btnVisual = document.getElementById('btn-visual-view');
+    const btnInteractive = document.getElementById('btn-interactive-view');
+    const containerVisual = document.getElementById('visual-view-container');
+    const containerInteractive = document.getElementById('interactive-view-container');
+
+    if (btnVisual && btnInteractive) {
+        btnVisual.addEventListener('click', () => {
+            containerVisual.classList.remove('hidden');
+            containerInteractive.classList.add('hidden');
+            btnVisual.className = "px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer bg-primary text-white shadow-md";
+            btnInteractive.className = "px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer text-on-surface/60 hover:text-on-surface";
+        });
+
+        btnInteractive.addEventListener('click', () => {
+            containerInteractive.classList.remove('hidden');
+            containerVisual.classList.add('hidden');
+            btnInteractive.className = "px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer bg-primary text-white shadow-md";
+            btnVisual.className = "px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer text-on-surface/60 hover:text-on-surface";
+        });
+    }
+
     const roadmapId = "{{ roadmap_id }}";
     const csrfToken = "{{ csrf_token() }}";
 
@@ -258,6 +291,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (progressBar) progressBar.style.width = data.progress_percentage + '%';
                         if (progressPct) progressPct.textContent = data.progress_percentage + '%';
                         if (progressText) progressText.textContent = `${data.completed_count} / ${data.total_count} Completed`;
+
+                        // Sync visual ascii PRE tag content
+                        const asciiPre = document.getElementById('visual-ascii-pre');
+                        if (asciiPre && data.visual_ascii) {
+                            asciiPre.textContent = data.visual_ascii;
+                        }
                     }
                 }
             } catch (err) {

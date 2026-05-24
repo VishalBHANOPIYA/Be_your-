@@ -38,11 +38,13 @@ def test_analyze_resume_empty_returns_zero():
 
 def test_generate_roadmap_fullstack():
     result = AIService.generate_roadmap("Full Stack Developer", [])
-    assert 'phases' in result
+    assert 'visual' in result
+    assert 'data' in result
+    assert 'steps' in result['data']
 
 def test_generate_roadmap_has_projects():
     result = AIService.generate_roadmap("Frontend Developer", [])
-    assert 'projects' in result
+    assert 'projects' in result['data']
 
 def test_generate_cover_letter_structure():
     mock_profile = MagicMock()
@@ -66,15 +68,17 @@ def test_generate_code_challenge():
 def test_roadmap_schema_compliance():
     # Test Frontend Developer cached roadmap
     result = AIService.generate_roadmap("Frontend Developer", [])
-    assert 'phases' in result
-    for phase in result['phases']:
-        assert 'milestones' in phase
-        for ms in phase['milestones']:
-            assert 'id' in ms
-            assert 'completed' in ms
-            assert 'estimated_hours' in ms
-            assert 'checkpoint' in ms
-            assert ms['completed'] is False
+    assert 'visual' in result
+    assert 'data' in result
+    data = result['data']
+    assert 'steps' in data
+    for step in data['steps']:
+        assert 'sub_topics' in step
+        for st in step['sub_topics']:
+            assert 'id' in st
+            assert 'completed' in st
+            assert 'name' in st
+            assert st['completed'] is False
 
 def test_roadmap_toggle_milestone(client, db):
     # Register/login seeker user
@@ -97,7 +101,8 @@ def test_roadmap_toggle_milestone(client, db):
         user_id=user.id,
         target_role="Backend Developer",
         current_skills=["Python"],
-        steps=roadmap_data
+        steps=roadmap_data['data'],
+        visual_ascii=roadmap_data['visual']
     )
     db.session.add(roadmap_record)
     db.session.commit()
@@ -107,7 +112,7 @@ def test_roadmap_toggle_milestone(client, db):
         sess['_user_id'] = str(user.id)
         sess['_fresh'] = True
         
-    milestone_id = roadmap_data['phases'][0]['milestones'][0]['id']
+    milestone_id = roadmap_data['data']['steps'][0]['sub_topics'][0]['id']
     
     # Send toggle request
     response = client.post('/ai/roadmap/toggle', json={
@@ -123,5 +128,5 @@ def test_roadmap_toggle_milestone(client, db):
     
     # Verify DB update
     updated_roadmap = Roadmap.query.get(roadmap_record.id)
-    assert updated_roadmap.steps['phases'][0]['milestones'][0]['completed'] is True
+    assert updated_roadmap.steps['steps'][0]['sub_topics'][0]['completed'] is True
 

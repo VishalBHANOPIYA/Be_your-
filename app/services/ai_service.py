@@ -153,6 +153,207 @@ class AIService:
         }
 
     @staticmethod
+    def _generate_ascii_visual_from_data(data):
+        role = data.get('role', 'Developer').upper()
+        lines = []
+        
+        # 1. Header Box
+        lines.append("┌" + "─"*59 + "┐")
+        role_text = f"{role} ROADMAP"
+        if len(role_text) > 55:
+            role_text = role_text[:52] + "..."
+        padding = (59 - len(role_text)) // 2
+        left_padding = " " * padding
+        right_padding = " " * (59 - len(role_text) - padding)
+        lines.append(f"│{left_padding}{role_text}{right_padding}│")
+        lines.append("└" + "─"*59 + "┘")
+        
+        # Down arrow
+        lines.append("")
+        lines.append("        ▼")
+        lines.append("")
+        
+        steps = data.get('steps', [])
+        for idx, step in enumerate(steps):
+            title = f"{step.get('number', idx+1)}. {step.get('title', '').upper()}"
+            if len(title) > 55:
+                title = title[:52] + "..."
+            
+            # Step Box
+            lines.append("┌" + "─"*59 + "┐")
+            t_pad = 59 - len(title) - 2
+            lines.append(f"│ {title}{' '*t_pad} │")
+            lines.append("├" + "─"*59 + "┤")
+            
+            # Sub-topics
+            for st in step.get('sub_topics', []):
+                name = st.get('name', '')
+                completed = st.get('completed', False)
+                bullet = "✓ " if completed else "• "
+                bullet_name = f"{bullet}{name}"
+                if len(bullet_name) > 54:
+                    bullet_name = bullet_name[:51] + "..."
+                
+                st_pad = 59 - len(bullet_name) - 3
+                lines.append(f"│  {bullet_name}{' '*st_pad} │")
+                
+            lines.append("└" + "─"*59 + "┘")
+            
+            # Down arrow if not last
+            lines.append("")
+            lines.append("        ▼")
+            lines.append("")
+            
+        # Build projects box
+        lines.append("┌" + "─"*59 + "┐")
+        proj_title = f"{len(steps) + 1}. BUILD PROJECTS"
+        t_pad = 59 - len(proj_title) - 2
+        lines.append(f"│ {proj_title}{' '*t_pad} │")
+        lines.append("├" + "─"*59 + "┤")
+        
+        projects = data.get('projects', {})
+        
+        # Beginner
+        beg_hdr = "Beginner:"
+        lines.append(f"│ {beg_hdr}{' '*(59 - len(beg_hdr) - 2)} │")
+        for p in projects.get('beginner', [])[:2]:
+            p_str = f"• {p}"
+            if len(p_str) > 54:
+                p_str = p_str[:51] + "..."
+            lines.append(f"│  {p_str}{' '*(59 - len(p_str) - 3)} │")
+        lines.append(f"│{' '*59}│")
+        
+        # Intermediate
+        int_hdr = "Intermediate:"
+        lines.append(f"│ {int_hdr}{' '*(59 - len(int_hdr) - 2)} │")
+        for p in projects.get('intermediate', [])[:1]:
+            p_str = f"• {p}"
+            if len(p_str) > 54:
+                p_str = p_str[:51] + "..."
+            lines.append(f"│  {p_str}{' '*(59 - len(p_str) - 3)} │")
+        lines.append(f"│{' '*59}│")
+        
+        # Advanced
+        adv_hdr = "Advanced:"
+        lines.append(f"│ {adv_hdr}{' '*(59 - len(adv_hdr) - 2)} │")
+        for p in projects.get('advanced', [])[:1]:
+            p_str = f"• {p}"
+            if len(p_str) > 54:
+                p_str = p_str[:51] + "..."
+            lines.append(f"│  {p_str}{' '*(59 - len(p_str) - 3)} │")
+            
+        lines.append("└" + "─"*59 + "┘")
+        
+        # Down arrow
+        lines.append("")
+        lines.append("        ▼")
+        lines.append("")
+        
+        # Job Ready Checklist Box
+        lines.append("┌" + "─"*59 + "┐")
+        jr_title = f"JOB READY {role.upper()}"
+        if len(jr_title) > 55:
+            jr_title = jr_title[:52] + "..."
+        padding = (59 - len(jr_title)) // 2
+        left_padding = " " * padding
+        right_padding = " " * (59 - len(jr_title) - padding)
+        lines.append(f"│{left_padding}{jr_title}{right_padding}│")
+        lines.append("├" + "─"*59 + "┤")
+        
+        for item in data.get('job_ready_checklist', [])[:8]:
+            item_str = f"✓ {item}"
+            if len(item_str) > 55:
+                item_str = item_str[:52] + "..."
+            lines.append(f"│ {item_str}{' '*(59 - len(item_str) - 2)} │")
+            
+        lines.append("└" + "─"*59 + "┘")
+        
+        return "\n".join(lines)
+
+    @staticmethod
+    def _build_roadmap_response(roadmap_data, current_skills=None):
+        if not current_skills:
+            current_skills = []
+        current_skills_lower = [s.lower().strip() for s in current_skills]
+        
+        # Map phases to steps
+        steps = []
+        job_ready_skills = []
+        for idx, phase in enumerate(roadmap_data.get("phases", [])):
+            estimated_hours = sum(ms.get("estimated_hours", 10) for ms in phase.get("milestones", []))
+            sub_topics = []
+            for ms in phase.get("milestones", []):
+                ms_name = ms.get("name", "Key Topic")
+                completed = any(s in ms_name.lower() or ms_name.lower() in s for s in current_skills_lower) or ms.get('completed', False)
+                sub_topics.append({
+                    "id": ms.get("id", f"step_{idx+1}_topic_{len(sub_topics)+1}"),
+                    "name": ms_name,
+                    "description": ms.get("desc", ms.get("description", "Learn this critical skill.")),
+                    "completed": completed
+                })
+                job_ready_skills.append(ms_name)
+                
+            steps.append({
+                "id": f"step_{idx+1}",
+                "number": idx + 1,
+                "title": phase.get("title", f"Phase {idx}").upper(),
+                "duration_weeks": max(2, len(phase.get("milestones", []))),
+                "estimated_hours": estimated_hours,
+                "sub_topics": sub_topics,
+                "checkpoint": phase.get("phase_project", "Build a practice application."),
+                "resources": [
+                    {"type": "docs", "title": "Official Documentation", "source": "official"}
+                ],
+                "completed": all(st["completed"] for st in sub_topics) if sub_topics else False
+            })
+            
+        projs = roadmap_data.get("projects", [])
+        projects_dict = {
+            "beginner": projs[:2] if len(projs) >= 2 else projs if projs else ["Beginner Project"],
+            "intermediate": [projs[2]] if len(projs) >= 3 else ["Intermediate Project"],
+            "advanced": [roadmap_data.get("final_capstone", "Final Capstone Project Prep")]
+        }
+        
+        data = {
+            "role": roadmap_data.get("role", "Developer"),
+            "summary": f"Complete path to master {roadmap_data.get('role', 'Developer')}.",
+            "total_duration_weeks": sum(step["duration_weeks"] for step in steps),
+            "weekly_commitment_hours": "10-15 hours",
+            "difficulty": "Beginner",
+            "steps": steps,
+            "projects": projects_dict,
+            "job_ready_checklist": job_ready_skills[:6] if job_ready_skills else ["Core Skills"],
+            "career_tips": [
+                "Build real-world projects and showcase them on GitHub.",
+                "Practice coding challenges regularly to improve problem solving.",
+                "Network with other developers in local or online communities."
+            ]
+        }
+        
+        visual = AIService._generate_ascii_visual_from_data(data)
+        
+        return {
+            "visual": visual,
+            "data": data
+        }
+
+    @staticmethod
+    def _mark_completed_topics(data, current_skills):
+        if not current_skills or not data or 'steps' not in data:
+            return data
+        current_skills_lower = [s.lower().strip() for s in current_skills]
+        for step in data.get('steps', []):
+            sub_topics = step.get('sub_topics', [])
+            for st in sub_topics:
+                name = st.get('name', '').lower().strip()
+                if any(skill in name or name in skill for skill in current_skills_lower):
+                    st['completed'] = True
+            # Update step completed status
+            if sub_topics:
+                step['completed'] = all(st.get('completed', False) for st in sub_topics)
+        return data
+
+    @staticmethod
     def generate_roadmap(target_role, current_skills):
         role_lower = target_role.lower()
         
@@ -231,7 +432,7 @@ class AIService:
                 "final_capstone": "Design and build a multi-user SaaS web app with secure payments, background jobs, and a clean responsive interface."
             }
             AIService._post_process_roadmap(roadmap, "fullstack")
-            return roadmap
+            return AIService._build_roadmap_response(roadmap, current_skills)
             
         elif is_frontend:
             roadmap = {
@@ -288,7 +489,7 @@ class AIService:
                 "final_capstone": "Develop and optimize a production-ready Next.js application integrated with a CMS, utilizing Tailwind CSS and advanced state management."
             }
             AIService._post_process_roadmap(roadmap, "frontend")
-            return roadmap
+            return AIService._build_roadmap_response(roadmap, current_skills)
             
         elif is_backend:
             roadmap = {
@@ -341,7 +542,7 @@ class AIService:
                 "final_capstone": "Design a highly available distributed API server equipped with rate-limiting, message queues, caching, and automated scaling properties."
             }
             AIService._post_process_roadmap(roadmap, "backend")
-            return roadmap
+            return AIService._build_roadmap_response(roadmap, current_skills)
             
         elif is_datascience:
             roadmap = {
@@ -394,7 +595,7 @@ class AIService:
                 "final_capstone": "Deploy an end-to-end model pipeline that pulls streaming data, performs inference at scale, and tracks metrics in a dashboard."
             }
             AIService._post_process_roadmap(roadmap, "datascience")
-            return roadmap
+            return AIService._build_roadmap_response(roadmap, current_skills)
             
         elif is_devops:
             roadmap = {
@@ -447,7 +648,7 @@ class AIService:
                 "final_capstone": "Build and secure a Kubernetes cluster with automated deployments, logging, backups, and live auto-scaling rules."
             }
             AIService._post_process_roadmap(roadmap, "devops")
-            return roadmap
+            return AIService._build_roadmap_response(roadmap, current_skills)
             
         elif is_ml:
             roadmap = {
@@ -480,7 +681,7 @@ class AIService:
                 "final_capstone": "Design and implement a production-ready RAG application using a fine-tuned LLM, vector database, and custom interface."
             }
             AIService._post_process_roadmap(roadmap, "ml")
-            return roadmap
+            return AIService._build_roadmap_response(roadmap, current_skills)
             
         # --- DYNAMIC GEMINI GENERATOR (For other roles) ---
         from app.services.prompts.roadmap_prompt import ROADMAP_GENERATION_PROMPT
@@ -491,7 +692,7 @@ class AIService:
         api_key = current_app.config.get('GEMINI_API_KEY') or os.environ.get('GEMINI_API_KEY')
         
         if not api_key:
-            return AIService._get_fallback_roadmap(target_role)
+            return AIService._build_roadmap_response(AIService._get_fallback_roadmap(target_role), current_skills)
             
         try:
             import google.generativeai as genai
@@ -509,12 +710,20 @@ class AIService:
             )
             
             roadmap_dict = json.loads(response.text)
-            AIService._post_process_roadmap(roadmap_dict, "general")
+            
+            # If the response conforms to {"visual": "...", "data": {...}}, validate/update it
+            if isinstance(roadmap_dict, dict) and "data" in roadmap_dict:
+                roadmap_dict["data"] = AIService._mark_completed_topics(roadmap_dict["data"], current_skills)
+                roadmap_dict["visual"] = AIService._generate_ascii_visual_from_data(roadmap_dict["data"])
+            else:
+                # If Gemini returned a flat/old schema, build the correct response
+                roadmap_dict = AIService._build_roadmap_response(roadmap_dict, current_skills)
+                
             return roadmap_dict
             
         except Exception as e:
             print(f"Gemini API error during roadmap generation: {e}")
-            return AIService._get_fallback_roadmap(target_role)
+            return AIService._build_roadmap_response(AIService._get_fallback_roadmap(target_role), current_skills)
 
     @staticmethod
     def analyze_resume(text):

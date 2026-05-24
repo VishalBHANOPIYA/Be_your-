@@ -14,5 +14,6 @@ class Roadmap(db.Model):
     target_role = db.Column(db.String(120), nullable=False)
     current_skills = db.Column(CompatibleJSON) # ["Python", "Flask"]
     steps = db.Column(CompatibleJSON) # [{"title": "Learn React", "resources": [], "status": "todo"}]
+    visual_ascii = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

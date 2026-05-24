@@ -75,13 +75,14 @@ def generate_roadmap():
     target_role = request.form.get('target_role')
     current_skills = current_user.profile.skills or []
     
-    roadmap_data = AIService.generate_roadmap(target_role, current_skills)
+    result = AIService.generate_roadmap(target_role, current_skills)
     
     existing_roadmap = Roadmap.query.filter_by(user_id=current_user.id).first()
     if existing_roadmap:
         existing_roadmap.target_role = target_role
         existing_roadmap.current_skills = current_skills
-        existing_roadmap.steps = roadmap_data
+        existing_roadmap.steps = result["data"]
+        existing_roadmap.visual_ascii = result["visual"]
         db.session.commit()
         roadmap_record = existing_roadmap
     else:
@@ -89,12 +90,13 @@ def generate_roadmap():
             user_id=current_user.id,
             target_role=target_role,
             current_skills=current_skills,
-            steps=roadmap_data
+            steps=result["data"],
+            visual_ascii=result["visual"]
         )
         db.session.add(roadmap_record)
         db.session.commit()
         
-    return render_template('user/roadmap.html', roadmap=roadmap_record.steps, target_role=target_role, roadmap_id=roadmap_record.id)
+    return render_template('user/roadmap.html', roadmap=roadmap_record, target_role=target_role, roadmap_id=roadmap_record.id)
 
 @ai_bp.route('/roadmap/toggle', methods=['POST'])
 @login_required
@@ -118,35 +120,43 @@ def toggle_milestone():
     if not roadmap_record:
         return jsonify({"success": False, "error": "Roadmap not found"}), 404
         
-    steps = dict(roadmap_record.steps) if roadmap_record.steps else {}
-    phases = steps.get('phases', [])
+    steps_data = dict(roadmap_record.steps) if roadmap_record.steps else {}
+    steps_list = steps_data.get('steps', [])
     
     found = False
     new_status = False
-    for phase in phases:
-        for ms in phase.get('milestones', []):
-            if ms.get('id') == milestone_id:
-                ms['completed'] = not ms.get('completed', False)
-                new_status = ms['completed']
+    for step in steps_list:
+        for st in step.get('sub_topics', []):
+            if st.get('id') == milestone_id:
+                st['completed'] = not st.get('completed', False)
+                new_status = st['completed']
                 found = True
                 break
         if found:
+            # Re-evaluate step completed status
+            sub_topics = step.get('sub_topics', [])
+            if sub_topics:
+                step['completed'] = all(item.get('completed', False) for item in sub_topics)
             break
             
     if not found:
         return jsonify({"success": False, "error": "Milestone not found in roadmap"}), 404
         
+    # Regenerate visual_ascii string in the backend to sync checkmarks!
+    from app.services.ai_service import AIService
+    roadmap_record.steps = steps_data
+    roadmap_record.visual_ascii = AIService._generate_ascii_visual_from_data(steps_data)
+    
     from sqlalchemy.orm.attributes import flag_modified
-    roadmap_record.steps = steps
     flag_modified(roadmap_record, "steps")
     db.session.commit()
     
     total_milestones = 0
     completed_milestones = 0
-    for phase in phases:
-        for ms in phase.get('milestones', []):
+    for step in steps_list:
+        for st in step.get('sub_topics', []):
             total_milestones += 1
-            if ms.get('completed', False):
+            if st.get('completed', False):
                 completed_milestones += 1
                 
     progress_percentage = int((completed_milestones / total_milestones) * 100) if total_milestones > 0 else 0
@@ -156,7 +166,8 @@ def toggle_milestone():
         "completed": new_status, 
         "progress_percentage": progress_percentage,
         "completed_count": completed_milestones,
-        "total_count": total_milestones
+        "total_count": total_milestones,
+        "visual_ascii": roadmap_record.visual_ascii
     })
 
 
