@@ -13,19 +13,19 @@
             <p class="text-on-surface-variant text-sm">Start your AI-powered career evolution today.</p>
         </div>
 
-        <form method="POST" action="{{ url_for('auth.register') }}" class="space-y-6">
+        <form method="POST" action="{{ url_for('auth.register') }}" class="space-y-6" data-form-type="register" autocomplete="on">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             
             <div class="space-y-2">
                 <label for="name" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Full Name</label>
-                <input type="text" id="name" name="name" required
+                <input type="text" id="name" name="name" required autocomplete="name"
                     class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant"
                     placeholder="Enter your name">
             </div>
 
             <div class="space-y-2">
                 <label for="email" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Email Address</label>
-                <input type="email" id="email" name="email" required
+                <input type="email" id="email" name="email" required autocomplete="email"
                     class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant"
                     placeholder="name@example.com">
             </div>
@@ -33,7 +33,7 @@
             <div class="space-y-2">
                 <label for="password" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Password</label>
                 <div class="relative group">
-                    <input type="password" id="password" name="password" required
+                    <input type="password" id="password" name="password" required autocomplete="new-password"
                         class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant pr-14"
                         placeholder="••••••••">
                     <button type="button" onclick="togglePassword('password', this)" class="absolute right-5 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">

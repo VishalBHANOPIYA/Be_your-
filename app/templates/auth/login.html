@@ -13,12 +13,12 @@
             <p class="text-on-surface-variant text-sm">Resume your journey to career excellence.</p>
         </div>
 
-        <form method="POST" action="{{ url_for('auth.login') }}" class="space-y-6">
+        <form method="POST" action="{{ url_for('auth.login') }}" class="space-y-6" data-form-type="login" autocomplete="on">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             
             <div class="space-y-2">
                 <label for="email" class="text-xs font-bold text-primary uppercase tracking-widest ml-1">Email Address</label>
-                <input type="email" id="email" name="email" required
+                <input type="email" id="email" name="email" required autocomplete="username"
                     class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant"
                     placeholder="name@example.com">
             </div>
@@ -29,7 +29,7 @@
                     <a href="{{ url_for('auth.forgot_password') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors font-medium">Forgot password?</a>
                 </div>
                 <div class="relative group">
-                    <input type="password" id="password" name="password" required
+                    <input type="password" id="password" name="password" required autocomplete="current-password"
                         class="w-full bg-input border border-outline rounded-2xl px-5 py-4 text-on-surface focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant pr-14"
                         placeholder="••••••••">
                     <button type="button" onclick="togglePassword('password', this)" class="absolute right-5 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">
