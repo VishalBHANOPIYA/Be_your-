@@ -190,8 +190,9 @@ flask run
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `SECRET_KEY` | Flask secret key (random string) | Yes |
-| `DATABASE_URL` | `postgresql://user:pass@localhost/be_your` | Yes |
 | `JWT_SECRET_KEY` | JWT signing key | Yes |
+| `GEMINI_API_KEY` | Google Gemini API key for AI roadmap generation. Get free key at https://aistudio.google.com/app/apikey | Yes |
+| `DATABASE_URL` | `postgresql://user:pass@localhost/be_your` | Yes |
 | `GOOGLE_CLIENT_ID` | Google OAuth (console.cloud.google.com) | Optional |
 | `GOOGLE_CLIENT_SECRET`| Google OAuth secret | Optional |
 | `MAIL_USERNAME` | Gmail address for sending emails | Optional |
