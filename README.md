@@ -150,8 +150,8 @@ be_your/
 
 **Step 1 — Clone:**
 ```bash
-git clone https://github.com/yourusername/be-your.git
-cd be-your
+git clone https://github.com/VishalBHANOPIYA/Be_your-.git
+cd Be_your-
 ```
 
 **Step 2 — Virtual environment (IMPORTANT: do NOT use Anaconda):**
@@ -201,8 +201,8 @@ flask run
 ## 🧪 Test Accounts (after running seed.py)
 | Role | Email | Password |
 |------|-------|----------|
-| **Job Seeker** | seeker@example.com | Seeker@123 |
-| **Recruiter** | recruiter@example.com | Recruiter@123 |
+| **Job Seeker** | `seeker@example.com` | Seeker@123 |
+| **Recruiter** | `recruiter@example.com` | Recruiter@123 |
 | **Admin** | Create manually (see below) | — |
 
 **Create admin user manually:**
