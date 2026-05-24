@@ -44,6 +44,80 @@ Be Your is a next-generation AI-powered career platform designed to bridge the g
 - **CSP Headers:** Strict content security policies applied platform-wide.
 - **Role-Based Access:** Isolated routes for Seekers, Recruiters, and Admins.
 
+## 📸 Screenshots
+
+| Landing Page | Seeker Dashboard |
+|:---:|:---:|
+| ![Landing](docs/screenshots/landing.png) | ![Dashboard](docs/screenshots/seeker-dashboard.png) |
+| **AI Career Roadmap** | **Job Listings** |
+| ![Roadmap](docs/screenshots/roadmap.png) | ![Jobs](docs/screenshots/jobs.png) |
+| **Recruiter Dashboard** | **AI Mock Interview** |
+| ![Recruiter](docs/screenshots/recruiter-dashboard.png) | ![Interview](docs/screenshots/interview.png) |
+| **Portfolio Analyzer** | **Daily Sprint** |
+| ![Portfolio](docs/screenshots/portfolio.png) | ![Sprint](docs/screenshots/sprint.png) |
+
+## 🎯 How It Works
+
+Be Your supports three distinct user journeys, each with its own 
+tailored experience:
+
+### 👨🎓 For Job Seekers (Students)
+Sign up → Upload resume → Get AI-powered resume analysis → Generate 
+a personalized career roadmap for your target role → Track daily 
+learning progress with Daily Sprint streaks → Practice with AI mock 
+interviews → Apply to jobs with auto-generated cover letters → 
+Showcase your portfolio analyzed by AI.
+
+### 🏢 For Recruiters
+Sign up as recruiter → Post jobs with detailed requirements → View 
+ranked applicants sorted by AI match score → Filter by skills, 
+experience, and portfolio strength → Access deep analytics on 
+applicant trends → Communicate with candidates through built-in 
+notifications.
+
+### 🛡️ For Admins
+Oversee the entire platform with role-based dashboards → Manage 
+users and recruiter accounts → Moderate job postings → View system 
+logs and audit trails → Export CSV reports for analysis.
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Browser / Client                     │
+└────────────────────────┬────────────────────────────────┘
+                         │ HTTPS
+┌────────────────────────▼────────────────────────────────┐
+│              Flask Application (Gunicorn)               │
+├─────────────────────────────────────────────────────────┤
+│  Routes Layer:                                          │
+│  /auth  /user  /jobs  /recruiter  /admin  /ai  /sprint  │
+├─────────────────────────────────────────────────────────┤
+│  Services Layer:                                        │
+│  AIService · MatchService · ResumeService               │
+│  PortfolioService · SprintService · NotifyService       │
+├─────────────────────────────────────────────────────────┤
+│  Models Layer (SQLAlchemy ORM):                         │
+│  User · Job · Application · Roadmap · Interview         │
+│  Portfolio · Sprint · Notification                      │
+└──────┬───────────────┬──────────────┬───────────────────┘
+       │               │              │
+       ▼               ▼              ▼
+┌──────────┐    ┌─────────────┐  ┌─────────────────┐
+│PostgreSQL│    │ Gemini AI   │  │ External APIs   │
+│ Database │    │ (Roadmaps,  │  │ GitHub · SMTP   │
+│          │    │  Interview) │  │ Google OAuth    │
+└──────────┘    └─────────────┘  └─────────────────┘
+```
+
+**Key Design Decisions:**
+- **Role-based access control** with `@role_required` decorator on every 
+  protected route — seeker, recruiter, and admin routes are fully isolated
+- **AI fallback strategy** — Gemini API for dynamic roadmaps with hardcoded 
+  cache for popular roles to reduce cost
+- **Async email** via Flask-Mail with threading
+- **JSONB columns** for flexible storage of roadmap progress and AI outputs
+
 ## 🛠️ Tech Stack
 | Category | Technology | Purpose |
 |----------|------------|---------|
@@ -178,6 +252,22 @@ pytest tests/test_auth.py -v   # Auth only
 
 ## 👤 Author
 **Vishal Bhanopiya** | [LinkedIn](https://linkedin.com/in/vishalbhanopiya) | [GitHub](https://github.com/VishalBHANOPIYA)
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how:
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add some amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+Please make sure your code:
+- Follows existing patterns (Flask blueprints, service layer)
+- Includes tests for new features
+- Passes existing tests: `pytest`
+- Uses proper logging instead of print statements
 
 ## 📄 License
 MIT — feel free to use, modify, and build on this project.
