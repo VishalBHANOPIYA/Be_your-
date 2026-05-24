@@ -7,7 +7,7 @@ def upgrade_database(app):
     with app.app_context():
         # Get the database dialect/engine name
         engine_name = db.engine.name
-        print(f"[DB-UPGRADE] Upgrading database with engine: {engine_name}")
+        app.logger.info(f"[DB-UPGRADE] Upgrading database with engine: {engine_name}")
         
         # 1. Idempotently add gamification columns to 'users' table
         user_columns = {
@@ -22,23 +22,23 @@ def upgrade_database(app):
                 db.session.execute(text(f"SELECT {column_name} FROM users LIMIT 1"))
             except Exception:
                 db.session.rollback()
-                print(f"[DB-UPGRADE] Adding column 'users.{column_name}'...")
+                app.logger.info(f"[DB-UPGRADE] Adding column 'users.{column_name}'...")
                 try:
                     db.session.execute(text(f"ALTER TABLE users ADD COLUMN {column_name} {column_def}"))
                     db.session.commit()
-                    print(f"[DB-UPGRADE] Column 'users.{column_name}' added successfully!")
+                    app.logger.info(f"[DB-UPGRADE] Column 'users.{column_name}' added successfully!")
                 except Exception as e:
                     db.session.rollback()
-                    print(f"[DB-UPGRADE] Warning: Could not add column 'users.{column_name}': {e}")
+                    app.logger.warning(f"[DB-UPGRADE] Warning: Could not add column 'users.{column_name}': {e}")
             else:
-                print(f"[DB-UPGRADE] Column 'users.{column_name}' already exists.")
+                app.logger.debug(f"[DB-UPGRADE] Column 'users.{column_name}' already exists.")
 
         # 2. Idempotently create 'user_sprint_submissions' table
         try:
             db.session.execute(text("SELECT id FROM user_sprint_submissions LIMIT 1"))
         except Exception:
             db.session.rollback()
-            print("[DB-UPGRADE] Table 'user_sprint_submissions' does not exist. Creating it...")
+            app.logger.info("[DB-UPGRADE] Table 'user_sprint_submissions' does not exist. Creating it...")
             
             # Determine appropriate types (JSONB for PostgreSQL, TEXT/JSON for others)
             json_type = "JSONB" if engine_name == "postgresql" else "TEXT"
@@ -67,12 +67,12 @@ def upgrade_database(app):
                 # Add unique index on (user_id, sprint_date) to ensure 1 submission per day
                 db.session.execute(text("CREATE UNIQUE INDEX idx_user_sprint_date ON user_sprint_submissions (user_id, sprint_date)"))
                 db.session.commit()
-                print("[DB-UPGRADE] Table 'user_sprint_submissions' created successfully!")
+                app.logger.info("[DB-UPGRADE] Table 'user_sprint_submissions' created successfully!")
             except Exception as e:
                 db.session.rollback()
-                print(f"[DB-UPGRADE] Error creating 'user_sprint_submissions' table: {e}")
+                app.logger.error(f"[DB-UPGRADE] Error creating 'user_sprint_submissions' table: {e}")
         else:
-            print("[DB-UPGRADE] Table 'user_sprint_submissions' already exists.")
+            app.logger.debug("[DB-UPGRADE] Table 'user_sprint_submissions' already exists.")
             
         # 3. Idempotently add portfolio columns to 'profiles' table
         profile_columns = {
@@ -86,15 +86,15 @@ def upgrade_database(app):
                 db.session.execute(text(f"SELECT {column_name} FROM profiles LIMIT 1"))
             except Exception:
                 db.session.rollback()
-                print(f"[DB-UPGRADE] Adding column 'profiles.{column_name}'...")
+                app.logger.info(f"[DB-UPGRADE] Adding column 'profiles.{column_name}'...")
                 try:
                     db.session.execute(text(f"ALTER TABLE profiles ADD COLUMN {column_name} {column_def}"))
                     db.session.commit()
-                    print(f"[DB-UPGRADE] Column 'profiles.{column_name}' added successfully!")
+                    app.logger.info(f"[DB-UPGRADE] Column 'profiles.{column_name}' added successfully!")
                 except Exception as e:
                     db.session.rollback()
-                    print(f"[DB-UPGRADE] Warning: Could not add column 'profiles.{column_name}': {e}")
+                    app.logger.warning(f"[DB-UPGRADE] Warning: Could not add column 'profiles.{column_name}': {e}")
             else:
-                print(f"[DB-UPGRADE] Column 'profiles.{column_name}' already exists.")
+                app.logger.debug(f"[DB-UPGRADE] Column 'profiles.{column_name}' already exists.")
             
-        print("[DB-UPGRADE] Database upgrade checks completed.")
+        app.logger.info("[DB-UPGRADE] Database upgrade checks completed.")

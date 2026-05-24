@@ -49,5 +49,5 @@ class GitHubService:
                 "top_repos": repos_data
             }
         except Exception as e:
-            print(f"Error fetching GitHub data: {e}")
+            current_app.logger.error(f"Error fetching GitHub data: {e}")
             return None

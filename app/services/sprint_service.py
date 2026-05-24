@@ -1,10 +1,13 @@
 import json
 import random
 import hashlib
+import logging
 from datetime import datetime, date, timedelta
 from app.extensions import db
 from app.models.user import User
 from app.models.sprint import UserSprintSubmission
+
+logger = logging.getLogger(__name__)
 
 class SprintService:
     # 15 Curated daily challenges for the global Wordle-style platform experience
@@ -817,7 +820,7 @@ class SprintService:
         yesterday = today - timedelta(days=1)
         
         if user.last_sprint_date != today and user.last_sprint_date != yesterday:
-            print(f"[STREAK-RESET] User {user.name} missed a day. Resetting streak from {user.streak_count} to 0.")
+            logger.info(f"[STREAK-RESET] User {user.name} missed a day. Resetting streak from {user.streak_count} to 0.")
             user.streak_count = 0
             db.session.commit()
             return True

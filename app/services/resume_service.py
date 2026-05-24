@@ -24,7 +24,7 @@ class ResumeService:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     text = f.read()
         except Exception as e:
-            print(f"Error extracting text: {e}")
+            current_app.logger.error(f"Error extracting text: {e}")
             return None
             
         return text.strip()

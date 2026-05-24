@@ -1,7 +1,10 @@
 import os
+import logging
 import pdfplumber
 import docx
 import re
+
+logger = logging.getLogger(__name__)
 
 class ResumeParser:
     @staticmethod
@@ -15,14 +18,14 @@ class ResumeParser:
                     if extracted:
                         text += extracted + "\n"
         except Exception as e:
-            print(f"pdfplumber extraction failed: {e}")
+            logger.warning(f"pdfplumber extraction failed: {e}")
             
         text = text.strip()
         if len(text) > 20:
             return text
             
         # Layer 2: pypdfium2 (Secondary Fallback)
-        print("pdfplumber returned empty/too-short text. Trying pypdfium2 fallback...")
+        logger.info("pdfplumber returned empty/too-short text. Trying pypdfium2 fallback...")
         pypdf_text = ""
         try:
             import pypdfium2 as pdfium
@@ -33,14 +36,14 @@ class ResumeParser:
                 if extracted:
                     pypdf_text += extracted + "\n"
         except Exception as e:
-            print(f"pypdfium2 extraction failed: {e}")
+            logger.warning(f"pypdfium2 extraction failed: {e}")
             
         pypdf_text = pypdf_text.strip()
         if len(pypdf_text) > 20:
             return pypdf_text
             
         # Layer 3: pdfminer (Tertiary Fallback)
-        print("pypdfium2 returned empty/too-short text. Trying pdfminer fallback...")
+        logger.info("pypdfium2 returned empty/too-short text. Trying pdfminer fallback...")
         pdfminer_text = ""
         try:
             from pdfminer.high_level import extract_text
@@ -48,7 +51,7 @@ class ResumeParser:
             if extracted:
                 pdfminer_text = extracted
         except Exception as e:
-            print(f"pdfminer extraction failed: {e}")
+            logger.warning(f"pdfminer extraction failed: {e}")
             
         pdfminer_text = pdfminer_text.strip()
         if len(pdfminer_text) > 20:
@@ -65,7 +68,7 @@ class ResumeParser:
             for para in doc.paragraphs:
                 text += para.text + "\n"
         except Exception as e:
-            print(f"Error extracting DOCX: {e}")
+            logger.error(f"Error extracting DOCX: {e}")
         return text
 
     @staticmethod

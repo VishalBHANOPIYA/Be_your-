@@ -2,6 +2,7 @@ import re
 import random
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from flask import current_app
 from app.models.job import Job
 
 class AIService:
@@ -722,7 +723,7 @@ class AIService:
             return roadmap_dict
             
         except Exception as e:
-            print(f"Gemini API error during roadmap generation: {e}")
+            current_app.logger.error(f"Gemini API error during roadmap generation: {e}")
             return AIService._build_roadmap_response(AIService._get_fallback_roadmap(target_role), current_skills)
 
     @staticmethod
@@ -1071,7 +1072,7 @@ Best regards,
                 "score": min(70 + (github_data['followers'] * 2) + (len(github_data['top_repos']) * 2), 98)
             }
         except Exception as e:
-            print(f"AI Analysis error: {e}")
+            current_app.logger.error(f"AI Analysis error: {e}")
             return None
 
     @staticmethod
