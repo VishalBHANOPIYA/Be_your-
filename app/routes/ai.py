@@ -70,11 +70,95 @@ def interview_analysis(interview_id):
 @login_required
 @role_required('seeker')
 def generate_roadmap():
+    from app.models.roadmap import Roadmap
+    from app.extensions import db
     target_role = request.form.get('target_role')
     current_skills = current_user.profile.skills or []
     
     roadmap_data = AIService.generate_roadmap(target_role, current_skills)
-    return render_template('user/roadmap.html', roadmap=roadmap_data, target_role=target_role)
+    
+    existing_roadmap = Roadmap.query.filter_by(user_id=current_user.id).first()
+    if existing_roadmap:
+        existing_roadmap.target_role = target_role
+        existing_roadmap.current_skills = current_skills
+        existing_roadmap.steps = roadmap_data
+        db.session.commit()
+        roadmap_record = existing_roadmap
+    else:
+        roadmap_record = Roadmap(
+            user_id=current_user.id,
+            target_role=target_role,
+            current_skills=current_skills,
+            steps=roadmap_data
+        )
+        db.session.add(roadmap_record)
+        db.session.commit()
+        
+    return render_template('user/roadmap.html', roadmap=roadmap_record.steps, target_role=target_role, roadmap_id=roadmap_record.id)
+
+@ai_bp.route('/roadmap/toggle', methods=['POST'])
+@login_required
+@role_required('seeker')
+def toggle_milestone():
+    from app.models.roadmap import Roadmap
+    from app.extensions import db
+    data = request.json or {}
+    roadmap_id_str = data.get('roadmap_id')
+    milestone_id = data.get('milestone_id')
+    
+    if not roadmap_id_str or not milestone_id:
+        return jsonify({"success": False, "error": "Missing roadmap_id or milestone_id"}), 400
+        
+    try:
+        roadmap_id = uuid.UUID(roadmap_id_str)
+    except ValueError:
+        return jsonify({"success": False, "error": "Invalid roadmap_id format"}), 400
+        
+    roadmap_record = Roadmap.query.filter_by(id=roadmap_id, user_id=current_user.id).first()
+    if not roadmap_record:
+        return jsonify({"success": False, "error": "Roadmap not found"}), 404
+        
+    steps = dict(roadmap_record.steps) if roadmap_record.steps else {}
+    phases = steps.get('phases', [])
+    
+    found = False
+    new_status = False
+    for phase in phases:
+        for ms in phase.get('milestones', []):
+            if ms.get('id') == milestone_id:
+                ms['completed'] = not ms.get('completed', False)
+                new_status = ms['completed']
+                found = True
+                break
+        if found:
+            break
+            
+    if not found:
+        return jsonify({"success": False, "error": "Milestone not found in roadmap"}), 404
+        
+    from sqlalchemy.orm.attributes import flag_modified
+    roadmap_record.steps = steps
+    flag_modified(roadmap_record, "steps")
+    db.session.commit()
+    
+    total_milestones = 0
+    completed_milestones = 0
+    for phase in phases:
+        for ms in phase.get('milestones', []):
+            total_milestones += 1
+            if ms.get('completed', False):
+                completed_milestones += 1
+                
+    progress_percentage = int((completed_milestones / total_milestones) * 100) if total_milestones > 0 else 0
+    
+    return jsonify({
+        "success": True, 
+        "completed": new_status, 
+        "progress_percentage": progress_percentage,
+        "completed_count": completed_milestones,
+        "total_count": total_milestones
+    })
+
 
 @ai_bp.route('/recommendations')
 @login_required

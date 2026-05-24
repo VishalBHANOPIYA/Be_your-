@@ -62,3 +62,66 @@ def test_generate_code_challenge():
     result = AIService.generate_code_challenge([])
     assert 'title' in result
     assert 'starter_code' in result or 'starter' in result
+
+def test_roadmap_schema_compliance():
+    # Test Frontend Developer cached roadmap
+    result = AIService.generate_roadmap("Frontend Developer", [])
+    assert 'phases' in result
+    for phase in result['phases']:
+        assert 'milestones' in phase
+        for ms in phase['milestones']:
+            assert 'id' in ms
+            assert 'completed' in ms
+            assert 'estimated_hours' in ms
+            assert 'checkpoint' in ms
+            assert ms['completed'] is False
+
+def test_roadmap_toggle_milestone(client, db):
+    # Register/login seeker user
+    import uuid
+    from app.models.user import User, Profile
+    from app.models.roadmap import Roadmap
+    
+    email = f"seeker_{uuid.uuid4().hex[:8]}@example.com"
+    user = User(name="Roadmap Tester", email=email, role="seeker")
+    user.set_password("Password123!")
+    db.session.add(user)
+    db.session.flush()
+    
+    profile = Profile(user_id=user.id, skills=["Python"])
+    db.session.add(profile)
+    
+    # Generate roadmap and save to db
+    roadmap_data = AIService.generate_roadmap("Backend Developer", ["Python"])
+    roadmap_record = Roadmap(
+        user_id=user.id,
+        target_role="Backend Developer",
+        current_skills=["Python"],
+        steps=roadmap_data
+    )
+    db.session.add(roadmap_record)
+    db.session.commit()
+    
+    # Authenticate client
+    with client.session_transaction() as sess:
+        sess['_user_id'] = str(user.id)
+        sess['_fresh'] = True
+        
+    milestone_id = roadmap_data['phases'][0]['milestones'][0]['id']
+    
+    # Send toggle request
+    response = client.post('/ai/roadmap/toggle', json={
+        'roadmap_id': str(roadmap_record.id),
+        'milestone_id': milestone_id
+    })
+    
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data['success'] is True
+    assert data['completed'] is True
+    assert data['progress_percentage'] > 0
+    
+    # Verify DB update
+    updated_roadmap = Roadmap.query.get(roadmap_record.id)
+    assert updated_roadmap.steps['phases'][0]['milestones'][0]['completed'] is True
+

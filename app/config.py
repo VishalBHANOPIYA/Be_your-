@@ -21,6 +21,7 @@ class Config:
     
     UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', 'uploads/resumes')
     MAX_CONTENT_LENGTH = int(os.environ.get('MAX_CONTENT_LENGTH', 5 * 1024 * 1024))
+    GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
 
     # Google OAuth
     GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')

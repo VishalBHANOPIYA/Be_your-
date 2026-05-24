@@ -60,3 +60,4 @@ Werkzeug==3.0.3
 wrapt==2.1.2
 WTForms==3.2.2
 zstandard==0.25.0
+google-generativeai==0.8.6

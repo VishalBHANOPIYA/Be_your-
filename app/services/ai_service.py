@@ -36,215 +36,485 @@ class AIService:
         return round(float(score), 2)
 
     @staticmethod
+    def _post_process_roadmap(roadmap_dict, role_type="general"):
+        # Map role type to generic default resources
+        resources_map = {
+            "fullstack": [{"title": "MDN Web Docs", "url": "https://developer.mozilla.org"}, {"title": "Full Stack Open", "url": "https://fullstackopen.com"}],
+            "frontend": [{"title": "MDN Web Docs", "url": "https://developer.mozilla.org"}, {"title": "javascript.info", "url": "https://javascript.info"}],
+            "backend": [{"title": "Real Python", "url": "https://realpython.com"}, {"title": "Flask Documentation", "url": "https://flask.palletsprojects.com"}],
+            "datascience": [{"title": "Kaggle Learn", "url": "https://www.kaggle.com/learn"}, {"title": "Scikit-Learn Docs", "url": "https://scikit-learn.org"}],
+            "devops": [{"title": "Docker Curriculum", "url": "https://docker-curriculum.com"}, {"title": "Kubernetes Docs", "url": "https://kubernetes.io/docs"}],
+            "ml": [{"title": "PyTorch Tutorials", "url": "https://pytorch.org/tutorials"}, {"title": "Hugging Face Course", "url": "https://huggingface.co/course"}]
+        }
+        default_res = resources_map.get(role_type, [{"title": "Official Documentation", "url": "https://docs.google.com"}])
+        
+        if not isinstance(roadmap_dict, dict):
+            return
+        if 'role' not in roadmap_dict:
+            roadmap_dict['role'] = 'Expert'
+        if 'phases' not in roadmap_dict:
+            roadmap_dict['phases'] = []
+        if 'projects' not in roadmap_dict:
+            roadmap_dict['projects'] = ['Capstone Project']
+        if 'stack' not in roadmap_dict:
+            roadmap_dict['stack'] = {'core': 'Industry Standard'}
+        if 'timeline' not in roadmap_dict:
+            roadmap_dict['timeline'] = '6 Months'
+        if 'final_capstone' not in roadmap_dict:
+            roadmap_dict['final_capstone'] = 'Build a final capstone project matching the target role.'
+            
+        for p_idx, phase in enumerate(roadmap_dict.get('phases', [])):
+            if not isinstance(phase, dict):
+                continue
+            if 'title' not in phase:
+                phase['title'] = f"Phase {p_idx}"
+            if 'phase_project' not in phase:
+                phase['phase_project'] = f"Build a practical implementation representing skills from Phase {p_idx}."
+            if 'milestones' not in phase:
+                phase['milestones'] = []
+                
+            for m_idx, ms in enumerate(phase.get('milestones', [])):
+                if not isinstance(ms, dict):
+                    continue
+                if 'id' not in ms or not ms['id']:
+                    ms['id'] = f"ms_{p_idx}_{m_idx}"
+                if 'name' not in ms:
+                    ms['name'] = 'Key Topic'
+                if 'description' not in ms:
+                    ms['description'] = ms.get('desc', 'Learn key principles of the topic.')
+                ms['desc'] = ms['description']
+                if 'estimated_hours' not in ms:
+                    ms['estimated_hours'] = 10
+                if 'resources' not in ms or not isinstance(ms['resources'], list):
+                    ms['resources'] = default_res
+                if 'checkpoint' not in ms:
+                    ms['checkpoint'] = 'Create a small test program verifying the concepts learned.'
+                if 'completed' not in ms:
+                    ms['completed'] = False
+
+    @staticmethod
+    def _get_fallback_roadmap(target_role):
+        return {
+            "role": f"{target_role.title()} Expert",
+            "phases": [
+                {
+                    "title": "Phase 0: Foundations",
+                    "phase_project": f"Setup dev tools and create a basic document outlining the role of a {target_role}.",
+                    "milestones": [
+                        {
+                            "id": "ms_0_0",
+                            "name": "Environment Setup",
+                            "description": "Install required IDEs, command line tools, and local servers.",
+                            "desc": "Install required IDEs, command line tools, and local servers.",
+                            "estimated_hours": 6,
+                            "resources": [{"title": "Official Guides", "url": "https://www.google.com"}],
+                            "checkpoint": "Verify installation of tools via console.",
+                            "completed": False
+                        }
+                    ]
+                },
+                {
+                    "title": "Phase 1: Basic Principles",
+                    "phase_project": "Build a minor utility or layout using basic principles.",
+                    "milestones": [
+                        {
+                            "id": "ms_1_0",
+                            "name": "Core Syntax & Logic",
+                            "description": "Understand language elements, basic APIs, and structural patterns.",
+                            "desc": "Understand language elements, basic APIs, and structural patterns.",
+                            "estimated_hours": 12,
+                            "resources": [{"title": "Reference Tutorial", "url": "https://www.w3schools.com"}],
+                            "checkpoint": "Create a console-based calculator or equivalent script.",
+                            "completed": False
+                        }
+                    ]
+                },
+                {
+                    "title": "Phase 2: Project Deployment",
+                    "phase_project": "Deploy the capstone project live to a cloud environment.",
+                    "milestones": [
+                        {
+                            "id": "ms_2_0",
+                            "name": "Final Capstone Prep",
+                            "description": "Assemble all elements and package them into a professional portfolio item.",
+                            "desc": "Assemble all elements and package them into a professional portfolio item.",
+                            "estimated_hours": 20,
+                            "resources": [{"title": "Deployment Best Practices", "url": "https://github.com"}],
+                            "checkpoint": "Run tests and verify build success.",
+                            "completed": False
+                        }
+                    ]
+                }
+            ],
+            "projects": [f"Standard {target_role} App", "System Architecture", "Performance Benchmarking"],
+            "stack": {"core": "Standard Industry Tools", "cloud": "AWS/Azure/GCP"},
+            "timeline": "6–9 Months",
+            "final_capstone": f"Build a production-ready deployment of a full {target_role} application."
+        }
+
+    @staticmethod
     def generate_roadmap(target_role, current_skills):
         role_lower = target_role.lower()
         
+        is_fullstack = "full" in role_lower and "stack" in role_lower
+        is_frontend = "front" in role_lower
+        is_backend = "back" in role_lower
+        is_datascience = "data" in role_lower or "science" in role_lower
+        is_devops = "devops" in role_lower or "cloud" in role_lower or "infra" in role_lower
+        is_ml = "ml" in role_lower or "machine" in role_lower or "learning" in role_lower
+        
         # --- PRE-DEFINED EXPERT ROADMAPS ---
         
-        # 1. FULL STACK ROADMAP
-        if "full" in role_lower and "stack" in role_lower:
-            return {
+        if is_fullstack:
+            roadmap = {
                 "role": "Full Stack Developer (2026)",
                 "phases": [
-                    {"title": "Phase 0: Basics & Setup", "milestones": [
-                        {"name": "Internet Fundamentals", "desc": "IP, DNS, Browsers, and Client-Server architecture."},
-                        {"name": "HTTP/HTTPS", "desc": "Request methods, Status codes, and Secure communication."},
-                        {"name": "Tools Setup", "desc": "VS Code, Node.js, and terminal mastery."}
+                    {"title": "Phase 0: Basics & Setup", "phase_project": "Set up a clean local environment and host a basic HTML page.", "milestones": [
+                        {"name": "Internet Fundamentals", "desc": "IP, DNS, Browsers, and Client-Server architecture.", "estimated_hours": 4, "checkpoint": "Explain the request-response cycle."},
+                        {"name": "HTTP/HTTPS", "desc": "Request methods, Status codes, and Secure communication.", "estimated_hours": 4, "checkpoint": "Verify requests using developer tools."},
+                        {"name": "Tools Setup", "desc": "VS Code, Node.js, and terminal mastery.", "estimated_hours": 6, "checkpoint": "Configure editor and git settings."}
                     ]},
-                    {"title": "Phase 1: Frontend Basics", "milestones": [
-                        {"name": "Semantic HTML", "desc": "Tags for SEO and accessibility (Forms, Tables, Nav)."},
-                        {"name": "Modern CSS", "desc": "Flexbox, Grid, and Responsive Media Queries."},
-                        {"name": "Tailwind CSS", "desc": "Utility-first CSS for rapid UI development."}
+                    {"title": "Phase 1: Frontend Basics", "phase_project": "Build a responsive personal homepage styled with Tailwind.", "milestones": [
+                        {"name": "Semantic HTML", "desc": "Tags for SEO and accessibility (Forms, Tables, Nav).", "estimated_hours": 8, "checkpoint": "Build an accessible signup form."},
+                        {"name": "Modern CSS", "desc": "Flexbox, Grid, and Responsive Media Queries.", "estimated_hours": 12, "checkpoint": "Build a responsive 3-column layout."},
+                        {"name": "Tailwind CSS", "desc": "Utility-first CSS for rapid UI development.", "estimated_hours": 8, "checkpoint": "Style a dashboard grid using Tailwind."}
                     ]},
-                    {"title": "Phase 2: JavaScript Mastery", "milestones": [
-                        {"name": "Core JS", "desc": "Variables, Functions, Closures, and DOM manipulation."},
-                        {"name": "Async JS", "desc": "Promises, Async/Await, and Fetching APIs."},
-                        {"name": "Data Structures", "desc": "Arrays, Objects, and ES6+ features."}
+                    {"title": "Phase 2: JavaScript Mastery", "phase_project": "Build a weather app that pulls and displays data from a public API.", "milestones": [
+                        {"name": "Core JS", "desc": "Variables, Functions, Closures, and DOM manipulation.", "estimated_hours": 15, "checkpoint": "Build a dynamic list builder in vanilla JS."},
+                        {"name": "Async JS", "desc": "Promises, Async/Await, and Fetching APIs.", "estimated_hours": 10, "checkpoint": "Fetch user data from a public user endpoint."},
+                        {"name": "Data Structures", "desc": "Arrays, Objects, and ES6+ features.", "estimated_hours": 8, "checkpoint": "Solve 5 basic array manipulation problems."}
                     ]},
-                    {"title": "Phase 3: React Development", "milestones": [
-                        {"name": "Components & Props", "desc": "Functional components and data passing."},
-                        {"name": "State & Hooks", "desc": "useState, useEffect, and custom hooks."},
-                        {"name": "Routing", "desc": "React Router for Single Page Apps."}
+                    {"title": "Phase 3: React Development", "phase_project": "Create a fully functional movie search dashboard with filtering.", "milestones": [
+                        {"name": "Components & Props", "desc": "Functional components and data passing.", "estimated_hours": 10, "checkpoint": "Create a reusable Card component."},
+                        {"name": "State & Hooks", "desc": "useState, useEffect, and custom hooks.", "estimated_hours": 15, "checkpoint": "Track user inputs and search queries in local state."},
+                        {"name": "Routing", "desc": "React Router for Single Page Apps.", "estimated_hours": 8, "checkpoint": "Setup home, details, and about routes."}
                     ]},
-                    {"title": "Phase 4: Backend Fundamentals", "milestones": [
-                        {"name": "Flask / Django", "desc": "Building robust servers and routing logic."},
-                        {"name": "RESTful APIs", "desc": "Designing CRUD endpoints for frontend integration."},
-                        {"name": "Authentication", "desc": "JWT and session-based user security."}
+                    {"title": "Phase 4: Backend Fundamentals", "phase_project": "Build a Flask-based task manager backend with complete CRUD APIs.", "milestones": [
+                        {"name": "Flask / Django", "desc": "Building robust servers and routing logic.", "estimated_hours": 15, "checkpoint": "Bootstrap a Flask app with blueprint routing."},
+                        {"name": "RESTful APIs", "desc": "Designing CRUD endpoints for frontend integration.", "estimated_hours": 10, "checkpoint": "Expose JSON endpoints for tasks."},
+                        {"name": "Authentication", "desc": "JWT and session-based user security.", "estimated_hours": 12, "checkpoint": "Secure private endpoints with Flask-JWT-Extended."}
                     ]},
-                    {"title": "Phase 5: Database Design", "milestones": [
-                        {"name": "SQL (PostgreSQL)", "desc": "Schema design, joins, and indexing."},
-                        {"name": "NoSQL (MongoDB)", "desc": "Document-based storage and aggregation."},
-                        {"name": "ORM/ODM", "desc": "SQLAlchemy and MongoEngine."}
+                    {"title": "Phase 5: Database Design", "phase_project": "Connect your task backend to a persistent PostgreSQL database.", "milestones": [
+                        {"name": "SQL (PostgreSQL)", "desc": "Schema design, joins, and indexing.", "estimated_hours": 15, "checkpoint": "Write SQL queries to join 3 related tables."},
+                        {"name": "NoSQL (MongoDB)", "desc": "Document-based storage and aggregation.", "estimated_hours": 10, "checkpoint": "Store flexible document structures in MongoDB."},
+                        {"name": "ORM/ODM", "desc": "SQLAlchemy and MongoEngine.", "estimated_hours": 10, "checkpoint": "Define tables using SQLAlchemy declarative base models."}
                     ]},
-                    {"title": "Phase 6: Full Integration", "milestones": [
-                        {"name": "Axios/Fetch", "desc": "Connecting React to your Backend APIs."},
-                        {"name": "CORS & Headers", "desc": "Handling cross-origin requests securely."},
-                        {"name": "State Sharing", "desc": "Context API or Redux for global state."}
+                    {"title": "Phase 6: Full Integration", "phase_project": "Integrate your React frontend with your Flask API backend.", "milestones": [
+                        {"name": "Axios/Fetch", "desc": "Connecting React to your Backend APIs.", "estimated_hours": 8, "checkpoint": "Perform fetch calls on component mount."},
+                        {"name": "CORS & Headers", "desc": "Handling cross-origin requests securely.", "estimated_hours": 6, "checkpoint": "Configure CORS headers in backend responses."},
+                        {"name": "State Sharing", "desc": "Context API or Redux for global state.", "estimated_hours": 12, "checkpoint": "Implement global auth state provider."}
                     ]},
-                    {"title": "Phase 7: Advanced Concepts", "milestones": [
-                        {"name": "Real-time Ops", "desc": "WebSockets and Socket.io for chat/notifications."},
-                        {"name": "Caching", "desc": "Redis for session management and speed."},
-                        {"name": "MVC Patterns", "desc": "Organizing code for scalability."}
+                    {"title": "Phase 7: Advanced Concepts", "phase_project": "Build a real-time notification system inside your application.", "milestones": [
+                        {"name": "Real-time Ops", "desc": "WebSockets and Socket.io for chat/notifications.", "estimated_hours": 12, "checkpoint": "Broadcast message from server to connected clients."},
+                        {"name": "Caching", "desc": "Redis for session management and speed.", "estimated_hours": 10, "checkpoint": "Cache database queries in Redis memory."},
+                        {"name": "MVC Patterns", "desc": "Organizing code for scalability.", "estimated_hours": 8, "checkpoint": "Structure project into models, views, and controllers."}
                     ]},
-                    {"title": "Phase 8: Security & Testing", "milestones": [
-                        {"name": "OWASP Top 10", "desc": "Preventing XSS and SQL Injection."},
-                        {"name": "Unit Testing", "desc": "Pytest and Jest for bug-free code."},
-                        {"name": "Logging", "desc": "System monitoring and error tracking."}
+                    {"title": "Phase 8: Security & Testing", "phase_project": "Write a complete test suite for your backend and frontend apps.", "milestones": [
+                        {"name": "OWASP Top 10", "desc": "Preventing XSS and SQL Injection.", "estimated_hours": 10, "checkpoint": "Input validation and SQL parameterization check."},
+                        {"name": "Unit Testing", "desc": "Pytest and Jest for bug-free code.", "estimated_hours": 12, "checkpoint": "Write unit tests targeting route controller logic."},
+                        {"name": "Logging", "desc": "System monitoring and error tracking.", "estimated_hours": 6, "checkpoint": "Add logger module writing to log files."}
                     ]},
-                    {"title": "Phase 9: DevOps & Cloud", "milestones": [
-                        {"name": "Docker", "desc": "Containerizing your full stack app."},
-                        {"name": "CI/CD", "desc": "Automated deployments with GitHub Actions."},
-                        {"name": "Vercel & Render", "desc": "Hosting frontend and backend in production."}
+                    {"title": "Phase 9: DevOps & Cloud", "phase_project": "Deploy containerized apps via auto pipelines.", "milestones": [
+                        {"name": "Docker", "desc": "Containerizing your full stack app.", "estimated_hours": 10, "checkpoint": "Build multi-stage Docker images."},
+                        {"name": "CI/CD", "desc": "Automated deployments with GitHub Actions.", "estimated_hours": 10, "checkpoint": "Automate testing via workflows."},
+                        {"name": "Vercel & Render", "desc": "Hosting frontend and backend in production.", "estimated_hours": 8, "checkpoint": "Verify live SSL and DNS settings."}
                     ]},
-                    {"title": "Phase 10: Career Prep", "milestones": [
-                        {"name": "Portfolio App", "desc": "Building a production-ready Capstone project."},
-                        {"name": "DSA Prep", "desc": "Solving Array and String challenges on LeetCode."},
-                        {"name": "Interview Skills", "desc": "Soft skills and technical system design."}
+                    {"title": "Phase 10: Career Prep", "phase_project": "Prepare full portfolio, resume, and GitHub files.", "milestones": [
+                        {"name": "Portfolio App", "desc": "Building a production-ready Capstone project.", "estimated_hours": 20, "checkpoint": "Host capstone demo and write README."},
+                        {"name": "DSA Prep", "desc": "Solving Array and String challenges on LeetCode.", "estimated_hours": 30, "checkpoint": "Solve 50 Easy/Medium LeetCode questions."},
+                        {"name": "Interview Skills", "desc": "Soft skills and technical system design.", "estimated_hours": 15, "checkpoint": "Answer 10 behavioral and design prompts."}
                     ]}
                 ],
                 "projects": ["Netflix Clone", "E-Commerce Site", "Real-Time Chat App", "AI Project", "Expense Tracker"],
                 "stack": {"frontend": "React, Tailwind", "backend": "Flask, Django", "db": "PostgreSQL, MongoDB"},
-                "timeline": "6–8 Months"
+                "timeline": "6–8 Months",
+                "final_capstone": "Design and build a multi-user SaaS web app with secure payments, background jobs, and a clean responsive interface."
             }
-
-        # 2. FRONTEND ROADMAP
-        if "front" in role_lower:
-            return {
+            AIService._post_process_roadmap(roadmap, "fullstack")
+            return roadmap
+            
+        elif is_frontend:
+            roadmap = {
                 "role": "Frontend Developer (2026)",
                 "phases": [
-                    {"title": "Phase 0: Basics & Setup", "milestones": [
-                        {"name": "Internet", "desc": "How browsers and the web work."},
-                        {"name": "Tools", "desc": "VS Code, Git, and Node.js install."}
+                    {"title": "Phase 0: Basics & Setup", "phase_project": "Setup your developer workspace and configure Git version control.", "milestones": [
+                        {"name": "Internet", "desc": "How browsers and the web work.", "estimated_hours": 4, "checkpoint": "Explain IP and browser caching."},
+                        {"name": "Tools", "desc": "VS Code, Git, and Node.js install.", "estimated_hours": 6, "checkpoint": "Create and push a GitHub repository."}
                     ]},
-                    {"title": "Phase 1: HTML Mastery", "milestones": [
-                        {"name": "Semantic Tags", "desc": "Clean and accessible structure."},
-                        {"name": "Forms", "desc": "Inputs, Validation, and Data submission."}
+                    {"title": "Phase 1: HTML Mastery", "phase_project": "Code a clean, semantic web layout with form validations.", "milestones": [
+                        {"name": "Semantic Tags", "desc": "Clean and accessible structure.", "estimated_hours": 6, "checkpoint": "Check website accessibility scoring."},
+                        {"name": "Forms", "desc": "Inputs, Validation, and Data submission.", "estimated_hours": 8, "checkpoint": "Add client-side form validation attributes."}
                     ]},
-                    {"title": "Phase 2: CSS Layouts", "milestones": [
-                        {"name": "Flex/Grid", "desc": "Modern responsive layout techniques."},
-                        {"name": "Animations", "desc": "CSS Transitions and keyframes."}
+                    {"title": "Phase 2: CSS Layouts", "phase_project": "Build a responsive grid landing page styled purely with CSS Grid.", "milestones": [
+                        {"name": "Flex/Grid", "desc": "Modern responsive layout techniques.", "estimated_hours": 10, "checkpoint": "Create a CSS grid gallery."},
+                        {"name": "Animations", "desc": "CSS Transitions and keyframes.", "estimated_hours": 8, "checkpoint": "Code a loading spinner animation."}
                     ]},
-                    {"title": "Phase 3: JavaScript Core", "milestones": [
-                        {"name": "DOM", "desc": "Selecting and modifying HTML with JS."},
-                        {"name": "Events", "desc": "Clicks, inputs, and form listeners."}
+                    {"title": "Phase 3: JavaScript Core", "phase_project": "Create an interactive interactive todo list app with DOM updates.", "milestones": [
+                        {"name": "DOM", "desc": "Selecting and modifying HTML with JS.", "estimated_hours": 12, "checkpoint": "Update UI dynamically on list operations."},
+                        {"name": "Events", "desc": "Clicks, inputs, and form listeners.", "estimated_hours": 8, "checkpoint": "Add search filtration using keypress events."}
                     ]},
-                    {"title": "Phase 4: JavaScript Pro", "milestones": [
-                        {"name": "Async/Await", "desc": "Handling external API data."},
-                        {"name": "ES6 Features", "desc": "Destructuring, Arrow functions, and Map/Filter."}
+                    {"title": "Phase 4: JavaScript Pro", "phase_project": "Build a dashboard fetching real-time user profiles from an open API.", "milestones": [
+                        {"name": "Async/Await", "desc": "Handling external API data.", "estimated_hours": 10, "checkpoint": "Implement retry logic for fetch calls."},
+                        {"name": "ES6 Features", "desc": "Destructuring, Arrow functions, and Map/Filter.", "estimated_hours": 8, "checkpoint": "Write clean array transforms."}
                     ]},
-                    {"title": "Phase 5: React Basics", "milestones": [
-                        {"name": "JSX", "desc": "Writing HTML inside your JavaScript."},
-                        {"name": "State", "desc": "Managing dynamic data with hooks."}
+                    {"title": "Phase 5: React Basics", "phase_project": "Build a functional multi-card layout managed via React State.", "milestones": [
+                        {"name": "JSX", "desc": "Writing HTML inside your JavaScript.", "estimated_hours": 8, "checkpoint": "Render items from a dynamic array list."},
+                        {"name": "State", "desc": "Managing dynamic data with hooks.", "estimated_hours": 12, "checkpoint": "Persist search inputs in state."}
                     ]},
-                    {"title": "Phase 6: React Advanced", "milestones": [
-                        {"name": "Context API", "desc": "Handling global user data."},
-                        {"name": "Custom Hooks", "desc": "Reusable logic for multiple components."}
+                    {"title": "Phase 6: React Advanced", "phase_project": "Build a theme toggle feature accessible by all UI subcomponents.", "milestones": [
+                        {"name": "Context API", "desc": "Handling global user data.", "estimated_hours": 10, "checkpoint": "Consume user configuration globally."},
+                        {"name": "Custom Hooks", "desc": "Reusable logic for multiple components.", "estimated_hours": 10, "checkpoint": "Code custom useLocalStorage hook."}
                     ]},
-                    {"title": "Phase 7: State Tools", "milestones": [
-                        {"name": "Zustand / Redux", "desc": "Modern state management libraries."},
-                        {"name": "State Persistence", "desc": "Saving data across page refreshes."}
+                    {"title": "Phase 7: State Tools", "phase_project": "Refactor state management of a shopping cart app to use Zustand.", "milestones": [
+                        {"name": "Zustand / Redux", "desc": "Modern state management libraries.", "estimated_hours": 12, "checkpoint": "Implement global store for cart state."},
+                        {"name": "State Persistence", "desc": "Saving data across page refreshes.", "estimated_hours": 6, "checkpoint": "Configure store auto-hydration."}
                     ]},
-                    {"title": "Phase 8: API Integration", "milestones": [
-                        {"name": "Axios", "desc": "Professional HTTP client for React."},
-                        {"name": "React Query", "desc": "Caching and fetching like a pro."}
+                    {"title": "Phase 8: API Integration", "phase_project": "Optimize queries of a dynamic dataset using React Query.", "milestones": [
+                        {"name": "Axios", "desc": "Professional HTTP client for React.", "estimated_hours": 6, "checkpoint": "Configure global axios interceptor instances."},
+                        {"name": "React Query", "desc": "Caching and fetching like a pro.", "estimated_hours": 12, "checkpoint": "Cache list queries with custom staleTime."}
                     ]},
-                    {"title": "Phase 9: UI Design", "milestones": [
-                        {"name": "Figma", "desc": "Turning designs into pixel-perfect code."},
-                        {"name": "Tailwind CSS", "desc": "Fast styling with utility classes."}
+                    {"title": "Phase 9: UI Design", "phase_project": "Style a complete responsive dashboard modeled on a Figma design.", "milestones": [
+                        {"name": "Figma", "desc": "Turning designs into pixel-perfect code.", "estimated_hours": 8, "checkpoint": "Extract layout specs and spacing from Figma file."},
+                        {"name": "Tailwind CSS", "desc": "Fast styling with utility classes.", "estimated_hours": 8, "checkpoint": "Style custom utility-focused layouts."}
                     ]},
-                    {"title": "Phase 10: Performance", "milestones": [
-                        {"name": "Next.js", "desc": "SEO and Server-side rendering."},
-                        {"name": "Lazy Loading", "desc": "Optimizing image and code bundle size."}
+                    {"title": "Phase 10: Performance", "phase_project": "Deploy a serverless website optimized for maximum lighthouse scores.", "milestones": [
+                        {"name": "Next.js", "desc": "SEO and Server-side rendering.", "estimated_hours": 15, "checkpoint": "Configure page using Server Component architecture."},
+                        {"name": "Lazy Loading", "desc": "Optimizing image and code bundle size.", "estimated_hours": 8, "checkpoint": "Split bundle size using dynamic imports."}
                     ]}
                 ],
                 "projects": ["Portfolio Website", "Movie App", "Blog UI", "Admin Dashboard", "E-Commerce Frontend"],
                 "stack": {"frontend": "React, Next.js, Tailwind", "tools": "Git, Figma, VS Code"},
-                "timeline": "5–7 Months"
+                "timeline": "5–7 Months",
+                "final_capstone": "Develop and optimize a production-ready Next.js application integrated with a CMS, utilizing Tailwind CSS and advanced state management."
             }
-
-        # 3. BACKEND ROADMAP
-        if "back" in role_lower:
-            return {
+            AIService._post_process_roadmap(roadmap, "frontend")
+            return roadmap
+            
+        elif is_backend:
+            roadmap = {
                 "role": "Backend Developer (2026)",
                 "phases": [
-                    {"title": "Phase 0: Basics", "milestones": [{"name": "Internet", "desc": "HTTP, DNS, TCP/IP"}, {"name": "OS", "desc": "Linux basics, Terminal"}]},
-                    {"title": "Phase 1: Languages", "milestones": [{"name": "Core Syntax", "desc": "Python, Node.js, or Go"}, {"name": "DSA", "desc": "Arrays, Trees, Graphs"}]},
-                    {"title": "Phase 2: APIs", "milestones": [{"name": "RESTful APIs", "desc": "Designing JSON endpoints"}, {"name": "GraphQL", "desc": "Advanced data querying"}]},
-                    {"title": "Phase 3: Databases", "milestones": [{"name": "Relational", "desc": "PostgreSQL, MySQL"}, {"name": "NoSQL", "desc": "MongoDB, Redis"}]},
-                    {"title": "Phase 4: Caching", "milestones": [{"name": "Redis", "desc": "In-memory data stores"}, {"name": "CDNs", "desc": "Content delivery"}]},
-                    {"title": "Phase 5: Security", "milestones": [{"name": "Auth", "desc": "JWT, OAuth2"}, {"name": "OWASP", "desc": "Preventing injection & XSS"}]},
-                    {"title": "Phase 6: Testing", "milestones": [{"name": "Unit Tests", "desc": "Pytest, Jest"}, {"name": "Integration Tests", "desc": "Testing API flows"}]},
-                    {"title": "Phase 7: CI/CD", "milestones": [{"name": "Pipelines", "desc": "GitHub Actions"}, {"name": "Docker", "desc": "Containerization basics"}]},
-                    {"title": "Phase 8: Architecture", "milestones": [{"name": "Microservices", "desc": "Service decoupling"}, {"name": "Message Brokers", "desc": "Kafka, RabbitMQ"}]},
-                    {"title": "Phase 9: Scale", "milestones": [{"name": "Load Balancing", "desc": "NGINX, HAProxy"}, {"name": "Monitoring", "desc": "Prometheus, Grafana"}]}
+                    {"title": "Phase 0: Basics", "phase_project": "Configure a basic Linux server environment with customized shell utilities.", "milestones": [
+                        {"name": "Internet", "desc": "HTTP, DNS, TCP/IP", "estimated_hours": 4, "checkpoint": "Trace route pathways for standard requests."},
+                        {"name": "OS", "desc": "Linux basics, Terminal", "estimated_hours": 6, "checkpoint": "Manage file permissions and scripts."}
+                    ]},
+                    {"title": "Phase 1: Languages", "phase_project": "Implement standard computer science algorithms in your language of choice.", "milestones": [
+                        {"name": "Core Syntax", "desc": "Python, Node.js, or Go", "estimated_hours": 12, "checkpoint": "Code custom modules and package sets."},
+                        {"name": "DSA", "desc": "Arrays, Trees, Graphs", "estimated_hours": 15, "checkpoint": "Code lookup operations for BST trees."}
+                    ]},
+                    {"title": "Phase 2: APIs", "phase_project": "Build an API service supporting nested lookup data routes.", "milestones": [
+                        {"name": "RESTful APIs", "desc": "Designing JSON endpoints", "estimated_hours": 10, "checkpoint": "Implement CRUD api with proper status returns."},
+                        {"name": "GraphQL", "desc": "Advanced data querying", "estimated_hours": 8, "checkpoint": "Define schema and write dynamic resolver logic."}
+                    ]},
+                    {"title": "Phase 3: Databases", "phase_project": "Design a relational schema with proper primary and foreign indexes.", "milestones": [
+                        {"name": "Relational", "desc": "PostgreSQL, MySQL", "estimated_hours": 15, "checkpoint": "Configure table indices and primary relationships."},
+                        {"name": "NoSQL", "desc": "MongoDB, Redis", "estimated_hours": 10, "checkpoint": "Store flexible schema-less data blocks."}
+                    ]},
+                    {"title": "Phase 4: Caching", "phase_project": "Integrate an in-memory cache layer to buffer heavy database queries.", "milestones": [
+                        {"name": "Redis", "desc": "In-memory data stores", "estimated_hours": 10, "checkpoint": "Cache resource responses in local Redis instances."},
+                        {"name": "CDNs", "desc": "Content delivery", "estimated_hours": 6, "checkpoint": "Configure edge cache rules."}
+                    ]},
+                    {"title": "Phase 5: Security", "phase_project": "Secure backend APIs using modern cryptographically signed token sets.", "milestones": [
+                        {"name": "Auth", "desc": "JWT, OAuth2", "estimated_hours": 12, "checkpoint": "Implement token rotation and expiration rules."},
+                        {"name": "OWASP", "desc": "Preventing injection & XSS", "estimated_hours": 10, "checkpoint": "Sanitize and escape all incoming query inputs."}
+                    ]},
+                    {"title": "Phase 6: Testing", "phase_project": "Setup code quality checks and automated unit/integration tests.", "milestones": [
+                        {"name": "Unit Tests", "desc": "Pytest, Jest", "estimated_hours": 12, "checkpoint": "Write unit tests matching 80% coverage limits."},
+                        {"name": "Integration Tests", "desc": "Testing API flows", "estimated_hours": 10, "checkpoint": "Mock server calls to test database logic."}
+                    ]},
+                    {"title": "Phase 7: CI/CD", "phase_project": "Automate testing and containerization steps on code changes.", "milestones": [
+                        {"name": "Pipelines", "desc": "GitHub Actions", "estimated_hours": 8, "checkpoint": "Configure build automation workflows."},
+                        {"name": "Docker", "desc": "Containerization basics", "estimated_hours": 10, "checkpoint": "Write efficient multi-stage Dockerfiles."}
+                    ]},
+                    {"title": "Phase 8: Architecture", "phase_project": "Deconstruct a monolithic app into message-driven decoupled services.", "milestones": [
+                        {"name": "Microservices", "desc": "Service decoupling", "estimated_hours": 15, "checkpoint": "Configure inter-service communication ports."},
+                        {"name": "Message Brokers", "desc": "Kafka, RabbitMQ", "estimated_hours": 12, "checkpoint": "Implement producer-consumer message flows."}
+                    ]},
+                    {"title": "Phase 9: Scale", "phase_project": "Setup load balancers and system telemetry for performance tracking.", "milestones": [
+                        {"name": "Load Balancing", "desc": "NGINX, HAProxy", "estimated_hours": 10, "checkpoint": "Configure NGINX reverse proxy routers."},
+                        {"name": "Monitoring", "desc": "Prometheus, Grafana", "estimated_hours": 12, "checkpoint": "Configure live server resource monitors."}
+                    ]}
                 ],
                 "projects": ["REST API Service", "Auth Server", "Task Queue Worker"],
                 "stack": {"backend": "Python/Go/Node", "db": "PostgreSQL/Redis"},
-                "timeline": "6-8 Months"
+                "timeline": "6-8 Months",
+                "final_capstone": "Design a highly available distributed API server equipped with rate-limiting, message queues, caching, and automated scaling properties."
             }
-
-        # 4. DATA SCIENTIST ROADMAP
-        if "data" in role_lower or "science" in role_lower:
-            return {
+            AIService._post_process_roadmap(roadmap, "backend")
+            return roadmap
+            
+        elif is_datascience:
+            roadmap = {
                 "role": "Data Scientist (2026)",
                 "phases": [
-                    {"title": "Phase 0: Math", "milestones": [{"name": "Stats", "desc": "Probability, Distributions"}, {"name": "LinAlg", "desc": "Matrices, Vectors"}]},
-                    {"title": "Phase 1: Python", "milestones": [{"name": "Basics", "desc": "Python scripting"}, {"name": "Data Types", "desc": "Lists, Dictionaries"}]},
-                    {"title": "Phase 2: Data Tools", "milestones": [{"name": "Pandas", "desc": "Data manipulation"}, {"name": "NumPy", "desc": "Numerical arrays"}]},
-                    {"title": "Phase 3: Vis", "milestones": [{"name": "Matplotlib", "desc": "Basic plotting"}, {"name": "Seaborn", "desc": "Statistical graphs"}]},
-                    {"title": "Phase 4: ML Basics", "milestones": [{"name": "Scikit-Learn", "desc": "Classical ML models"}, {"name": "Regression", "desc": "Linear & Logistic"}]},
-                    {"title": "Phase 5: ML Adv", "milestones": [{"name": "Trees", "desc": "Random Forests"}, {"name": "Clustering", "desc": "K-Means, PCA"}]},
-                    {"title": "Phase 6: Deep Learning", "milestones": [{"name": "NNs", "desc": "Neural Networks"}, {"name": "PyTorch/TF", "desc": "Deep learning frameworks"}]},
-                    {"title": "Phase 7: NLP", "milestones": [{"name": "Text", "desc": "Tokenization, Embeddings"}, {"name": "Transformers", "desc": "HuggingFace, BERT"}]},
-                    {"title": "Phase 8: Big Data", "milestones": [{"name": "SQL", "desc": "Advanced querying"}, {"name": "Spark", "desc": "Distributed computing"}]},
-                    {"title": "Phase 9: MLOps", "milestones": [{"name": "Deployment", "desc": "Flask/FastAPI for models"}, {"name": "Tracking", "desc": "MLflow, Weights & Biases"}]}
+                    {"title": "Phase 0: Math", "phase_project": "Analyze a random variable dataset and test distribution parameters.", "milestones": [
+                        {"name": "Stats", "desc": "Probability, Distributions", "estimated_hours": 15, "checkpoint": "Calculate standard error bounds."},
+                        {"name": "LinAlg", "desc": "Matrices, Vectors", "estimated_hours": 12, "checkpoint": "Perform matrix decomposition manually."}
+                    ]},
+                    {"title": "Phase 1: Python", "phase_project": "Write robust scripting code to read and parse local raw telemetry feeds.", "milestones": [
+                        {"name": "Basics", "desc": "Python scripting", "estimated_hours": 10, "checkpoint": "Write object-oriented Python modules."},
+                        {"name": "Data Types", "desc": "Lists, Dictionaries", "estimated_hours": 8, "checkpoint": "Implement custom key lookup scripts."}
+                    ]},
+                    {"title": "Phase 2: Data Tools", "phase_project": "Clean and preprocess a noisy csv database using vector operations.", "milestones": [
+                        {"name": "Pandas", "desc": "Data manipulation", "estimated_hours": 12, "checkpoint": "Handle empty values and outliers in dataframes."},
+                        {"name": "NumPy", "desc": "Numerical arrays", "estimated_hours": 10, "checkpoint": "Perform fast vector dot product runs."}
+                    ]},
+                    {"title": "Phase 3: Vis", "phase_project": "Produce a presentation deck outlining patterns from data graphs.", "milestones": [
+                        {"name": "Matplotlib", "desc": "Basic plotting", "estimated_hours": 8, "checkpoint": "Configure custom charts and scales."},
+                        {"name": "Seaborn", "desc": "Statistical graphs", "estimated_hours": 8, "checkpoint": "Generate custom correlation heatmaps."}
+                    ]},
+                    {"title": "Phase 4: ML Basics", "phase_project": "Train a model predicting house values based on feature tables.", "milestones": [
+                        {"name": "Scikit-Learn", "desc": "Classical ML models", "estimated_hours": 15, "checkpoint": "Train validation split evaluation flow."},
+                        {"name": "Regression", "desc": "Linear & Logistic", "estimated_hours": 12, "checkpoint": "Measure model coefficients and residuals."}
+                    ]},
+                    {"title": "Phase 5: ML Adv", "phase_project": "Build an ensemble classifier predicting customer churn ratios.", "milestones": [
+                        {"name": "Trees", "desc": "Random Forests", "estimated_hours": 15, "checkpoint": "Evaluate feature importances from classifiers."},
+                        {"name": "Clustering", "desc": "K-Means, PCA", "estimated_hours": 12, "checkpoint": "Plot cluster outputs across principal components."}
+                    ]},
+                    {"title": "Phase 6: Deep Learning", "phase_project": "Build a network classifying images into designated categories.", "milestones": [
+                        {"name": "NNs", "desc": "Neural Networks", "estimated_hours": 15, "checkpoint": "Code custom backprop training loop."},
+                        {"name": "PyTorch/TF", "desc": "Deep learning frameworks", "estimated_hours": 18, "checkpoint": "Compile a model structure using custom layers."}
+                    ]},
+                    {"title": "Phase 7: NLP", "phase_project": "Train a sentiment classifier categorizing client support emails.", "milestones": [
+                        {"name": "Text", "desc": "Tokenization, Embeddings", "estimated_hours": 12, "checkpoint": "Map raw strings into dense embeddings."},
+                        {"name": "Transformers", "desc": "HuggingFace, BERT", "estimated_hours": 15, "checkpoint": "Fine-tune pretrained transformers."}
+                    ]},
+                    {"title": "Phase 8: Big Data", "phase_project": "Write map-reduce scripts extracting metrics from massive log tables.", "milestones": [
+                        {"name": "SQL", "desc": "Advanced querying", "estimated_hours": 12, "checkpoint": "Use window operations for relative ranking."},
+                        {"name": "Spark", "desc": "Distributed computing", "estimated_hours": 15, "checkpoint": "Process dataset in distributed spark sessions."}
+                    ]},
+                    {"title": "Phase 9: MLOps", "phase_project": "Deploy your model as a microservice and track accuracy drift.", "milestones": [
+                        {"name": "Deployment", "desc": "Flask/FastAPI for models", "estimated_hours": 12, "checkpoint": "Expose endpoint for model predictions."},
+                        {"name": "Tracking", "desc": "MLflow, Weights & Biases", "estimated_hours": 10, "checkpoint": "Register model runs and parameters."}
+                    ]}
                 ],
                 "projects": ["Housing Price Predictor", "Customer Segmentation", "Text Sentiment Analyzer"],
                 "stack": {"language": "Python/R", "tools": "Pandas/PyTorch/SQL"},
-                "timeline": "8-12 Months"
+                "timeline": "8-12 Months",
+                "final_capstone": "Deploy an end-to-end model pipeline that pulls streaming data, performs inference at scale, and tracks metrics in a dashboard."
             }
-
-        # 5. DEVOPS ENGINEER ROADMAP
-        if "devops" in role_lower or "cloud" in role_lower:
-            return {
+            AIService._post_process_roadmap(roadmap, "datascience")
+            return roadmap
+            
+        elif is_devops:
+            roadmap = {
                 "role": "DevOps Engineer (2026)",
                 "phases": [
-                    {"title": "Phase 0: OS & Linux", "milestones": [{"name": "CLI", "desc": "Bash scripting"}, {"name": "Networking", "desc": "TCP/IP, DNS, SSH"}]},
-                    {"title": "Phase 1: Programming", "milestones": [{"name": "Python/Go", "desc": "Automation scripting"}, {"name": "Git", "desc": "Version control"}]},
-                    {"title": "Phase 2: Cloud", "milestones": [{"name": "AWS/Azure/GCP", "desc": "Cloud fundamentals"}, {"name": "IAM", "desc": "Identity & Access Management"}]},
-                    {"title": "Phase 3: Containers", "milestones": [{"name": "Docker", "desc": "Building images"}, {"name": "Registry", "desc": "Docker Hub, ECR"}]},
-                    {"title": "Phase 4: Orchestration", "milestones": [{"name": "Kubernetes", "desc": "Pods, Deployments"}, {"name": "Helm", "desc": "K8s package manager"}]},
-                    {"title": "Phase 5: CI/CD", "milestones": [{"name": "Jenkins/Actions", "desc": "Continuous Integration"}, {"name": "ArgoCD", "desc": "Continuous Deployment (GitOps)"}]},
-                    {"title": "Phase 6: IaC", "milestones": [{"name": "Terraform", "desc": "Infrastructure as Code"}, {"name": "Ansible", "desc": "Configuration management"}]},
-                    {"title": "Phase 7: Monitoring", "milestones": [{"name": "Prometheus", "desc": "Metrics collection"}, {"name": "Grafana", "desc": "Dashboards & Alerts"}]},
-                    {"title": "Phase 8: Logging", "milestones": [{"name": "ELK Stack", "desc": "Elasticsearch, Logstash, Kibana"}, {"name": "Datadog", "desc": "APM and Logs"}]},
-                    {"title": "Phase 9: Security", "milestones": [{"name": "DevSecOps", "desc": "Secret scanning, Vault"}, {"name": "Compliance", "desc": "Auditing infra"}]}
+                    {"title": "Phase 0: OS & Linux", "phase_project": "Script automated system cleanups running on schedule.", "milestones": [
+                        {"name": "CLI", "desc": "Bash scripting", "estimated_hours": 8, "checkpoint": "Write a bash script parsing arguments."},
+                        {"name": "Networking", "desc": "TCP/IP, DNS, SSH", "estimated_hours": 10, "checkpoint": "Troubleshoot network routing errors."}
+                    ]},
+                    {"title": "Phase 1: Programming", "phase_project": "Create a cli utility integrating with git to check branch naming.", "milestones": [
+                        {"name": "Python/Go", "desc": "Automation scripting", "estimated_hours": 12, "checkpoint": "Interact with file system and env properties."},
+                        {"name": "Git", "desc": "Version control", "estimated_hours": 8, "checkpoint": "Rebase branches and handle merge conflicts."}
+                    ]},
+                    {"title": "Phase 2: Cloud", "phase_project": "Bootstrap a virtual private cloud configuration with security groups.", "milestones": [
+                        {"name": "AWS/Azure/GCP", "desc": "Cloud fundamentals", "estimated_hours": 15, "checkpoint": "Configure access control policy models."},
+                        {"name": "IAM", "desc": "Identity & Access Management", "estimated_hours": 10, "checkpoint": "Create users under custom role bounds."}
+                    ]},
+                    {"title": "Phase 3: Containers", "phase_project": "Write multi-stage Dockerfiles caching build dependencies.", "milestones": [
+                        {"name": "Docker", "desc": "Building images", "estimated_hours": 10, "checkpoint": "Maintain small final image sizes."},
+                        {"name": "Registry", "desc": "Docker Hub, ECR", "estimated_hours": 8, "checkpoint": "Push versioned images securely."}
+                    ]},
+                    {"title": "Phase 4: Orchestration", "phase_project": "Deploy a multi-service web application onto a local Kubernetes cluster.", "milestones": [
+                        {"name": "Kubernetes", "desc": "Pods, Deployments", "estimated_hours": 15, "checkpoint": "Write YAML config declarations for pods."},
+                        {"name": "Helm", "desc": "K8s package manager", "estimated_hours": 10, "checkpoint": "Build custom chart packages."}
+                    ]},
+                    {"title": "Phase 5: CI/CD", "phase_project": "Write a git pipeline running build tests and deploying on success.", "milestones": [
+                        {"name": "Jenkins/Actions", "desc": "Continuous Integration", "estimated_hours": 12, "checkpoint": "Implement stage gates for pull requests."},
+                        {"name": "ArgoCD", "desc": "Continuous Deployment (GitOps)", "estimated_hours": 10, "checkpoint": "Sync cluster state with git repo settings."}
+                    ]},
+                    {"title": "Phase 6: IaC", "phase_project": "Define complete cloud infrastructure as a modular Terraform project.", "milestones": [
+                        {"name": "Terraform", "desc": "Infrastructure as Code", "estimated_hours": 15, "checkpoint": "Use remote backends for state management."},
+                        {"name": "Ansible", "desc": "Configuration management", "estimated_hours": 12, "checkpoint": "Write playbooks to update node packages."}
+                    ]},
+                    {"title": "Phase 7: Monitoring", "phase_project": "Configure system metrics collectors alerting on resource spikes.", "milestones": [
+                        {"name": "Prometheus", "desc": "Metrics collection", "estimated_hours": 12, "checkpoint": "Expose custom app metrics for Prometheus."},
+                        {"name": "Grafana", "desc": "Dashboards & Alerts", "estimated_hours": 10, "checkpoint": "Create dynamic system dashboards."}
+                    ]},
+                    {"title": "Phase 8: Logging", "phase_project": "Setup a centralized server gathering and indexing log stdout streams.", "milestones": [
+                        {"name": "ELK Stack", "desc": "Elasticsearch, Logstash, Kibana", "estimated_hours": 12, "checkpoint": "Filter raw logs using regex matches."},
+                        {"name": "Datadog", "desc": "APM and Logs", "estimated_hours": 10, "checkpoint": "Configure tracing flags inside backend apps."}
+                    ]},
+                    {"title": "Phase 9: Security", "phase_project": "Setup secret scanners and secure vault spaces for credentials.", "milestones": [
+                        {"name": "DevSecOps", "desc": "Secret scanning, Vault", "estimated_hours": 12, "checkpoint": "Inject secret tokens securely into runtimes."},
+                        {"name": "Compliance", "desc": "Auditing infra", "estimated_hours": 8, "checkpoint": "Run automated infrastructure security scans."}
+                    ]}
                 ],
                 "projects": ["Dockerized Web App", "Terraform AWS Infra", "Kubernetes Cluster Setup"],
                 "stack": {"cloud": "AWS/K8s", "tools": "Terraform/Docker"},
-                "timeline": "6-9 Months"
+                "timeline": "6-9 Months",
+                "final_capstone": "Build and secure a Kubernetes cluster with automated deployments, logging, backups, and live auto-scaling rules."
             }
-
-        # 6. GENERALIZED GENERATOR (For any other role)
-        return {
-            "role": f"{target_role.title()} Expert",
-            "phases": [
-                {"title": "Phase 0: Prep", "milestones": [{"name": "Environment", "desc": "Installing standard tools and languages."}]},
-                {"title": "Phase 1: Basics", "milestones": [{"name": "Foundations", "desc": "Learning core syntax and principles."}]},
-                {"title": "Phase 2: Logic", "milestones": [{"name": "Algorithms", "desc": "Understanding data structures and patterns."}]},
-                {"title": "Phase 3: Domain", "milestones": [{"name": "Specialization", "desc": "Primary industry frameworks."}]},
-                {"title": "Phase 4: API", "milestones": [{"name": "Integration", "desc": "Networking and data exchange."}]},
-                {"title": "Phase 5: Data", "milestones": [{"name": "Persistence", "desc": "Databases and storage design."}]},
-                {"title": "Phase 6: Security", "milestones": [{"name": "Hardening", "desc": "Secure coding and auth protocols."}]},
-                {"title": "Phase 7: Perf", "milestones": [{"name": "Optimizing", "desc": "Efficiency and code quality."}]},
-                {"title": "Phase 8: Infra", "milestones": [{"name": "Cloud", "desc": "Hosting and server management."}]},
-                {"title": "Phase 9: Ops", "milestones": [{"name": "Automation", "desc": "Pipelines and monitoring."}]},
-                {"title": "Phase 10: Final", "milestones": [{"name": "Portfolio", "desc": "Building real-world project."}]}
-            ],
-            "projects": [f"Standard {target_role} App", "System Architecture", "Performance Benchmarking", "Open Source Contribution"],
-            "stack": {"core": "Standard Industry Tools", "cloud": "AWS/Azure", "dev": "CI/CD Pipelines"},
-            "timeline": "6–9 Months"
-        }
+            AIService._post_process_roadmap(roadmap, "devops")
+            return roadmap
+            
+        elif is_ml:
+            roadmap = {
+                "role": "Machine Learning Engineer (2026)",
+                "phases": [
+                    {"title": "Phase 0: Foundations & Math", "phase_project": "Build a statistical analysis notebook for a sample dataset.", "milestones": [
+                        {"name": "Linear Algebra & Calculus", "desc": "Vector spaces, matrix multiplication, derivatives, and gradients.", "estimated_hours": 15, "checkpoint": "Solve linear equations and calculate gradients manually."},
+                        {"name": "Probability & Statistics", "desc": "Distributions, Bayes theorem, hypothesis testing.", "estimated_hours": 15, "checkpoint": "Perform a hypothesis test and calculate Bayes theorem probabilities."}
+                    ]},
+                    {"title": "Phase 1: Python & Data Processing", "phase_project": "Perform Exploratory Data Analysis (EDA) on a dataset and present findings.", "milestones": [
+                        {"name": "Numpy & Pandas", "desc": "Dataframes, vectorization, indexing, and merging data.", "estimated_hours": 12, "checkpoint": "Load, clean, and aggregate a 1M+ row dataset."},
+                        {"name": "Matplotlib & Seaborn", "desc": "Statistical visualizations and plot customization.", "estimated_hours": 8, "checkpoint": "Generate correlation heatmaps and distribution plots."}
+                    ]},
+                    {"title": "Phase 2: Classical Machine Learning", "phase_project": "Train and tune an end-to-end model to predict housing prices.", "milestones": [
+                        {"name": "Supervised Learning", "desc": "Linear regression, decision trees, support vector machines.", "estimated_hours": 20, "checkpoint": "Build and evaluate multiple classification models."},
+                        {"name": "Unsupervised Learning", "desc": "K-means, hierarchical clustering, PCA.", "estimated_hours": 15, "checkpoint": "Segment a customer dataset using K-means and reduce dimensions with PCA."}
+                    ]},
+                    {"title": "Phase 3: Deep Learning Foundations", "phase_project": "Build and deploy an image classifier model using PyTorch.", "milestones": [
+                        {"name": "Neural Networks", "desc": "Activation functions, backpropagation, feedforward networks.", "estimated_hours": 15, "checkpoint": "Write a simple neural network from scratch in Python."},
+                        {"name": "PyTorch or TensorFlow", "desc": "Tensors, datasets, and training loops.", "estimated_hours": 20, "checkpoint": "Train a simple CNN on CIFAR-10 using PyTorch."}
+                    ]},
+                    {"title": "Phase 4: Advanced DL & GenAI", "phase_project": "Build a custom QA bot over local document PDF files.", "milestones": [
+                        {"name": "Transformers & LLMs", "desc": "Self-attention mechanism, transformer architecture, fine-tuning.", "estimated_hours": 25, "checkpoint": "Fine-tune a small LLM (e.g. GPT-2 or Llama-3) on a custom dataset."},
+                        {"name": "Prompt Engineering & RAG", "desc": "Retrieval Augmented Generation, vector databases.", "estimated_hours": 15, "checkpoint": "Create a RAG pipeline using LangChain and ChromaDB."}
+                    ]}
+                ],
+                "projects": ["EDA Dashboard", "Housing Price Predictor", "Image Classifier App", "RAG PDF Bot"],
+                "stack": {"language": "Python", "frameworks": "PyTorch, Scikit-Learn", "tools": "Jupyter, HuggingFace"},
+                "timeline": "6–9 Months",
+                "final_capstone": "Design and implement a production-ready RAG application using a fine-tuned LLM, vector database, and custom interface."
+            }
+            AIService._post_process_roadmap(roadmap, "ml")
+            return roadmap
+            
+        # --- DYNAMIC GEMINI GENERATOR (For other roles) ---
+        from app.services.prompts.roadmap_prompt import ROADMAP_GENERATION_PROMPT
+        from flask import current_app
+        import os
+        import json
+        
+        api_key = current_app.config.get('GEMINI_API_KEY') or os.environ.get('GEMINI_API_KEY')
+        
+        if not api_key:
+            return AIService._get_fallback_roadmap(target_role)
+            
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            
+            prompt = ROADMAP_GENERATION_PROMPT.format(
+                target_role=target_role,
+                current_skills=", ".join(current_skills) if current_skills else "None"
+            )
+            
+            response = model.generate_content(
+                prompt,
+                generation_config={"response_mime_type": "application/json"}
+            )
+            
+            roadmap_dict = json.loads(response.text)
+            AIService._post_process_roadmap(roadmap_dict, "general")
+            return roadmap_dict
+            
+        except Exception as e:
+            print(f"Gemini API error during roadmap generation: {e}")
+            return AIService._get_fallback_roadmap(target_role)
 
     @staticmethod
     def analyze_resume(text):

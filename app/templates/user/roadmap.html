@@ -3,61 +3,138 @@
 {% block title %}Career Roadmap | Be Your AI{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto px-6 py-12 space-y-12">
+<div class="max-w-5xl mx-auto px-6 py-12 space-y-12">
     
-    <!-- Active Roadmap Header (Only shows if roadmap exists) -->
+    <!-- Active Roadmap Header -->
     {% if roadmap %}
-    <div class="glass-card p-10 rounded-[2.5rem] border border-primary/20 bg-primary/5">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="space-y-3 text-center md:text-left">
-                <div class="flex items-center justify-center md:justify-start gap-4 mb-2">
-                    <a href="{{ url_for('user.dashboard') }}" class="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest hover:text-primary transition-colors flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm">arrow_back</span>
+    {% set ns = namespace(total=0, completed=0) %}
+    {% for phase in roadmap.phases %}
+        {% for ms in phase.milestones %}
+            {% set ns.total = ns.total + 1 %}
+            {% if ms.completed %}
+                {% set ns.completed = ns.completed + 1 %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    {% set pct = ((ns.completed / ns.total) * 100)|int if ns.total > 0 else 0 %}
+
+    <div class="glass-card p-10 rounded-[2.5rem] border border-primary/20 bg-primary/5 shadow-2xl relative overflow-hidden">
+        <!-- Glow accents -->
+        <div class="absolute -top-24 -left-24 w-48 h-48 bg-primary/20 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-purple-600/20 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 flex flex-col lg:flex-row justify-between items-stretch gap-8">
+            <div class="space-y-4 flex-1">
+                <div class="flex items-center gap-4">
+                    <a href="{{ url_for('user.dashboard') }}" class="text-[11px] font-bold text-on-surface/40 uppercase tracking-widest hover:text-primary transition-all flex items-center gap-1.5 group">
+                        <span class="material-symbols-outlined text-sm transition-transform group-hover:-translate-x-1">arrow_back</span>
                         Back to Dashboard
                     </a>
                 </div>
-                <h1 class="text-3xl md:text-4xl font-bold text-on-surface">
-                    Your Path to <span class="text-primary">{{ target_role }}</span>
+                <h1 class="text-3xl md:text-5xl font-extrabold text-on-surface tracking-tight">
+                    Your Path to <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">{{ target_role }}</span>
                 </h1>
-                <p class="text-on-surface/60">Follow these {{ roadmap.phases|length }} phases to master your role.</p>
+                <p class="text-on-surface/60 max-w-xl text-base leading-relaxed">
+                    Master this role by completing <span class="font-semibold text-primary">{{ ns.total }} milestones</span> across <span class="font-semibold text-primary">{{ roadmap.phases|length }} strategic phases</span>.
+                </p>
             </div>
             
-            <div class="flex flex-col sm:flex-row gap-4 items-center">
-                <div class="px-6 py-3 rounded-2xl bg-surface border border-outline text-center min-w-[120px]">
-                    <p class="text-xl font-bold text-primary">{{ roadmap.timeline }}</p>
-                    <p class="text-[9px] uppercase font-bold text-on-surface/40">Duration</p>
+            <div class="flex flex-col sm:flex-row lg:flex-col justify-center gap-6 min-w-[280px]">
+                <!-- Progress Card -->
+                <div class="p-6 rounded-3xl bg-surface/60 border border-outline/50 flex-1 space-y-4 shadow-lg backdrop-blur-md">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] uppercase font-bold text-on-surface/40 tracking-wider">Overall Progress</span>
+                        <span id="progress-text" class="text-sm font-bold text-primary">{{ ns.completed }} / {{ ns.total }} Completed</span>
+                    </div>
+                    <div class="w-full bg-background/60 rounded-full h-3.5 overflow-hidden border border-outline/30 relative">
+                        <div id="progress-bar" class="indigo-gradient h-full rounded-full transition-all duration-500 ease-out" style="width: {{ pct }}%;"></div>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <span id="progress-pct" class="font-extrabold text-lg text-on-surface">{{ pct }}%</span>
+                        <span class="text-on-surface/40 font-semibold">{{ roadmap.timeline }} Est.</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Roadmap Steps -->
-    <div class="relative space-y-8">
-        <div class="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-purple-600 rounded-full opacity-20"></div>
+    <div class="relative space-y-12">
+        <!-- Connecting Line -->
+        <div class="absolute left-8 top-4 bottom-8 w-[3px] bg-gradient-to-b from-primary via-purple-600 to-emerald-500 rounded-full opacity-20"></div>
 
         {% for phase in roadmap.phases %}
-        <div class="relative pl-20 pb-8 group">
-            <div class="absolute left-4 top-0 w-8 h-8 rounded-full indigo-gradient border-4 border-background z-10 flex items-center justify-center text-[10px] text-white font-bold shadow-lg">
-                {{ loop.index0 }}
+        {% set phase_loop = loop %}
+        <div class="relative pl-16 md:pl-24 pb-4 group">
+            <!-- Phase Indicator node -->
+            <div class="absolute left-4 md:left-6 top-1 w-9 h-9 rounded-full indigo-gradient border-4 border-background z-10 flex items-center justify-center text-xs text-white font-extrabold shadow-lg shadow-primary/20 transform group-hover:scale-110 transition-all duration-300">
+                {{ phase_loop.index0 }}
             </div>
 
-            <div class="glass-card p-8 rounded-3xl border border-outline hover:border-primary/50 transition-all space-y-6 bg-surface/50">
-                <div class="space-y-1">
-                    <p class="text-[10px] font-bold text-primary uppercase tracking-widest">
-                        {{ phase.title.split(':')[0] if ':' in phase.title else 'Step ' ~ loop.index0 }}
-                    </p>
-                    <h2 class="text-2xl font-bold text-on-surface">
-                        {{ phase.title.split(':')[1] if ':' in phase.title else phase.title }}
-                    </h2>
+            <div class="glass-card p-6 md:p-8 rounded-[2rem] border border-outline hover:border-primary/40 transition-all duration-300 space-y-6 bg-surface/30 backdrop-blur-lg hover:shadow-2xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-outline/20">
+                    <div class="space-y-1">
+                        <p class="text-[10px] font-extrabold text-primary uppercase tracking-[0.2em]">
+                            {{ phase.title.split(':')[0] if ':' in phase.title else 'Phase ' ~ phase_loop.index0 }}
+                        </p>
+                        <h2 class="text-xl md:text-2xl font-bold text-on-surface">
+                            {{ phase.title.split(':')[1] if ':' in phase.title else phase.title }}
+                        </h2>
+                    </div>
+                    {% if phase.phase_project %}
+                    <div class="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-primary/10 border border-primary/20 text-xs text-primary font-medium max-w-full">
+                        <span class="material-symbols-outlined text-sm shrink-0">architecture</span>
+                        <span class="truncate"><strong>Proj:</strong> {{ phase.phase_project }}</span>
+                    </div>
+                    {% endif %}
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 gap-4">
                     {% for ms in phase.milestones %}
-                    <div class="p-5 rounded-2xl bg-background/40 border border-outline/30 flex items-start gap-4">
-                        <span class="material-symbols-outlined text-primary text-xl">task_alt</span>
-                        <div class="space-y-1">
-                            <p class="font-bold text-on-surface text-sm">{{ ms.name }}</p>
-                            <p class="text-xs text-on-surface/50 leading-relaxed">{{ ms.desc }}</p>
+                    <div data-milestone-id="{{ ms.id }}" 
+                         class="milestone-card p-5 rounded-2xl border transition-all duration-300 flex items-start gap-4 cursor-pointer select-none
+                                {% if ms.completed %}
+                                bg-primary/5 border-primary/30 shadow-md shadow-primary/5
+                                {% else %}
+                                bg-background/30 border-outline/30 hover:border-outline/80 hover:bg-background/50
+                                {% endif %}">
+                        
+                        <!-- Interactive Toggle Checkbox -->
+                        <div class="mt-0.5 toggle-checkbox w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition-all duration-300
+                                    {% if ms.completed %}
+                                    bg-primary border-primary text-white scale-110
+                                    {% else %}
+                                    border-outline/60 text-transparent hover:border-primary
+                                    {% endif %}">
+                            <span class="material-symbols-outlined text-sm font-extrabold pointer-events-none">check</span>
+                        </div>
+
+                        <div class="space-y-3 flex-1">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <p class="font-bold text-on-surface text-base transition-all duration-300 milestone-name {% if ms.completed %}line-through text-on-surface/50{% endif %}">
+                                    {{ ms.name }}
+                                </p>
+                                {% if ms.estimated_hours %}
+                                <span class="px-2.5 py-0.5 rounded-full bg-on-surface/5 border border-outline/30 text-[10px] font-bold text-on-surface/60 uppercase tracking-wider">
+                                    {{ ms.estimated_hours }}h
+                                </span>
+                                {% endif %}
+                            </div>
+                            
+                            <p class="text-sm text-on-surface/60 leading-relaxed milestone-desc {% if ms.completed %}text-on-surface/40{% endif %}">
+                                {{ ms.desc }}
+                            </p>
+
+                            {% if ms.checkpoint %}
+                            <div class="p-3.5 rounded-xl bg-background/50 border border-outline/20 text-xs space-y-1.5 {% if ms.completed %}opacity-60{% endif %}">
+                                <span class="text-[9px] uppercase font-extrabold tracking-widest text-primary/70 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[12px]">verified</span> Checkpoint Criteria
+                                </span>
+                                <p class="text-on-surface/80 leading-relaxed italic font-medium">
+                                    {{ ms.checkpoint }}
+                                </p>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     {% endfor %}
@@ -67,38 +144,43 @@
         {% endfor %}
 
         <!-- Final Goal -->
-        <div class="relative pl-20 pt-4">
-            <div class="absolute left-2 top-0 w-12 h-12 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-emerald-400">
+        <div class="relative pl-16 md:pl-24 pt-4">
+            <div class="absolute left-3.5 md:left-5 top-0 w-10 h-10 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-emerald-400 animate-pulse">
                 <span class="material-symbols-outlined">workspace_premium</span>
             </div>
-            <div class="glass-card p-10 rounded-[3rem] border-2 border-emerald-500/30 bg-emerald-500/5 text-center">
+            <div class="glass-card p-10 rounded-[3rem] border-2 border-emerald-500/30 bg-emerald-500/5 text-center space-y-3 relative overflow-hidden shadow-emerald-500/5 shadow-2xl">
+                <div class="absolute -top-16 -left-16 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
                 <h3 class="text-2xl font-bold text-emerald-400">Goal Reached!</h3>
-                <p class="text-on-surface/60 mt-2">You are now ready for a role as {{ target_role }}</p>
+                <p class="text-on-surface/70 max-w-md mx-auto">
+                    Once you complete all milestones, you will possess all critical theoretical and practical qualifications required to excel as a <strong class="text-on-surface font-semibold">{{ target_role }}</strong>.
+                </p>
             </div>
         </div>
     </div>
     {% endif %}
 
-    <!-- Career Explorer (Always available to search for new/next roles) -->
+    <!-- Career Explorer -->
     <div class="pt-12">
-        <div class="glass-card p-12 rounded-[3.5rem] border border-dashed border-outline text-center space-y-8 bg-primary/5">
-            <div class="space-y-2">
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-2">
+        <div class="glass-card p-12 rounded-[3.5rem] border border-dashed border-outline/80 text-center space-y-8 bg-surface/20 shadow-xl backdrop-blur-md">
+            <div class="space-y-3">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-2 shadow-inner">
                     Career Explorer
                 </div>
-                <h2 class="text-3xl font-bold">Want to explore another path?</h2>
-                <p class="text-on-surface/50 max-w-lg mx-auto">Type any role below (e.g., Backend Developer, Data Scientist, DevOps Engineer) to generate a new specialized tech tree.</p>
+                <h2 class="text-3xl font-extrabold text-on-surface">Want to explore another path?</h2>
+                <p class="text-on-surface/50 max-w-lg mx-auto text-sm leading-relaxed">
+                    Type any career path below (e.g., <strong>iOS Developer</strong>, <strong>Data Analyst</strong>, <strong>Cybersecurity Engineer</strong>) to generate a custom tech tree mapped to your unique skill gap.
+                </p>
             </div>
             
             <form action="{{ url_for('ai.generate_roadmap') }}" method="POST" class="max-w-md mx-auto relative group">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="relative">
-                    <span class="material-symbols-outlined absolute left-6 top-1/2 -translate-y-1/2 text-primary">search</span>
+                <div class="relative shadow-2xl rounded-[2rem] overflow-hidden">
+                    <span class="material-symbols-outlined absolute left-6 top-1/2 -translate-y-1/2 text-primary text-xl">search</span>
                     <input type="text" name="target_role" required 
-                        class="w-full bg-background border border-outline rounded-3xl pl-16 pr-6 py-5 text-on-surface focus:outline-none focus:border-primary transition-all text-lg shadow-xl"
+                        class="w-full bg-background/80 border border-outline/80 rounded-[2rem] pl-16 pr-6 py-5 text-on-surface focus:outline-none focus:border-primary transition-all text-base backdrop-blur-md"
                         placeholder="Search for your next role...">
                 </div>
-                <button type="submit" class="w-full mt-6 py-4 rounded-2xl indigo-gradient text-white font-bold shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
+                <button type="submit" class="w-full mt-6 py-4 rounded-2xl indigo-gradient text-white font-bold shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
                     <span class="material-symbols-outlined">bolt</span>
                     Generate Next Path
                 </button>
@@ -113,4 +195,76 @@
         background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const roadmapId = "{{ roadmap_id }}";
+    const csrfToken = "{{ csrf_token() }}";
+
+    if (!roadmapId) return;
+
+    const cards = document.querySelectorAll('.milestone-card');
+    cards.forEach(card => {
+        card.addEventListener('click', async (e) => {
+            const milestoneId = card.getAttribute('data-milestone-id');
+            const checkbox = card.querySelector('.toggle-checkbox');
+            const nameEl = card.querySelector('.milestone-name');
+            const descEl = card.querySelector('.milestone-desc');
+            const criteriaEl = card.querySelector('.opacity-60, .p-3\\.5');
+            try {
+                const response = await fetch("{{ url_for('ai.toggle_milestone') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        roadmap_id: roadmapId,
+                        milestone_id: milestoneId
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        // Update milestone card styles dynamically
+                        if (data.completed) {
+                            card.classList.remove('bg-background/30', 'border-outline/30', 'hover:border-outline/80', 'hover:bg-background/50');
+                            card.classList.add('bg-primary/5', 'border-primary/30', 'shadow-md', 'shadow-primary/5');
+
+                            checkbox.classList.remove('border-outline/60', 'text-transparent', 'hover:border-primary');
+                            checkbox.classList.add('bg-primary', 'border-primary', 'text-white', 'scale-110');
+
+                            nameEl.classList.add('line-through', 'text-on-surface/50');
+                            descEl.classList.add('text-on-surface/40');
+                            if (criteriaEl) criteriaEl.classList.add('opacity-60');
+                        } else {
+                            card.classList.remove('bg-primary/5', 'border-primary/30', 'shadow-md', 'shadow-primary/5');
+                            card.classList.add('bg-background/30', 'border-outline/30', 'hover:border-outline/80', 'hover:bg-background/50');
+
+                            checkbox.classList.remove('bg-primary', 'border-primary', 'text-white', 'scale-110');
+                            checkbox.classList.add('border-outline/60', 'text-transparent', 'hover:border-primary');
+
+                            nameEl.classList.remove('line-through', 'text-on-surface/50');
+                            descEl.classList.remove('text-on-surface/40');
+                            if (criteriaEl) criteriaEl.classList.remove('opacity-60');
+                        }
+
+                        // Update overall progress bar
+                        const progressBar = document.getElementById('progress-bar');
+                        const progressPct = document.getElementById('progress-pct');
+                        const progressText = document.getElementById('progress-text');
+
+                        if (progressBar) progressBar.style.width = data.progress_percentage + '%';
+                        if (progressPct) progressPct.textContent = data.progress_percentage + '%';
+                        if (progressText) progressText.textContent = `${data.completed_count} / ${data.total_count} Completed`;
+                    }
+                }
+            } catch (err) {
+                console.error('Error toggling milestone status:', err);
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
