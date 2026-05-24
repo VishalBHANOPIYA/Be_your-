@@ -84,7 +84,7 @@
                     <p class="text-sm font-bold">{{ profile_progress }}%</p>
                 </div>
                 <div class="h-1.5 w-full bg-surface rounded-full overflow-hidden">
-                    <div class="h-full indigo-gradient rounded-full" style="width: {{ profile_progress }}%"></div>
+                    <div class="h-full indigo-gradient rounded-full" data-dynamic-width="{{ profile_progress }}%"></div>
                 </div>
             </div>
 
@@ -226,7 +226,7 @@
                                 <td class="px-10 py-8">
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-1.5 bg-surface rounded-full overflow-hidden">
-                                            <div class="h-full {% if app.resume_score > 80 %}bg-green-500{% elif app.resume_score > 50 %}bg-yellow-500{% else %}bg-red-500{% endif %} rounded-full" style="width: {{ app.resume_score }}%"></div>
+                                            <div class="h-full {% if app.resume_score > 80 %}bg-green-500{% elif app.resume_score > 50 %}bg-yellow-500{% else %}bg-red-500{% endif %} rounded-full" data-dynamic-width="{{ app.resume_score }}%"></div>
                                         </div>
                                         <span class="text-xs font-bold">{{ app.resume_score }}%</span>
                                     </div>

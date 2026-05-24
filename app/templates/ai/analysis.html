@@ -45,7 +45,7 @@
             </div>
             
             <div class="h-1.5 w-full bg-surface rounded-full overflow-hidden">
-                <div class="h-full indigo-gradient rounded-full transition-all duration-1000" style="width: {{ report.score }}%"></div>
+                <div class="h-full indigo-gradient rounded-full transition-all duration-1000" data-dynamic-width="{{ report.score }}%"></div>
             </div>
 
             <p class="text-xs text-on-surface/60 leading-relaxed">{{ report.summary }}</p>

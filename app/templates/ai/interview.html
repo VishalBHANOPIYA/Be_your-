@@ -81,13 +81,17 @@
 
         <!-- Progress Bar at bottom -->
         <div class="mt-12 h-1.5 w-full bg-surface rounded-full overflow-hidden">
-            <div id="bottom-progress-bar" class="h-full indigo-gradient transition-all duration-500" style="width: {{ (1 / interview.questions|length) * 100 }}%"></div>
+            <div id="bottom-progress-bar" class="h-full indigo-gradient transition-all duration-500" data-dynamic-width="{{ (1 / interview.questions|length) * 100 }}%"></div>
         </div>
     </div>
 </div>
 
+<script id="interview-data" type="application/json">
+    {{ interview.questions | tojson | safe }}
+</script>
+
 <script>
-    const questions = {{ interview.questions | tojson }};
+    const questions = JSON.parse(document.getElementById('interview-data').textContent);
     let currentIndex = 0;
     let timerValue = 90;
     let timerInterval;

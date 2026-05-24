@@ -287,6 +287,16 @@
                 icon.textContent = 'visibility';
             }
         }
+
+        // Set dynamic widths for progress bars to avoid IDE CSS parsing issues
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-dynamic-width]').forEach(el => {
+                const width = el.getAttribute('data-dynamic-width');
+                if (width) {
+                    el.style.width = width;
+                }
+            });
+        });
     </script>
     {% block extra_js %}{% endblock %}
     <script>

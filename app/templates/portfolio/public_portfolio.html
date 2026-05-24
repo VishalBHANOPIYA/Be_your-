@@ -13,108 +13,103 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
-        /* Theme Core Styling mappings */
-        {% if theme == 'zinc_indigo' %}
-            :root {
-                --bg-primary: #09090b;
-                --bg-surface: rgba(20, 20, 23, 0.65);
-                --border-color: rgba(255, 255, 255, 0.08);
-                --text-primary: #f4f4f5;
-                --text-secondary: #a1a1aa;
-                --accent-color: #6366f1;
-                --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-                --font-stack: 'Inter', sans-serif;
-                --inner-bg: rgba(255, 255, 255, 0.03);
-                --inner-border: rgba(255, 255, 255, 0.06);
-            }
-            body {
-                background-color: var(--bg-primary);
-                background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
-                                  radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
-            }
-            .glass-card {
-                background: var(--bg-surface);
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
-                border: 1px solid var(--border-color);
-                box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.5);
-                transition: all 0.3s ease;
-            }
-            .glass-card:hover {
-                border-color: rgba(99, 102, 241, 0.25);
-                box-shadow: 0 15px 45px -12px rgba(99, 102, 241, 0.15);
-            }
+        /* Zinc Indigo Theme variables & rules */
+        .theme-zinc_indigo {
+            --bg-primary: #09090b;
+            --bg-surface: rgba(20, 20, 23, 0.65);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --accent-color: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --font-stack: 'Inter', sans-serif;
+            --inner-bg: rgba(255, 255, 255, 0.03);
+            --inner-border: rgba(255, 255, 255, 0.06);
             
-        {% elif theme == 'cyberpunk' %}
-            @keyframes scanline {
-                0% { transform: translateY(-100%); }
-                100% { transform: translateY(100%); }
-            }
-            :root {
-                --bg-primary: #050508;
-                --bg-surface: #0a0a12;
-                --border-color: #00f0ff;
-                --text-primary: #39ff14;
-                --text-secondary: #00f0ff;
-                --accent-color: #ff007f;
-                --accent-gradient: linear-gradient(135deg, #ff007f 0%, #00f0ff 100%);
-                --font-stack: 'Fira Code', monospace;
-                --inner-bg: rgba(0, 240, 255, 0.03);
-                --inner-border: rgba(0, 240, 255, 0.15);
-            }
-            body {
-                background-color: var(--bg-primary);
-                position: relative;
-                overflow-x: hidden;
-            }
-            body::before {
-                content: "";
-                position: fixed;
-                inset: 0;
-                background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-                background-size: 100% 4px, 6px 100__;
-                z-index: 9999;
-                pointer-events: none;
-            }
-            .glass-card {
-                background: var(--bg-surface);
-                border: 2px solid var(--border-color);
-                box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
-                transition: all 0.2s ease;
-            }
-            .glass-card:hover {
-                border-color: var(--accent-color);
-                box-shadow: 0 0 25px rgba(255, 0, 127, 0.3);
-                transform: translate(-2px, -2px);
-            }
+            background-color: var(--bg-primary);
+            background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
+        }
+        .theme-zinc_indigo .glass-card {
+            background: var(--bg-surface);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        .theme-zinc_indigo .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.25);
+            box-shadow: 0 15px 45px -12px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Cyberpunk Theme variables & rules */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .theme-cyberpunk {
+            --bg-primary: #050508;
+            --bg-surface: #0a0a12;
+            --border-color: #00f0ff;
+            --text-primary: #39ff14;
+            --text-secondary: #00f0ff;
+            --accent-color: #ff007f;
+            --accent-gradient: linear-gradient(135deg, #ff007f 0%, #00f0ff 100%);
+            --font-stack: 'Fira Code', monospace;
+            --inner-bg: rgba(0, 240, 255, 0.03);
+            --inner-border: rgba(0, 240, 255, 0.15);
             
-        {% elif theme == 'minimalist' %}
-            :root {
-                --bg-primary: #f8fafc;
-                --bg-surface: #ffffff;
-                --border-color: #e2e8f0;
-                --text-primary: #0f172a;
-                --text-secondary: #475569;
-                --accent-color: #3b82f6;
-                --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-                --font-stack: 'Lora', serif;
-                --inner-bg: #f1f5f9;
-                --inner-border: #e2e8f0;
-            }
-            body {
-                background-color: var(--bg-primary);
-            }
-            .glass-card {
-                background: var(--bg-surface);
-                border: 1px solid var(--border-color);
-                box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-                transition: all 0.3s ease;
-            }
-            .glass-card:hover {
-                box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08);
-                transform: translateY(-2px);
-            }
-        {% endif %}
+            background-color: var(--bg-primary);
+            position: relative;
+            overflow-x: hidden;
+        }
+        .theme-cyberpunk::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .theme-cyberpunk .glass-card {
+            background: var(--bg-surface);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+            transition: all 0.2s ease;
+        }
+        .theme-cyberpunk .glass-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.3);
+            transform: translate(-2px, -2px);
+        }
+
+        /* Minimalist Theme variables & rules */
+        .theme-minimalist {
+            --bg-primary: #f8fafc;
+            --bg-surface: #ffffff;
+            --border-color: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-color: #3b82f6;
+            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            --font-stack: 'Lora', serif;
+            --inner-bg: #f1f5f9;
+            --inner-border: #e2e8f0;
+            
+            background-color: var(--bg-primary);
+        }
+        .theme-minimalist .glass-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+            transition: all 0.3s ease;
+        }
+        .theme-minimalist .glass-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08);
+            transform: translateY(-2px);
+        }
 
         body {
             font-family: var(--font-stack);
@@ -141,7 +136,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen py-16 px-4 md:px-8 relative">
+<body class="theme-{{ theme }} min-h-screen py-16 px-4 md:px-8 relative">
 
     <div class="max-w-4xl mx-auto space-y-12">
         

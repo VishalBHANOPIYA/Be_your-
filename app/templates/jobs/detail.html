@@ -183,16 +183,24 @@
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% if skill_gap %}
+<script id="skill-gap-data" type="application/json">
+    {{ skill_gap | tojson | safe }}
+</script>
+{% endif %}
+
 <script>
     {% if skill_gap %}
+    const skillGap = JSON.parse(document.getElementById('skill-gap-data').textContent);
     const ctx = document.getElementById('skillRadarChart').getContext('2d');
     new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: {{ skill_gap.labels | tojson }},
+            labels: skillGap.labels,
             datasets: [{
                 label: 'Your Skills',
-                data: {{ skill_gap.user_data | tojson }},
+                data: skillGap.user_data,
                 fill: true,
                 backgroundColor: 'rgba(255, 107, 0, 0.4)',
                 borderColor: '#FF6B00',
@@ -203,7 +211,7 @@
                 borderWidth: 3
             }, {
                 label: 'Job Requirement',
-                data: {{ skill_gap.job_data | tojson }},
+                data: skillGap.job_data,
                 fill: true,
                 backgroundColor: 'rgba(100, 100, 100, 0.05)',
                 borderColor: 'rgba(150, 150, 150, 0.3)',

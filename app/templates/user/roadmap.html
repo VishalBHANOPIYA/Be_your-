@@ -47,7 +47,7 @@
                         <span id="progress-text" class="text-sm font-bold text-primary">{{ ns.completed }} / {{ ns.total }} Completed</span>
                     </div>
                     <div class="w-full bg-background/60 rounded-full h-3.5 overflow-hidden border border-outline/30 relative">
-                        <div id="progress-bar" class="indigo-gradient h-full rounded-full transition-all duration-500 ease-out" style="width: {{ pct }}%;"></div>
+                        <div id="progress-bar" class="indigo-gradient h-full rounded-full transition-all duration-500 ease-out" data-dynamic-width="{{ pct }}%"></div>
                     </div>
                     <div class="flex justify-between items-center text-xs">
                         <span id="progress-pct" class="font-extrabold text-lg text-on-surface">{{ pct }}%</span>
